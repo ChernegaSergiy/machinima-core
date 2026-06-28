@@ -41,6 +41,28 @@ class AppController extends AbstractController
         ]);
     }
 
+    #[Route('/category/{id}', name: 'app_category', requirements: ['id' => '\d+'])]
+    public function category(int $id, EntityManagerInterface $em): Response
+    {
+        $category = $em->getRepository(Category::class)->find($id);
+        if (!$category) {
+            throw $this->createNotFoundException();
+        }
+
+        $projects = $em->getRepository(Content::class)->createQueryBuilder('c')
+            ->join('c.categories', 'cat')
+            ->where('cat.id = :categoryId')
+            ->setParameter('categoryId', $id)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('app/category.html.twig', [
+            'category' => $category,
+            'projects' => $projects,
+        ]);
+    }
+
     #[Route('/authors', name: 'app_authors')]
     public function authors(EntityManagerInterface $em): Response
     {

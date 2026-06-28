@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block body %}
+<div class="category-page" style="padding-bottom: 100px;">
+    <div style="background-color: var(--tg-theme-bg-color); margin-bottom: 24px; border-bottom: 3px solid var(--tg-theme-text-color);">
+        <div style="padding: 12px 16px; display: flex; align-items: center;">
+            <a href="{{ path('app_categories') }}" class="brutalist-button" style="text-decoration: none;">НАЗАД</a>
+        </div>
+    </div>
+
+    <div style="padding: 0 16px 24px 16px; text-align: center;">
+        <div class="brutalist-list-icon" style="width: 64px; height: 64px; margin: 0 auto 16px auto; background-color: var(--tg-theme-button-color);">
+            <i data-lucide="layout-grid" style="color: #fff; width: 32px; height: 32px;"></i>
+        </div>
+        <h1 style="margin: 0; font-size: 24px; font-weight: 900; text-transform: uppercase;">{{ category.name }}</h1>
+    </div>
+
+    <h2 class="brutalist-section-header" style="margin: 0 16px 16px 16px;">ПРОЄКТИ ({{ projects|length }})</h2>
+
+    <div class="feed-container">
+        {% for project in projects %}
+        <div class="post-card brutalist-card" style="margin: 0px 16px 16px;">
+            <div class="post-header">
+                <div class="post-author-info">
+                    <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;"><div class="post-author-name">{{ project.title }}</div></a>
+                    <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+                </div>
+            </div>
+            
+            <div class="post-text line-clamp-2">
+                {{ project.description }}
+            </div>
+            
+            <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
+                <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+                    {% if project.coverFileId %}
+                        [Cover Image]
+                    {% else %}
+                        <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+                    {% endif %}
+                </div>
+            </a>
+            
+            <div class="post-actions" style="margin-top: 12px;">
+                <div class="brutalist-button action-button">
+                    <i data-lucide="heart"></i> {{ project.likesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="eye"></i> {{ project.viewsCount }}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="padding: 32px; text-align: center; color: var(--tg-theme-hint-color);">
+            У цій категорії ще немає проєктів
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
