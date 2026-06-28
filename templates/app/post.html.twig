@@ -50,7 +50,7 @@
             {% for item in tree %}
                 <div class="comment-item">
                     <div class="comment-header">
-                        <div class="comment-avatar"><i data-lucide="user" style="width:16px;height:16px;"></i></div>
+                        <div class="comment-avatar"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" /></div>
                         <div>
                             <div class="comment-author">{{ item.entity.authorName }}</div>
                             <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>

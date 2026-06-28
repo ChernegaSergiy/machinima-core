@@ -125,7 +125,8 @@ body.is-tma .top-nav { display: none !important; }
 .comment-section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
 .comment-item { background: var(--surface); border-radius: var(--radius); padding: 16px; border: 2px solid var(--border); margin-bottom: 16px; box-shadow: 3px 3px 0px var(--border); }
 .comment-header { display: flex; align-items: center; margin-bottom: 12px; }
-.comment-avatar { width: 36px; height: 36px; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; margin-right: 12px; color: var(--primary); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); font-family: 'Unbounded', sans-serif;}
+.comment-avatar { width: 36px; height: 36px; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; margin-right: 12px; color: var(--primary); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); font-family: 'Unbounded', sans-serif; overflow: hidden; padding: 0; }
+.comment-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .comment-author { font-weight: 700; font-size: 15px; }
 .comment-date { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 .comment-text { font-size: 15px; line-height: 1.5; color: var(--text); margin-bottom: 12px; font-weight: 500; }
