@@ -46,7 +46,7 @@
             document.head.appendChild(style);
         })();
     </script>
-    <h2 class="comment-section-title">Коментарі ({{ commentsCount }})</h2>
+    <h2 class="comment-section-title">Коментарі (<span id="comment-count-number">{{ commentsCount }}</span>)</h2>
     
     <div id="comments-list">
         {% if commentsCount == 0 %}
@@ -131,7 +131,16 @@
             const data = await res.json();
             if (data.success) {
                 const item = document.getElementById('comment-item-' + id);
-                if (item) item.remove();
+                if (item) {
+                    const nestedCount = item.querySelectorAll('.comment-item').length;
+                    const totalDeleted = 1 + nestedCount;
+                    item.remove();
+                    
+                    const countEl = document.getElementById('comment-count-number');
+                    if (countEl) {
+                        countEl.innerText = Math.max(0, parseInt(countEl.innerText) - totalDeleted);
+                    }
+                }
             } else {
                 alert('Помилка: ' + (data.error || 'Не вдалося видалити'));
             }
@@ -214,6 +223,10 @@
                     document.getElementById(`comment-text-${editModeId}`).innerText = text;
                 } else {
                     appendCommentToDOM(data.data);
+                    const countEl = document.getElementById('comment-count-number');
+                    if (countEl) {
+                        countEl.innerText = parseInt(countEl.innerText) + 1;
+                    }
                 }
                 
                 input.value = '';
