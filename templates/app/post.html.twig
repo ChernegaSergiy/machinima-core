@@ -133,7 +133,10 @@
         try {
             const res = await fetch(`/api/comments/${id}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                },
                 body: JSON.stringify({ user_id: currentUserId })
             });
             const data = await res.json();
@@ -209,13 +212,19 @@
             if (editModeId) {
                 res = await fetch(`/api/comments/${editModeId}`, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                    },
                     body: JSON.stringify({ user_id: currentUserId, text: text })
                 });
             } else {
                 res = await fetch(`/api/projects/${postId}/comments`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                    },
                     body: JSON.stringify({
                         user_id: currentUserId,
                         author_name: authorName,
