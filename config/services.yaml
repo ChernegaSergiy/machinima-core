@@ -33,7 +33,7 @@ services:
 
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     
-    translator:
+    bot_translator:
         alias: morfeditorial\Translator
         public: true
 
