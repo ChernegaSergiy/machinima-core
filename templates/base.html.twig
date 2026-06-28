@@ -86,20 +86,7 @@
             }
             if (typeof lucide !== 'undefined') lucide.createIcons();
             
-            const initData = window.Telegram?.WebApp?.initData;
-            if (initData) {
-                document.querySelectorAll('a').forEach(a => {
-                    if (a.href && a.href.startsWith(window.location.origin)) {
-                        try {
-                            const url = new URL(a.href);
-                            if (!url.searchParams.has('initData')) {
-                                url.searchParams.set('initData', initData);
-                                a.href = url.toString();
-                            }
-                        } catch (e) {}
-                    }
-                });
-            }
+            // The a.href hacking was removed in favor of native Turbo header injection below.
         }
         document.addEventListener('turbo:load', initApp);
         if (document.readyState === 'loading') {
@@ -107,6 +94,15 @@
         } else {
             initApp();
         }
+
+        // Robust Architecture: Inject auth header into every Turbo navigation request natively.
+        // This guarantees authentication without relying on cookies or URL parameters.
+        document.addEventListener('turbo:before-fetch-request', function (event) {
+            const tgData = window.Telegram?.WebApp?.initData;
+            if (tgData) {
+                event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = tgData;
+            }
+        });
     </script>
     {% block javascripts %}{% endblock %}
 </body>
