@@ -211,6 +211,22 @@
                     badge.style.display = 'none';
                 }
             } catch(e) {}
+            
+            window.formatLocalTimes = function() {
+                document.querySelectorAll('time.local-time:not([data-formatted])').forEach(el => {
+                    const date = new Date(el.getAttribute('datetime'));
+                    if (!isNaN(date)) {
+                        const format = el.getAttribute('data-format') || 'datetime';
+                        const opts = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                        if (format === 'datetime') {
+                            opts.hour = '2-digit'; opts.minute = '2-digit';
+                        }
+                        el.innerText = new Intl.DateTimeFormat('uk-UA', opts).format(date).replace(',', '');
+                        el.setAttribute('data-formatted', 'true');
+                    }
+                });
+            };
+            window.formatLocalTimes();
         });
     </script>
     {% block javascripts %}{% endblock %}

@@ -13,7 +13,7 @@
             <div class="avatar"><i data-lucide="user"></i></div>
             <div class="author-info">
                 <div class="author-name">{% if post.staff|length > 0 %}{{ post.staff|first.author.name }}{% else %}Автор невідомий{% endif %}</div>
-                <div class="author-meta">{{ post.type }} • {{ post.createdAt|date('d.m.Y H:i') }}</div>
+                <div class="author-meta">{{ post.type }} • <time class="local-time" datetime="{{ post.createdAt|date('c') }}" data-format="datetime">{{ post.createdAt|date('d.m.Y H:i') }}</time></div>
             </div>
         </div>
         
@@ -87,7 +87,7 @@
                             <div class="comment-avatar"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" /></div>
                             <div>
                                 <div class="comment-author">{{ item.entity.authorName }}</div>
-                                <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>
+                                <div class="comment-date"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
                         <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>

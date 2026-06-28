@@ -33,7 +33,7 @@
             <div class="avatar"><i data-lucide="user"></i></div>
             <div class="author-info">
                 <div class="author-name">{{ author.name }}</div>
-                <div class="author-meta">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+                <div class="author-meta">{{ project.type }} • <time class="local-time" datetime="{{ project.createdAt|date('c') }}" data-format="date">{{ project.createdAt|date('d.m.Y') }}</time></div>
             </div>
         </div>
         

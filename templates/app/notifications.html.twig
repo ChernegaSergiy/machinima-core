@@ -19,7 +19,7 @@
             <div class="list-content">
                 <div class="list-title">Сповіщення {% if not notif.isRead %}<span class="badge">Нове</span>{% endif %}</div>
                 <div class="list-desc">{{ notif.message }}</div>
-                <div class="list-meta">{{ notif.createdAt|date('d.m.Y H:i') }}</div>
+                <div class="list-meta"><time class="local-time" datetime="{{ notif.createdAt|date('c') }}" data-format="datetime">{{ notif.createdAt|date('d.m.Y H:i') }}</time></div>
             </div>
         </a>
     {% else %}
