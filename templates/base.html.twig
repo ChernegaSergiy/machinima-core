@@ -129,9 +129,14 @@
                         const postActions = btnElement.closest('.post-actions');
                         if (postActions) {
                             const likesEl = postActions.querySelector('.likes-count');
-                            const dislikesEl = postActions.querySelector('.dislikes-count');
-                            if (likesEl && data.likes !== undefined) likesEl.innerText = data.likes;
-                            if (dislikesEl && data.dislikes !== undefined) dislikesEl.innerText = data.dislikes;
+                            if (likesEl && data.likes !== undefined) {
+                                const oldLikes = parseInt(likesEl.innerText);
+                                likesEl.innerText = data.likes;
+                                if (type === 'like') {
+                                    if (data.likes > oldLikes) btnElement.classList.add('active');
+                                    else if (data.likes < oldLikes) btnElement.classList.remove('active');
+                                }
+                            }
                         }
                     }
                 } else {
@@ -141,6 +146,26 @@
                 console.error(e);
             }
         };
+
+        // Load active interactions on page load
+        document.addEventListener('turbo:load', async function() {
+            const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+            if (!tgUserId) return;
+            try {
+                const res = await fetch('/api/user/' + tgUserId + '/interactions');
+                const data = await res.json();
+                if (data.success && data.likes) {
+                    const likedIds = data.likes;
+                    document.querySelectorAll('.post-actions').forEach(actions => {
+                        const postId = parseInt(actions.getAttribute('data-post-id'));
+                        if (likedIds.includes(postId)) {
+                            const likeBtn = actions.querySelector('.btn-like');
+                            if (likeBtn) likeBtn.classList.add('active');
+                        }
+                    });
+                }
+            } catch(e) {}
+        });
     </script>
     {% block javascripts %}{% endblock %}
 </body>

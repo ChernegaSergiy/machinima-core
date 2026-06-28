@@ -137,3 +137,11 @@ body.is-tma .top-nav { display: none !important; }
 
 .empty-state { text-align: center; padding: 64px 16px; color: var(--text); border: 2px dashed var(--border); border-radius: var(--radius); margin: 32px 0; background: rgba(0,0,0,0.02); }
 .empty-state i { opacity: 0.8; margin-bottom: 16px; width: 48px; height: 48px; stroke-width: 1.5px; }
+
+/* Active Like Button */
+.action-item.active {
+    color: #e74c3c !important;
+}
+.action-item.active svg {
+    fill: currentColor;
+}

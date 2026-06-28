@@ -144,4 +144,26 @@ class InteractionController extends AbstractController
             'views' => $content->getViewsCount()
         ]);
     }
+
+    #[Route('/user/{userId}/interactions', name: 'api_user_interactions', methods: ['GET'])]
+    public function getUserInteractions(int $userId, EntityManagerInterface $em): JsonResponse
+    {
+        $user = $em->getRepository(User::class)->find($userId);
+        if (!$user) {
+            return $this->json(['success' => false, 'error' => 'User not found'], 404);
+        }
+
+        $interactions = $em->getRepository(ContentInteraction::class)->findBy(['user' => $user]);
+        $likedIds = [];
+        foreach ($interactions as $interaction) {
+            if ($interaction->getInteractionType() === 'like') {
+                $likedIds[] = $interaction->getContent()->getId();
+            }
+        }
+
+        return $this->json([
+            'success' => true,
+            'likes' => $likedIds
+        ]);
+    }
 }

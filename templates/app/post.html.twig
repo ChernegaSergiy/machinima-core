@@ -35,9 +35,9 @@
             {% endif %}
         </div>
         
-        <div class="post-actions">
-            <div class="action-item" onclick="interact('like')" style="cursor:pointer;"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
-            <div class="action-item" onclick="interact('dislike')" style="cursor:pointer;"><i data-lucide="thumbs-down"></i> <span id="dislikes-count">{{ post.dislikesCount }}</span></div>
+        <div class="post-actions" data-post-id="{{ post.id }}">
+            <div class="action-item btn-like" onclick="interact('like', this)" style="cursor:pointer;"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
+            <div class="action-item" onclick="interact('dislike', this)" style="cursor:pointer;"><i data-lucide="thumbs-down"></i></div>
             <div class="action-item ml-auto"><i data-lucide="eye"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
         </div>
     </div>
@@ -127,7 +127,7 @@
     window.replyToId = null;
     window.editModeId = null;
 
-    window.interact = async function(type) {
+    window.interact = async function(type, btnElement) {
         let step = 'init';
         try {
             step = 'tgData';
@@ -160,9 +160,17 @@
             step = 'success_check';
             if (data.success && type !== 'view') {
                 const likesEl = document.getElementById('likes-count');
-                const dislikesEl = document.getElementById('dislikes-count');
-                if (likesEl && data.likes !== undefined) likesEl.innerText = data.likes;
-                if (dislikesEl && data.dislikes !== undefined) dislikesEl.innerText = data.dislikes;
+                if (likesEl && data.likes !== undefined) {
+                    const oldLikes = parseInt(likesEl.innerText);
+                    likesEl.innerText = data.likes;
+                    if (btnElement) {
+                        if (data.likes > oldLikes) {
+                            btnElement.classList.add('active');
+                        } else if (data.likes < oldLikes) {
+                            btnElement.classList.remove('active');
+                        }
+                    }
+                }
             } else if (!data.success && type !== 'view') {
                 alert('Помилка лайку: ' + data.error);
             }
