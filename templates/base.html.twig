@@ -42,11 +42,15 @@
                 tg.expand();
                 
                 if (tg.initData) {
+                    document.body.classList.add('is-tma');
                     const currentRoute = '{{ app.request.attributes.get("_route") }}';
-                    const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications'];
+                    const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_login'];
                     if (!rootRoutes.includes(currentRoute)) {
                         tg.BackButton.show();
-                        tg.BackButton.onClick(() => window.history.back());
+                        if (!window.tgBackAssigned) {
+                            tg.BackButton.onClick(() => window.history.back());
+                            window.tgBackAssigned = true;
+                        }
                     } else {
                         tg.BackButton.hide();
                     }

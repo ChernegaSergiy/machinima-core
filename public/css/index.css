@@ -71,6 +71,7 @@ h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, 
 
 /* Top Nav */
 .top-nav { position: sticky; top: 0; z-index: 50; background: var(--surface); padding: 12px 16px; border-bottom: 2px solid var(--border); max-width: 600px; margin: 0 auto; }
+body.is-tma .top-nav { display: none !important; }
 .back-btn { display: inline-flex; align-items: center; font-weight: 700; font-size: 14px; background: var(--surface); padding: 8px 16px; border-radius: var(--radius); color: var(--text); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; }
 .back-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border); }
 .back-btn i { margin-right: 6px; width: 18px; height: 18px; stroke-width: 2.5px; }
