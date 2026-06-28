@@ -50,9 +50,9 @@
             {% for item in tree %}
                 <div class="comment-item">
                     <div class="comment-header">
-                        <div class="comment-avatar">{{ item.entity.user.firstName|slice(0, 1) }}</div>
+                        <div class="comment-avatar"><i data-lucide="user" style="width:16px;height:16px;"></i></div>
                         <div>
-                            <div class="comment-author">{{ item.entity.user.firstName }}</div>
+                            <div class="comment-author">Користувач {{ item.entity.user.id }}</div>
                             <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>
                         </div>
                     </div>
