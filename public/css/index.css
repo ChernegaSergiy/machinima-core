@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap');
 
 :root {
   --primary: var(--tg-theme-text-color, #000000);
@@ -24,7 +24,7 @@ a { text-decoration: none; color: inherit; }
 
 /* Headers / Titles use brutalist font */
 h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, .empty-state-text {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: 'Unbounded', sans-serif;
     letter-spacing: -0.02em;
     text-transform: uppercase;
 }
@@ -72,7 +72,7 @@ h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, 
 /* Top Nav */
 .top-nav { position: sticky; top: 0; z-index: 50; background: var(--surface); padding: 12px 16px; border-bottom: 2px solid var(--border); max-width: 600px; margin: 0 auto; }
 body.is-tma .top-nav { display: none !important; }
-.back-btn { display: inline-flex; align-items: center; font-weight: 700; font-size: 14px; background: var(--surface); padding: 8px 16px; border-radius: var(--radius); color: var(--text); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; }
+.back-btn { display: inline-flex; align-items: center; font-weight: 700; font-size: 14px; background: var(--surface); padding: 8px 16px; border-radius: var(--radius); color: var(--text); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; text-transform: uppercase; font-family: 'Unbounded', sans-serif; }
 .back-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border); }
 .back-btn i { margin-right: 6px; width: 18px; height: 18px; stroke-width: 2.5px; }
 
@@ -94,10 +94,10 @@ body.is-tma .top-nav { display: none !important; }
 .list-title { font-weight: 700; font-size: 16px; margin-bottom: 4px; display: flex; align-items: center; }
 .list-desc { font-size: 14px; color: var(--text); margin-bottom: 4px; line-height: 1.4; font-weight: 600; }
 .list-meta { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-.badge { background: var(--border); color: var(--surface); padding: 2px 8px; border-radius: var(--radius); font-size: 11px; font-weight: 700; margin-left: 8px; text-transform: uppercase; font-family: 'Space Grotesk', sans-serif; }
+.badge { background: var(--border); color: var(--surface); padding: 2px 8px; border-radius: var(--radius); font-size: 11px; font-weight: 700; margin-left: 8px; text-transform: uppercase; font-family: 'Unbounded', sans-serif; }
 
 /* Buttons */
-.action-button { background: var(--surface); color: var(--text); padding: 12px 24px; border-radius: var(--radius); font-weight: 700; font-size: 14px; text-transform: uppercase; display: inline-flex; align-items: center; cursor: pointer; border: 2px solid var(--border); box-shadow: 3px 3px 0px var(--border); transition: all 0.1s; font-family: 'Space Grotesk', sans-serif; }
+.action-button { background: var(--surface); color: var(--text); padding: 12px 24px; border-radius: var(--radius); font-weight: 700; font-size: 14px; text-transform: uppercase; display: inline-flex; align-items: center; cursor: pointer; border: 2px solid var(--border); box-shadow: 3px 3px 0px var(--border); transition: all 0.1s; font-family: 'Unbounded', sans-serif; }
 .action-button:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--border); }
 .primary-btn { background: var(--border); color: var(--surface); }
 .small-btn { padding: 8px 16px; font-size: 13px; box-shadow: 2px 2px 0px var(--border); }
@@ -105,7 +105,7 @@ body.is-tma .top-nav { display: none !important; }
 
 /* Tabbar */
 .bottom-tabbar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom); z-index: 100; max-width: 600px; margin: 0 auto; }
-.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0; color: var(--text); font-size: 11px; font-weight: 700; transition: background 0.1s; text-transform: uppercase; opacity: 0.6; font-family: 'Space Grotesk', sans-serif; }
+.tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 0; color: var(--text); font-size: 11px; font-weight: 700; transition: background 0.1s; text-transform: uppercase; opacity: 0.6; font-family: 'Unbounded', sans-serif; }
 .tab-item i { margin-bottom: 4px; width: 24px; height: 24px; stroke-width: 2.5px; }
 .tab-item.active { opacity: 1; font-weight: 800; background: rgba(0,0,0,0.04); border-top: 3px solid var(--border); margin-top: -2px; }
 .tab-item:active { background: rgba(0,0,0,0.08); }
@@ -113,7 +113,7 @@ body.is-tma .top-nav { display: none !important; }
 /* Comment Input */
 .comment-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 2px solid var(--border); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 100; max-width: 600px; margin: 0 auto; }
 .comment-form { display: flex; gap: 12px; }
-.comment-input { flex: 1; background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 0 16px; font-size: 15px; outline: none; color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 600; box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05); }
+.comment-input { flex: 1; background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 0 16px; font-size: 15px; outline: none; color: var(--text); font-family: 'Unbounded', sans-serif; font-weight: 600; box-shadow: inset 2px 2px 0px rgba(0,0,0,0.05); }
 .comment-input:focus { background: #fff; }
 .comment-submit { width: 48px; height: 48px; border-radius: var(--radius); background: var(--border); color: var(--surface); border: none; display: flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; box-shadow: 3px 3px 0px rgba(0,0,0,0.2); transition: all 0.1s; }
 .comment-submit:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0px rgba(0,0,0,0.2); }
@@ -125,11 +125,11 @@ body.is-tma .top-nav { display: none !important; }
 .comment-section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 8px; }
 .comment-item { background: var(--surface); border-radius: var(--radius); padding: 16px; border: 2px solid var(--border); margin-bottom: 16px; box-shadow: 3px 3px 0px var(--border); }
 .comment-header { display: flex; align-items: center; margin-bottom: 12px; }
-.comment-avatar { width: 36px; height: 36px; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; margin-right: 12px; color: var(--primary); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); font-family: 'Space Grotesk', sans-serif;}
+.comment-avatar { width: 36px; height: 36px; border-radius: var(--radius); background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; margin-right: 12px; color: var(--primary); border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border); font-family: 'Unbounded', sans-serif;}
 .comment-author { font-weight: 700; font-size: 15px; }
 .comment-date { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
 .comment-text { font-size: 15px; line-height: 1.5; color: var(--text); margin-bottom: 12px; font-weight: 500; }
-.reply-btn { font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface); border: 2px solid var(--border); padding: 6px 12px; border-radius: var(--radius); cursor: pointer; display: inline-flex; align-items: center; text-transform: uppercase; box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; font-family: 'Space Grotesk', sans-serif;}
+.reply-btn { font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface); border: 2px solid var(--border); padding: 6px 12px; border-radius: var(--radius); cursor: pointer; display: inline-flex; align-items: center; text-transform: uppercase; box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; font-family: 'Unbounded', sans-serif;}
 .reply-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--border); }
 .reply-btn i { width: 14px; height: 14px; margin-right: 6px; stroke-width: 2.5px; }
 .comment-reply-wrapper { margin-left: 20px; border-left: 3px solid var(--border); padding-left: 20px; margin-top: 20px; }
