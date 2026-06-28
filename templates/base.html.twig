@@ -37,46 +37,45 @@
         {% endblock %}
     </div>
 
+    <!-- Hotwire Turbo for SPA navigation (prevents blinking) -->
+    <script type="module" src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-esm.js"></script>
+    
     <script>
-        // Init Telegram Web App
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            
-            if (tg.initData) {
-                // We are inside Telegram Mini App
+        function initApp() {
+            // Init Telegram Web App
+            const tg = window.Telegram?.WebApp;
+            if (tg) {
+                tg.ready();
+                tg.expand();
                 
-                // Hide manual HTML back buttons
-                document.addEventListener('DOMContentLoaded', () => {
+                if (tg.initData) {
+                    // Hide manual HTML back buttons
                     document.querySelectorAll('.header-action-bar').forEach(el => {
                         el.style.display = 'none';
                     });
-                });
 
-                // Configure Native Telegram Back Button
-                const currentRoute = '{{ app.request.attributes.get("_route") }}';
-                const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications'];
-                
-                if (!rootRoutes.includes(currentRoute)) {
-                    tg.BackButton.show();
-                    tg.BackButton.onClick(() => {
-                        window.history.back();
-                    });
-                } else {
-                    tg.BackButton.hide();
+                    // Configure Native Telegram Back Button
+                    const currentRoute = '{{ app.request.attributes.get("_route") }}';
+                    const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications'];
+                    
+                    if (!rootRoutes.includes(currentRoute)) {
+                        tg.BackButton.show();
+                        // Important: With Turbo, we might need to go back via Turbo or history
+                        tg.BackButton.onClick(() => {
+                            window.history.back();
+                        });
+                    } else {
+                        tg.BackButton.hide();
+                    }
                 }
             }
-        }
-        
-        // Initialize Lucide icons
-        if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-        }
-        
-        // Propagate Telegram initData to all internal links to prevent session loss
-        // since Telegram WebViews often block or drop session cookies on navigation.
-        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Initialize Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Propagate Telegram initData to all internal links
             const initData = window.Telegram?.WebApp?.initData;
             if (initData) {
                 document.querySelectorAll('a').forEach(a => {
@@ -93,7 +92,14 @@
                     }
                 });
             }
-        });
+
+            // Add haptic to tab clicks
+            document.querySelectorAll('.tab-item').forEach(item => {
+                // remove existing listener to avoid duplicates on turbo load
+                item.removeEventListener('click', haptic);
+                item.addEventListener('click', haptic);
+            });
+        }
 
         // Optional haptic feedback helper
         function haptic() {
@@ -102,10 +108,15 @@
             }
         }
 
-        // Add haptic to tab clicks
-        document.querySelectorAll('.tab-item').forEach(item => {
-            item.addEventListener('click', haptic);
-        });
+        // Run on Turbo navigation
+        document.addEventListener('turbo:load', initApp);
+        
+        // Run on initial load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
     </script>
     {% block javascripts %}{% endblock %}
 </body>
