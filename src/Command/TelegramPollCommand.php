@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use morfeditorial\MyBot;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,10 +37,12 @@ class TelegramPollCommand extends Command
                     $io->writeln('Received update: ' . ($update['update_id'] ?? 'unknown'));
                     $this->offset = ($update['update_id'] ?? 0) + 1;
                     $this->updateDispatcher->dispatch($update);
+                    $io->writeln('  -> Dispatched OK');
                 }
                 sleep(1);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $io->error($e->getMessage());
+                $io->writeln($e->getTraceAsString());
                 sleep(5);
             }
         }
