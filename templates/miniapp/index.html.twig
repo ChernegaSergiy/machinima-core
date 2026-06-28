@@ -1,0 +1,245 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Machinima Mini App{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8O2vIbb7oSzY5v8Q2R8n2bM+G/8kKkKouqRjZcE/2w/0uL1sL/x1s4q4fN2j/2jY0gG4mH6rA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-color: #2185d0;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #4183c4;
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-color: #e0e0e0;
+            }
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .ui.menu {
+            border-radius: 0;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .ui.menu .item {
+            color: var(--text-color) !important;
+        }
+
+        .dashboard-container {
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: #888;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .glass-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0d47a1 100%);
+            color: white;
+            padding: 40px 0;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 15px rgba(33, 133, 208, 0.2);
+            margin-top: -2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Dark mode overrides for semantic ui */
+        @media (prefers-color-scheme: dark) {
+            .ui.card, .ui.cards>.card {
+                background: var(--card-bg);
+                box-shadow: 0 1px 3px 0 rgba(255,255,255,0.1),0 0 0 1px rgba(255,255,255,0.1);
+            }
+            .ui.card>.content>.header, .ui.cards>.card>.content>.header {
+                color: var(--text-color);
+            }
+            .ui.card>.content>.description, .ui.cards>.card>.content>.description {
+                color: #aaa;
+            }
+            .ui.menu {
+                box-shadow: 0 2px 10px rgba(255,255,255,0.02);
+            }
+            .stat-card {
+                border-color: rgba(255,255,255,0.05);
+            }
+            .stat-card .value {
+                color: var(--text-color);
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Telegram Mini App
+            let tg = window.Telegram.WebApp;
+            tg.expand();
+            
+            // Adapt to Telegram theme
+            if (tg.colorScheme === 'dark') {
+                document.body.classList.add('dark-theme');
+            }
+
+            // Interactive micro-animations
+            $('.stat-card').on('mouseenter', function() {
+                $(this).find('i.icon').transition('pulse');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="ui menu">
+        <div class="ui container">
+            <a href="#" class="header item">
+                <i class="gamepad icon"></i>
+                Machinima
+            </a>
+            <a href="#" class="item active">Dashboard</a>
+            <a href="#" class="item">Projects</a>
+            <div class="right menu">
+                <div class="item">
+                    <div class="ui transparent icon input">
+                        <input type="text" placeholder="Search...">
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+                <a class="item">
+                    <img class="ui avatar image" src="https://placehold.co/100x100.png" alt="Profile">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-header">
+        <div class="ui container">
+            <h1 class="ui inverted header">
+                <i class="chart line icon"></i>
+                <div class="content">
+                    Mini App Dashboard
+                    <div class="sub header">Modern portal for Machinima Management</div>
+                </div>
+            </h1>
+        </div>
+    </div>
+
+    <div class="ui container dashboard-container">
+        <div class="ui three column stackable grid">
+            <div class="column">
+                <div class="stat-card">
+                    <i class="users icon"></i>
+                    <div class="value">2,543</div>
+                    <div class="label">Total Authors</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="stat-card">
+                    <i class="film icon"></i>
+                    <div class="value">1,204</div>
+                    <div class="label">Machinima Projects</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="stat-card">
+                    <i class="star outline icon"></i>
+                    <div class="value">4.8</div>
+                    <div class="label">Average Rating</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui divider" style="margin: 30px 0;"></div>
+
+        <div class="ui two column stackable grid">
+            <div class="column">
+                <h3 class="ui header" style="color: var(--text-color);">Recent Projects</h3>
+                <div class="ui cards">
+                    <div class="card" style="width: 100%;">
+                        <div class="content">
+                            <img class="right floated mini ui image" src="https://placehold.co/100x100.png">
+                            <div class="header">Gothic Legacy</div>
+                            <div class="meta">Roleplay Machinima</div>
+                            <div class="description">
+                                A completely new vision of the Gothic universe created within the original game engine.
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <div class="ui two buttons">
+                                <div class="ui basic blue button">Edit</div>
+                                <div class="ui basic red button">Remove</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <h3 class="ui header" style="color: var(--text-color);">Quick Actions</h3>
+                <div class="ui vertical fluid menu" style="background: var(--card-bg); border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                    <a class="item" style="color: var(--text-color);">
+                        <i class="plus icon"></i>
+                        Create New Project
+                    </a>
+                    <a class="item" style="color: var(--text-color);">
+                        <i class="user plus icon"></i>
+                        Invite Author
+                    </a>
+                    <a class="item" style="color: var(--text-color);">
+                        <i class="cog icon"></i>
+                        System Settings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
