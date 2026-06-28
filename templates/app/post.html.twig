@@ -2,212 +2,90 @@
 
 {% block title %}{{ post.title }}{% endblock %}
 
-{% block tabbar %}{# Hide tabbar on post view #}{% endblock %}
-
 {% block body %}
-<div class="pb-32 max-w-xl mx-auto">
-    <!-- Header Action Bar -->
-    <div class="sticky top-0 z-50 bg-brutal border-b-3 p-3 px-4 flex items-center">
-        <a href="{{ path('app_index') }}" class="inline-flex items-center justify-center px-4 py-2 font-bold uppercase text-brutal bg-brutal border-3 shadow-brutal-sm active-brutal-sm transition-all">
-            <i data-lucide="arrow-left" class="icon-sm mr-2"></i> Назад
-        </a>
-    </div>
+<div class="top-nav">
+    <a href="{{ path('app_index') }}" class="back-btn"><i data-lucide="arrow-left"></i> Назад</a>
+</div>
 
-    <!-- Post Content -->
-    <div class="bg-brutal border-3 rounded-none p-4 mx-4 my-4 shadow-brutal">
-        <div class="flex items-center mb-3">
-            <div class="w-11 h-11 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3">
-                <i data-lucide="user" class="text-brutal"></i>
-            </div>
-            <div class="flex-1">
-                <div class="text-base font-bold tracking-tight text-brutal mb-1">Автор невідомий</div>
-                <div class="text-sm font-semibold text-brutal opacity-80">{{ post.type }} • {{ post.createdAt|date('d.m.Y H:i') }}</div>
+<div class="container" style="padding-bottom: 80px;">
+    <div class="card" style="margin-top: 16px;">
+        <div class="card-header">
+            <div class="avatar"><i data-lucide="user"></i></div>
+            <div class="author-info">
+                <div class="author-name">Автор невідомий</div>
+                <div class="author-meta">{{ post.type }} • {{ post.createdAt|date('d.m.Y H:i') }}</div>
             </div>
         </div>
         
-        <div class="mb-4">
-            <h1 class="text-2xl font-bold tracking-tight text-brutal m-0">{{ post.title }}</h1>
-        </div>
+        <h1 class="post-full-title">{{ post.title }}</h1>
         
-        <div class="text-base font-semibold text-brutal break-words mb-4">
+        <div class="post-full-desc">
             {{ post.description|nl2br }}
         </div>
         
-        <div class="w-full aspect-video bg-brutal-secondary border-3 my-4 flex items-center justify-center relative overflow-hidden">
-            {% if post.url and ('youtube.com' in post.url or 'youtu.be' in post.url) %}
-                {% set video_id = post.url|split('v=')|last|split('&')|first %}
-                {% if 'youtu.be' in post.url %}
-                    {% set video_id = post.url|split('/')|last|split('?')|first %}
-                {% endif %}
-                <iframe class="absolute inset-0 w-full h-full border-none" src="https://www.youtube.com/embed/{{ video_id }}" allowfullscreen></iframe>
-            {% elseif post.url %}
-                <a href="{{ post.url }}" target="_blank" class="absolute inset-0 flex flex-col items-center justify-center text-brutal bg-brutal-secondary font-bold uppercase transition-all hover:opacity-80">
-                    <i data-lucide="external-link" class="icon-lg mb-2"></i>
-                    Відкрити відео
-                </a>
-            {% elseif post.coverFileId %}
-                <div class="absolute inset-0 flex items-center justify-center font-bold uppercase">[Cover Image]</div>
+        <div class="post-media" style="aspect-ratio: auto; min-height: 200px;">
+            {% if post.coverFileId %}
+                <span style="font-weight:700;">[Кобложка]</span>
             {% else %}
-                <i data-lucide="image" class="absolute top-1/2 left-1/2 transform-center icon-lg text-brutal"></i>
+                <i data-lucide="image" style="width:48px; height:48px;"></i>
             {% endif %}
         </div>
         
-        <div class="flex items-center gap-3 pt-4 mt-4 border-t-3">
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm" onclick="interact('like')">
-                <i data-lucide="heart" class="icon-sm mr-2"></i> <span id="likes-count">{{ post.likesCount }}</span>
-            </div>
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm" onclick="interact('dislike')">
-                <i data-lucide="thumbs-down" class="icon-sm mr-2"></i> <span id="dislikes-count">{{ post.dislikesCount }}</span>
-            </div>
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                <i data-lucide="eye" class="icon-sm mr-2"></i> <span id="views-count">{{ post.viewsCount }}</span>
-            </div>
+        <div class="post-actions">
+            <div class="action-item"><i data-lucide="heart"></i> {{ post.likesCount }}</div>
+            <div class="action-item"><i data-lucide="thumbs-down"></i> {{ post.dislikesCount }}</div>
+            <div class="action-item ml-auto"><i data-lucide="eye"></i> {{ post.viewsCount }}</div>
         </div>
     </div>
+
+    <h2 class="comment-section-title">Коментарі ({{ commentsCount }})</h2>
     
-    <!-- Comments -->
-    <div class="px-4 mt-6">
-        <h3 class="text-xl font-bold uppercase text-brutal bg-brutal-border text-brutal-bg p-3 mb-4 tracking-wide border-3">
-            Коментарі ({{ commentsCount }})
-        </h3>
-        
-        {% if commentsCount == 0 %}
-            <div class="p-6 text-center font-bold text-brutal border-3 my-4">
-                Ще немає коментарів. Будьте першим!
-            </div>
-        {% else %}
-            {% macro render_comment(node, depth) %}
-                {% import _self as macros %}
-                {% set comment = node.entity %}
-                <div class="{% if depth > 0 %}ml-6 border-l-3 pl-4{% endif %} {% if depth == 0 %}mt-4{% else %}mt-2{% endif %}">
-                    <div class="bg-brutal border-2 p-3 mb-4 shadow-brutal-sm">
-                        <div class="flex items-center mb-2 pb-2 border-b-3">
-                            <div class="w-8 h-8 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3 font-bold">
-                                {{ comment.authorName|first|upper }}
-                            </div>
-                            <div class="flex-1">
-                                <div class="text-sm font-bold uppercase text-brutal">{{ comment.authorName }}</div>
-                                <div class="text-xs font-semibold text-brutal opacity-80">{{ comment.createdAt|date('d.m.y H:i') }}</div>
-                            </div>
-                        </div>
-                        <div class="text-base font-semibold break-words mb-3 text-brutal">
-                            {{ comment.text|nl2br }}
-                        </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button class="inline-flex items-center px-2 py-1 text-xs font-bold uppercase bg-brutal border-2 shadow-brutal-sm active-brutal-sm text-brutal cursor-pointer transition-all outline-none" onclick="setReply({{ comment.id }}, '{{ comment.authorName|escape('js') }}')">
-                                <i data-lucide="reply" class="icon-sm mr-1"></i> Відповісти
-                            </button>
+    {% if commentsCount == 0 %}
+        <div class="empty-state">
+            <i data-lucide="message-square"></i>
+            <div class="empty-state-text">Немає коментарів</div>
+        </div>
+    {% else %}
+        {% macro render_comment_tree(tree) %}
+            {% for item in tree %}
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-avatar">{{ item.entity.user.firstName|slice(0, 1) }}</div>
+                        <div>
+                            <div class="comment-author">{{ item.entity.user.firstName }}</div>
+                            <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>
                         </div>
                     </div>
-                    {% for child in node.children %}
-                        {{ macros.render_comment(child, depth + 1) }}
-                    {% endfor %}
+                    <div class="comment-text">{{ item.entity.text }}</div>
+                    <button class="reply-btn"><i data-lucide="corner-down-right"></i> Відповісти</button>
+                    
+                    {% if item.children|length > 0 %}
+                        <div class="comment-reply-wrapper">
+                            {{ _self.render_comment_tree(item.children) }}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endmacro %}
-            
-            {% import _self as recursive %}
-            <div class="mb-6">
-                {% for node in commentTree %}
-                    {{ recursive.render_comment(node, 0) }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- Sticky form -->
-    <div class="fixed bottom-0 left-0 right-0 w-full max-w-xl mx-auto bg-brutal border-t-3 p-3 px-4 z-100 flex items-center pb-safe">
-        <form id="comment-form" onsubmit="submitComment(event)" class="flex gap-3 w-full">
-            <input id="comment-input" type="text" placeholder="НАПИСАТИ КОМЕНТАР..." class="flex-1 p-3 bg-brutal border-3 text-brutal text-base font-semibold font-mono outline-none shadow-brutal-sm uppercase" />
-            <button type="submit" class="inline-flex items-center justify-center px-4 bg-brutal-border text-brutal-bg border-3 shadow-brutal-sm active-brutal-sm cursor-pointer transition-all">
-                <i data-lucide="send" class="icon-md"></i>
-            </button>
-        </form>
-    </div>
+            {% endfor %}
+        {% endmacro %}
+        {{ _self.render_comment_tree(commentTree) }}
+    {% endif %}
 </div>
-{% endblock %}
 
-{% block javascripts %}
+<div class="comment-bar">
+    <form id="comment-form" onsubmit="submitComment(event)" class="comment-form">
+        <input id="comment-input" type="text" placeholder="Написати коментар..." class="comment-input" required />
+        <button type="submit" class="comment-submit"><i data-lucide="send"></i></button>
+    </form>
+</div>
+
 <script>
-    const postId = {{ post.id }};
-    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-    const currentUserId = tgUser?.id || 1;
-    const authorName = tgUser?.first_name || 'Анонім';
-    let replyToId = null;
-
-    function interact(type) {
-        if (window.Telegram?.WebApp?.HapticFeedback) {
-            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-        }
-        fetch('/api/interact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                content_id: postId,
-                user_id: currentUserId,
-                type: type
-            })
-        }).catch(err => console.error(err));
-    }
-
     function submitComment(e) {
         e.preventDefault();
         const input = document.getElementById('comment-input');
-        const text = input.value.trim();
-        if (!text) return;
-
-        fetch(`/api/projects/${postId}/comments`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user_id: currentUserId,
-                author_name: authorName,
-                text: text,
-                parent_id: replyToId
-            })
-        }).then(res => res.json()).then(data => {
-            if(data.success) {
-                input.value = '';
-                replyToId = null;
-                input.placeholder = 'НАПИСАТИ КОМЕНТАР...';
-                // Use Turbo to reload if available, otherwise fallback
-                if (typeof window.Turbo !== 'undefined') {
-                    window.Turbo.visit(window.location.href);
-                } else {
-                    window.location.reload();
-                }
-            }
-        });
-    }
-
-    function setReply(id, name) {
-        replyToId = id;
-        const input = document.getElementById('comment-input');
-        input.placeholder = `ВІДПОВІДЬ ДЛЯ ${name.toUpperCase()}...`;
-        input.focus();
-    }
-
-    // Listen to Mercure events for real-time updates
-    try {
-        const mercureUrl = new URL('/.well-known/mercure', window.location.origin);
-        mercureUrl.searchParams.append('topic', 'machinima/updates');
-        
-        const eventSource = new EventSource(mercureUrl.href);
-        eventSource.onmessage = event => {
-            const data = JSON.parse(event.data);
-            if (data.type === 'STATS_UPDATE' && data.content_id === postId) {
-                document.getElementById('likes-count').innerText = data.likes;
-                document.getElementById('dislikes-count').innerText = data.dislikes;
-                document.getElementById('views-count').innerText = data.views;
-            } else if (data.type === 'NEW_COMMENT' && data.content_id === postId) {
-                if (typeof window.Turbo !== 'undefined') {
-                    window.Turbo.visit(window.location.href);
-                } else {
-                    window.location.reload();
-                }
-            }
-        };
-    } catch (e) {
-        console.error('Mercure connection failed', e);
+        if(input.value.trim() !== '') {
+            alert('Функція коментування в розробці (через TMA)');
+            input.value = '';
+        }
     }
 </script>
 {% endblock %}

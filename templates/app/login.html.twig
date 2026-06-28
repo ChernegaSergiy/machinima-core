@@ -1,44 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Авторизація{% endblock %}
-
-{% block tabbar %}{% endblock %}
+{% block title %}Вхід{% endblock %}
 
 {% block body %}
-<div class="min-h-screen max-w-xl mx-auto flex flex-col items-center justify-center p-4">
-    <div id="auth-dimmer" class="w-full bg-brutal border-3 shadow-brutal p-8 text-center flex flex-col items-center">
-        <i data-lucide="loader" class="icon-lg text-brutal mb-4" style="animation: spin 2s linear infinite;"></i>
-        <h2 class="text-xl font-bold uppercase text-brutal m-0">Перевірка Telegram сесії...</h2>
-    </div>
-
-    <div id="error-segment" class="w-full bg-brutal-secondary border-3 shadow-brutal p-8 text-center flex flex-col items-center" style="display: none;">
-        <i data-lucide="smartphone" class="icon-lg text-brutal mb-4"></i>
-        <h2 class="text-xl font-bold uppercase text-brutal m-0 mb-2">Доступ лише через Telegram</h2>
-        <p class="text-base font-semibold text-brutal opacity-80 m-0">Будь ласка, відкрийте цей додаток через бота в Telegram.</p>
+<div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 0;">
+    <div class="profile-header" style="width: 100%;">
+        <div class="profile-avatar" style="margin-bottom: 24px;">
+            <i data-lucide="lock" style="width: 40px; height: 40px;"></i>
+        </div>
+        
+        <h1 class="profile-name" style="margin-bottom: 12px;">Тільки через Telegram</h1>
+        <p class="profile-bio" style="margin-bottom: 24px;">
+            Цей застосунок розроблено спеціально для використання всередині Telegram.
+        </p>
+        
+        <a href="https://t.me/MorfTutorialBot" class="action-button primary-btn" style="width: 100%; justify-content: center;">
+            <i data-lucide="external-link" style="margin-right: 8px; width: 18px; height: 18px;"></i>
+            Відкрити бота
+        </a>
     </div>
 </div>
-
-<style>
-@keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // If Lucide is available, render icons immediately
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
-
-    const initData = window.Telegram?.WebApp?.initData;
-    
-    if (initData) {
-        // We have initData, redirect to home page with initData as query param
-        window.location.href = '{{ path('app_index') }}?initData=' + encodeURIComponent(initData);
-    } else {
-        // No initData found (opened in regular browser)
-        document.getElementById('auth-dimmer').style.display = 'none';
-        document.getElementById('error-segment').style.display = 'flex';
-    }
-});
-</script>
 {% endblock %}

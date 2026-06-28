@@ -3,54 +3,51 @@
 {% block title %}Стрічка{% endblock %}
 
 {% block body %}
-<div class="py-4 max-w-xl mx-auto">
+<div class="container">
     {% for project in feed %}
-    <div class="bg-brutal border-3 rounded-none p-4 mx-4 mb-6 shadow-brutal transition-all active-brutal">
-        <div class="flex items-center mb-3">
-            <div class="w-11 h-11 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3">
-                <i data-lucide="user" class="text-brutal"></i>
+    <div class="card">
+        <div class="card-header">
+            <div class="avatar">
+                <i data-lucide="user"></i>
             </div>
-            <div class="flex-1">
-                <div class="text-base font-bold tracking-tight text-brutal mb-1">Автор невідомий</div>
-                <div class="text-sm font-semibold text-brutal opacity-80">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+            <div class="author-info">
+                <div class="author-name">Автор невідомий</div>
+                <div class="author-meta">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
             </div>
-        </div>
-        
-        <div class="mb-2">
-            <a href="{{ path('app_post', {id: project.id}) }}">
-                <h3 class="text-xl font-bold tracking-tight text-brutal m-0">{{ project.title }}</h3>
-            </a>
-        </div>
-        
-        <div class="text-base font-semibold line-clamp-2 text-brutal mb-4">
-            {{ project.description }}
         </div>
         
         <a href="{{ path('app_post', {id: project.id}) }}">
-            <div class="w-full aspect-video bg-brutal-secondary border-3 my-4 flex items-center justify-center text-brutal relative overflow-hidden">
-                {% if project.coverFileId %}
-                    <span class="font-bold uppercase">[Cover Image]</span>
-                {% else %}
-                    <i data-lucide="image" class="icon-lg"></i>
-                {% endif %}
-            </div>
+            <h3 class="post-title">{{ project.title }}</h3>
         </a>
         
-        <div class="flex items-center gap-3 pt-4 mt-4 border-t-3">
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                <i data-lucide="heart" class="icon-sm mr-2"></i> {{ project.likesCount }}
+        <div class="post-desc">
+            {{ project.description }}
+        </div>
+        
+        <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
+            {% if project.coverFileId %}
+                <span style="font-weight:700;">[Кобложка]</span>
+            {% else %}
+                <i data-lucide="image" style="width:32px; height:32px;"></i>
+            {% endif %}
+        </a>
+        
+        <div class="post-actions">
+            <div class="action-item">
+                <i data-lucide="heart"></i> {{ project.likesCount }}
             </div>
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                <i data-lucide="thumbs-down" class="icon-sm mr-2"></i> {{ project.dislikesCount }}
+            <div class="action-item">
+                <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
             </div>
-            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                <i data-lucide="eye" class="icon-sm mr-2"></i> {{ project.viewsCount }}
+            <div class="action-item ml-auto">
+                <i data-lucide="eye"></i> {{ project.viewsCount }}
             </div>
         </div>
     </div>
     {% else %}
-    <div class="p-6 text-center text-brutal opacity-50 font-bold uppercase">
-        Немає проєктів
+    <div class="empty-state">
+        <i data-lucide="inbox"></i>
+        <div class="empty-state-text">Стрічка порожня</div>
     </div>
     {% endfor %}
 </div>

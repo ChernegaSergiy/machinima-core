@@ -6,76 +6,54 @@
     <title>{% block title %}Morf TMA{% endblock %}</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
-    <link rel="stylesheet" href="/css/App.css?v={{ random() }}">
-    <!-- Using Lucide icons to match the React components -->
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="w-full min-h-screen bg-brutal pb-32">
-        {% block body %}{% endblock %}
+    {% block body %}{% endblock %}
 
-        {% block tabbar %}
-        {% set current_route = app.request.attributes.get('_route') %}
-        <nav class="fixed bottom-0 left-0 right-0 w-full max-w-xl mx-auto h-16 bg-brutal border-t-3 flex z-100 pb-safe">
-            <a href="{{ path('app_index') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_index' %}bg-brutal-border text-brutal-bg{% endif %}">
-                <i data-lucide="play-square" class="icon-md mb-1"></i>
-                <span>Стрічка</span>
-            </a>
-            <a href="{{ path('app_categories') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_categories' %}bg-brutal-border text-brutal-bg{% endif %}">
-                <i data-lucide="layout-grid" class="icon-md mb-1"></i>
-                <span>Категорії</span>
-            </a>
-            <a href="{{ path('app_authors') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_authors' %}bg-brutal-border text-brutal-bg{% endif %}">
-                <i data-lucide="users" class="icon-md mb-1"></i>
-                <span>Автори</span>
-            </a>
-            <a href="{{ path('app_notifications') }}" class="flex flex-col items-center justify-center flex-1 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_notifications' %}bg-brutal-border text-brutal-bg{% endif %}">
-                <i data-lucide="bell" class="icon-md mb-1"></i>
-                <span>Сповіщ.</span>
-            </a>
-        </nav>
-        {% endblock %}
-    </div>
+    {% block tabbar %}
+    {% set current_route = app.request.attributes.get('_route') %}
+    <nav class="bottom-tabbar">
+        <a href="{{ path('app_index') }}" class="tab-item {% if current_route == 'app_index' %}active{% endif %}">
+            <i data-lucide="play-square"></i>
+            <span>Стрічка</span>
+        </a>
+        <a href="{{ path('app_categories') }}" class="tab-item {% if current_route == 'app_categories' %}active{% endif %}">
+            <i data-lucide="layout-grid"></i>
+            <span>Категорії</span>
+        </a>
+        <a href="{{ path('app_authors') }}" class="tab-item {% if current_route == 'app_authors' %}active{% endif %}">
+            <i data-lucide="users"></i>
+            <span>Автори</span>
+        </a>
+        <a href="{{ path('app_notifications') }}" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}">
+            <i data-lucide="bell"></i>
+            <span>Сповіщ.</span>
+        </a>
+    </nav>
+    {% endblock %}
 
-    <!-- Hotwire Turbo for SPA navigation (prevents blinking) -->
     <script type="module" src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-esm.js"></script>
-    
     <script>
         function initApp() {
-            // Init Telegram Web App
             const tg = window.Telegram?.WebApp;
             if (tg) {
                 tg.ready();
                 tg.expand();
                 
                 if (tg.initData) {
-                    // Hide manual HTML back buttons
-                    document.querySelectorAll('.header-action-bar').forEach(el => {
-                        el.style.display = 'none';
-                    });
-
-                    // Configure Native Telegram Back Button
                     const currentRoute = '{{ app.request.attributes.get("_route") }}';
                     const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications'];
-                    
                     if (!rootRoutes.includes(currentRoute)) {
                         tg.BackButton.show();
-                        // Important: With Turbo, we might need to go back via Turbo or history
-                        tg.BackButton.onClick(() => {
-                            window.history.back();
-                        });
+                        tg.BackButton.onClick(() => window.history.back());
                     } else {
                         tg.BackButton.hide();
                     }
                 }
             }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
             
-            // Initialize Lucide icons
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-            
-            // Propagate Telegram initData to all internal links
             const initData = window.Telegram?.WebApp?.initData;
             if (initData) {
                 document.querySelectorAll('a').forEach(a => {
@@ -86,32 +64,12 @@
                                 url.searchParams.set('initData', initData);
                                 a.href = url.toString();
                             }
-                        } catch (e) {
-                            console.error('Failed to parse URL', e);
-                        }
+                        } catch (e) {}
                     }
                 });
             }
-
-            // Add haptic to tab clicks
-            document.querySelectorAll('.tab-item').forEach(item => {
-                // remove existing listener to avoid duplicates on turbo load
-                item.removeEventListener('click', haptic);
-                item.addEventListener('click', haptic);
-            });
         }
-
-        // Optional haptic feedback helper
-        function haptic() {
-            if (window.Telegram?.WebApp?.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-            }
-        }
-
-        // Run on Turbo navigation
         document.addEventListener('turbo:load', initApp);
-        
-        // Run on initial load
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initApp);
         } else {

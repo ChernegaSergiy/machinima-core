@@ -3,72 +3,46 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
-<div class="pb-32 max-w-xl mx-auto">
-    <div class="sticky top-0 z-50 bg-brutal border-b-3 p-3 px-4 flex items-center mb-6">
-        <a href="{{ path('app_categories') }}" class="inline-flex items-center justify-center px-4 py-2 font-bold uppercase text-brutal bg-brutal border-3 shadow-brutal-sm active-brutal-sm transition-all">
-            <i data-lucide="arrow-left" class="icon-sm mr-2"></i> Назад
+<div class="top-nav">
+    <a href="{{ path('app_categories') }}" class="back-btn"><i data-lucide="arrow-left"></i> Назад</a>
+</div>
+
+<div class="container">
+    <div class="page-header-flex" style="margin-top: 16px;">
+        <h1 class="page-title">{{ category.name }}</h1>
+    </div>
+    
+    {% for project in projects %}
+    <div class="card">
+        <div class="card-header">
+            <div class="avatar"><i data-lucide="user"></i></div>
+            <div class="author-info">
+                <div class="author-name">Автор невідомий</div>
+                <div class="author-meta">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+            </div>
+        </div>
+        
+        <a href="{{ path('app_post', {id: project.id}) }}">
+            <h3 class="post-title">{{ project.title }}</h3>
         </a>
-    </div>
-
-    <div class="px-4 text-center mb-6 pb-6 border-b-3">
-        <div class="w-24 h-24 mx-auto mb-4 bg-brutal-border text-brutal-bg border-3 rounded-none flex items-center justify-center shadow-brutal">
-            <i data-lucide="layout-grid" class="icon-lg"></i>
+        
+        <div class="post-desc">{{ project.description }}</div>
+        
+        <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
+            <i data-lucide="image" style="width:32px; height:32px;"></i>
+        </a>
+        
+        <div class="post-actions">
+            <div class="action-item"><i data-lucide="heart"></i> {{ project.likesCount }}</div>
+            <div class="action-item"><i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}</div>
+            <div class="action-item ml-auto"><i data-lucide="eye"></i> {{ project.viewsCount }}</div>
         </div>
-        <h1 class="text-xl font-bold uppercase text-brutal m-0">{{ category.name }}</h1>
     </div>
-
-    <h2 class="text-lg font-bold uppercase text-brutal-bg bg-brutal-border p-3 mx-4 mb-4 tracking-wide border-3">Проєкти ({{ projects|length }})</h2>
-
-    <div>
-        {% for project in projects %}
-        <div class="bg-brutal border-3 rounded-none p-4 mx-4 mb-6 shadow-brutal transition-all active-brutal">
-            <div class="flex items-center mb-3">
-                <div class="w-11 h-11 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3">
-                    <i data-lucide="user" class="text-brutal"></i>
-                </div>
-                <div class="flex-1">
-                    <div class="text-base font-bold tracking-tight text-brutal mb-1">Автор невідомий</div>
-                    <div class="text-sm font-semibold text-brutal opacity-80">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
-                </div>
-            </div>
-            
-            <div class="mb-2">
-                <a href="{{ path('app_post', {id: project.id}) }}">
-                    <h3 class="text-xl font-bold tracking-tight text-brutal m-0">{{ project.title }}</h3>
-                </a>
-            </div>
-            
-            <div class="text-base font-semibold line-clamp-2 text-brutal mb-4">
-                {{ project.description }}
-            </div>
-            
-            <a href="{{ path('app_post', {id: project.id}) }}">
-                <div class="w-full aspect-video bg-brutal-secondary border-3 my-4 flex items-center justify-center text-brutal relative overflow-hidden">
-                    {% if project.coverFileId %}
-                        <span class="font-bold uppercase">[Cover Image]</span>
-                    {% else %}
-                        <i data-lucide="image" class="icon-lg"></i>
-                    {% endif %}
-                </div>
-            </a>
-            
-            <div class="flex items-center gap-3 pt-4 mt-4 border-t-3">
-                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                    <i data-lucide="heart" class="icon-sm mr-2"></i> {{ project.likesCount }}
-                </div>
-                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                    <i data-lucide="thumbs-down" class="icon-sm mr-2"></i> {{ project.dislikesCount }}
-                </div>
-                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
-                    <i data-lucide="eye" class="icon-sm mr-2"></i> {{ project.viewsCount }}
-                </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="p-6 text-center text-brutal opacity-50 font-bold uppercase mx-4 border-3">
-            У цій категорії ще немає проєктів
-        </div>
-        {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <i data-lucide="inbox"></i>
+        <div class="empty-state-text">В цій категорії немає проєктів</div>
     </div>
+    {% endfor %}
 </div>
 {% endblock %}

@@ -3,24 +3,27 @@
 {% block title %}Автори{% endblock %}
 
 {% block body %}
-<div class="pb-32 max-w-xl mx-auto p-4">
-    <h2 class="text-xl font-bold uppercase text-brutal-bg bg-brutal-border p-3 mb-6 tracking-wide border-3 shadow-brutal-sm">Популярні автори</h2>
-    
-    <div class="flex flex-col gap-4">
-        {% for author in authors %}
-            <a href="{{ path('app_author', {id: author.id}) }}" class="flex items-center p-3 bg-brutal border-3 shadow-brutal active-brutal cursor-pointer transition-all">
-                <div class="w-12 h-12 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 mr-4 font-bold">
-                    <i data-lucide="user" class="icon-md text-brutal"></i>
-                </div>
-                <div class="flex-1 text-lg font-bold uppercase tracking-tight text-brutal">{{ author.name }}</div>
-                <i data-lucide="chevron-right" class="icon-md text-brutal"></i>
-            </a>
-        {% else %}
-            <div class="p-8 text-center text-brutal border-3 border-dashed flex flex-col items-center">
-                <i data-lucide="users" class="icon-lg mb-4 opacity-50"></i>
-                <span class="font-bold uppercase opacity-50">Немає авторів</span>
-            </div>
-        {% endfor %}
+<div class="container">
+    <div class="page-header-flex" style="margin-top: 16px;">
+        <h1 class="page-title">Автори</h1>
     </div>
+    
+    {% for author in authors %}
+        <a href="{{ path('app_author', {id: author.id}) }}" class="list-item">
+            <div class="list-icon"><i data-lucide="user"></i></div>
+            <div class="list-content">
+                <div class="list-title">{{ author.name }}</div>
+                {% if author.biography %}
+                    <div class="list-desc" style="-webkit-line-clamp:1; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden;">{{ author.biography }}</div>
+                {% endif %}
+            </div>
+            <i data-lucide="chevron-right" style="color: var(--text-muted); width: 20px;"></i>
+        </a>
+    {% else %}
+        <div class="empty-state">
+            <i data-lucide="users"></i>
+            <div class="empty-state-text">Авторів не знайдено</div>
+        </div>
+    {% endfor %}
 </div>
 {% endblock %}
