@@ -121,6 +121,7 @@ class InteractionController extends AbstractController
         }
 
         // Broadcast new stats via Mercure
+        /*
         $update = new Update(
             'machinima/updates',
             json_encode([
@@ -136,6 +137,7 @@ class InteractionController extends AbstractController
         } catch (\Throwable $e) {
             // Ignore Mercure errors if hub is not running
         }
+        */
 
         return $this->json([
             'success' => true,
