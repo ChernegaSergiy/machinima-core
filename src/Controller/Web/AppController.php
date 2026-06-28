@@ -119,12 +119,17 @@ class AppController extends AbstractController
         }
         
         foreach ($comments as $comment) {
+            $isOrphan = false;
             if ($comment->getParent()) {
                 $parentId = $comment->getParent()->getId();
                 if (isset($commentMap[$parentId])) {
                     $commentMap[$parentId]['children'][] = &$commentMap[$comment->getId()];
+                } else {
+                    $isOrphan = true;
                 }
-            } else {
+            }
+            
+            if (!$comment->getParent() || $isOrphan) {
                 $commentTree[] = &$commentMap[$comment->getId()];
             }
         }
