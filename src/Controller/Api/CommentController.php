@@ -166,8 +166,11 @@ class CommentController extends AbstractController
         $isModerator = false;
         if (!$isOwner) {
             $user = $em->getRepository(User::class)->find((int)$userId);
-            if ($user && in_array('ROLE_MODERATOR', $user->getRoles(), true)) {
-                $isModerator = true;
+            if ($user) {
+                $roles = $user->getRoles();
+                if (in_array('ROLE_MODERATOR', $roles, true) || in_array('ROLE_ADMIN', $roles, true)) {
+                    $isModerator = true;
+                }
             }
         }
 
