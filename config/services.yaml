@@ -21,5 +21,13 @@ services:
     App\:
         resource: '../src/'
 
+    morfeditorial\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/'
+        exclude:
+            - '../vendor/morfeditorial/machinima-bot/src/MyBot.php'
+            - '../vendor/morfeditorial/machinima-bot/src/screens/'
+            - '../vendor/morfeditorial/machinima-bot/src/panels/'
+            - '../vendor/morfeditorial/machinima-bot/src/commands/'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
