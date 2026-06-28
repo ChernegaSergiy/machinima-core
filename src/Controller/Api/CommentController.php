@@ -101,7 +101,9 @@ class CommentController extends AbstractController
                 'comment' => $responseData
             ])
         );
-        $hub->publish($update);
+        try {
+            $hub->publish($update);
+        } catch (\Exception $e) {}
 
         return $this->json([
             'success' => true,
@@ -140,7 +142,9 @@ class CommentController extends AbstractController
                 'updated_at' => $comment->getUpdatedAt()
             ])
         );
-        $hub->publish($update);
+        try {
+            $hub->publish($update);
+        } catch (\Exception $e) {}
 
         return $this->json(['success' => true]);
     }
@@ -168,6 +172,7 @@ class CommentController extends AbstractController
         }
 
         if ($isOwner || $isModerator) {
+            $this->deleteCommentRecursive($comment, $em);
             $em->remove($comment);
             $em->flush();
 
@@ -178,11 +183,23 @@ class CommentController extends AbstractController
                     'comment_id' => $id
                 ])
             );
-            $hub->publish($update);
+            
+            try {
+                $hub->publish($update);
+            } catch (\Exception $e) {}
 
             return $this->json(['success' => true]);
         }
 
         return $this->json(['success' => false, 'error' => 'Unauthorized'], 403);
+    }
+    
+    private function deleteCommentRecursive(Comment $comment, EntityManagerInterface $em): void
+    {
+        $children = $em->getRepository(Comment::class)->findBy(['parent' => $comment]);
+        foreach ($children as $child) {
+            $this->deleteCommentRecursive($child, $em);
+            $em->remove($child);
+        }
     }
 }
