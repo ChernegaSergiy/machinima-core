@@ -25,16 +25,20 @@
         
         <div class="post-media" style="aspect-ratio: auto; min-height: 200px;">
             {% if post.coverFileId %}
-                <span style="font-weight:700;">[Кобложка]</span>
+                {% if post.coverFileId starts with 'http' %}
+                    <img src="{{ post.coverFileId }}" alt="Cover" style="width: 100%; height: auto; display: block;" />
+                {% else %}
+                    <img src="{{ path('app_media', {fileId: post.coverFileId}) }}" alt="Cover" style="width: 100%; height: auto; display: block;" />
+                {% endif %}
             {% else %}
                 <i data-lucide="image" style="width:48px; height:48px;"></i>
             {% endif %}
         </div>
         
         <div class="post-actions">
-            <div class="action-item"><i data-lucide="heart"></i> {{ post.likesCount }}</div>
-            <div class="action-item"><i data-lucide="thumbs-down"></i> {{ post.dislikesCount }}</div>
-            <div class="action-item ml-auto"><i data-lucide="eye"></i> {{ post.viewsCount }}</div>
+            <div class="action-item" onclick="interact('like')" style="cursor:pointer;"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
+            <div class="action-item" onclick="interact('dislike')" style="cursor:pointer;"><i data-lucide="thumbs-down"></i> <span id="dislikes-count">{{ post.dislikesCount }}</span></div>
+            <div class="action-item ml-auto"><i data-lucide="eye"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
         </div>
     </div>
 
@@ -117,11 +121,41 @@
 </div>
 
 <script>
-    let currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
-    let authorName = window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Користувач';
-    const postId = {{ post.id }};
-    let replyToId = null;
-    let editModeId = null;
+    window.currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+    window.authorName = window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Користувач';
+    window.postId = {{ post.id }};
+    window.replyToId = null;
+    window.editModeId = null;
+
+    window.interact = async function(type) {
+        try {
+            const res = await fetch('/api/interact', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                },
+                body: JSON.stringify({
+                    content_id: window.postId,
+                    type: type,
+                    user_id: window.currentUserId
+                })
+            });
+            const data = await res.json();
+            if (data.success && type !== 'view') {
+                window.location.reload();
+            }
+        } catch (e) {
+            console.error('Interaction error:', e);
+        }
+    };
+
+    // Register unique view automatically on page load
+    setTimeout(() => {
+        if(typeof window.interact === 'function') {
+            window.interact('view');
+        }
+    }, 100);
 
     function setReply(id, name) {
         replyToId = id;
