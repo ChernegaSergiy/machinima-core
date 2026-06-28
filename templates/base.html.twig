@@ -99,8 +99,8 @@
         // This guarantees authentication without relying on cookies or URL parameters.
         document.addEventListener('turbo:before-fetch-request', function (event) {
             const tgData = window.Telegram?.WebApp?.initData;
-            if (tgData) {
-                event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = tgData;
+            if (tgData && typeof tgData === 'string') {
+                event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
             }
         });
 
@@ -108,12 +108,15 @@
         window.interactFeed = async function(contentId, type, btnElement) {
             try {
                 const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+                const tgData = window.Telegram?.WebApp?.initData;
+                const headers = { 'Content-Type': 'application/json' };
+                if (tgData && typeof tgData === 'string') {
+                    headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+                }
+
                 const res = await fetch('/api/interact', {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
-                    },
+                    headers: headers,
                     body: JSON.stringify({
                         content_id: contentId,
                         type: type,

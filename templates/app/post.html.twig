@@ -129,12 +129,15 @@
 
     window.interact = async function(type) {
         try {
+            const tgData = window.Telegram?.WebApp?.initData;
+            const headers = { 'Content-Type': 'application/json' };
+            if (tgData && typeof tgData === 'string') {
+                headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+            }
+
             const res = await fetch('/api/interact', {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
-                },
+                headers: headers,
                 body: JSON.stringify({
                     content_id: window.postId,
                     type: type,
@@ -144,9 +147,14 @@
             const data = await res.json();
             if (data.success && type !== 'view') {
                 window.location.reload();
+            } else if (!data.success && type !== 'view') {
+                alert('Помилка лайку: ' + data.error);
             }
         } catch (e) {
             console.error('Interaction error:', e);
+            if (type !== 'view') {
+                alert('Мережева помилка при оцінці: ' + e.message);
+            }
         }
     };
 
