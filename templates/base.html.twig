@@ -113,7 +113,6 @@
                 if (tgData && typeof tgData === 'string') {
                     headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
                 }
-
                 const res = await fetch('/api/interact', {
                     method: 'POST',
                     headers: headers,

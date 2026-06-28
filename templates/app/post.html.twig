@@ -143,8 +143,7 @@
             }
 
             step = 'fetch_call';
-            const targetUrl = window.location.origin + '/api/interact';
-            const res = await fetch(targetUrl, {
+            const res = await fetch('/api/interact', {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
