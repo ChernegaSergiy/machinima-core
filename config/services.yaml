@@ -37,5 +37,33 @@ services:
         alias: morfeditorial\Translator
         public: true
 
+    role_service:
+        alias: morfeditorial\services\RoleService
+        public: true
+
+    user_service:
+        alias: morfeditorial\services\UserService
+        public: true
+
+    user_state_service:
+        alias: morfeditorial\services\UserStateService
+        public: true
+
+    author_service:
+        alias: morfeditorial\services\AuthorService
+        public: true
+
+    content_service:
+        alias: morfeditorial\services\ContentService
+        public: true
+
+    notification_service:
+        alias: morfeditorial\services\NotificationService
+        public: true
+
+    rating_service:
+        alias: morfeditorial\services\RatingService
+        public: true
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
