@@ -35,6 +35,9 @@
             "migrations/.gitignore"
         ]
     },
+    "morfeditorial/telegram-bot-bundle": {
+        "version": "dev-main"
+    },
     "symfony/console": {
         "version": "8.1",
         "recipe": {
