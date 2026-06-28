@@ -76,6 +76,16 @@ class CommentController extends AbstractController
             $parent = $em->getRepository(Comment::class)->find((int)$body['parent_id']);
             if ($parent) {
                 $comment->setParent($parent);
+                
+                // Notify the parent comment's author if it's a different user
+                if ($parent->getUser() !== $user) {
+                    $notification = new \App\Entity\Notification();
+                    $notification->setUser($parent->getUser());
+                    $notification->setType('comment_reply');
+                    $notification->setTargetId($project->getId());
+                    $notification->setMessage($comment->getAuthorName() . ' відповів(ла) на ваш коментар.');
+                    $em->persist($notification);
+                }
             }
         }
 
