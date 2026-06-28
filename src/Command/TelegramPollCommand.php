@@ -7,6 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
 use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
 
@@ -20,7 +23,9 @@ class TelegramPollCommand extends Command
 
     public function __construct(
         private TelegramClient $telegramClient,
-        private UpdateDispatcher $updateDispatcher
+        private UpdateDispatcher $updateDispatcher,
+        private EntityManagerInterface $entityManager,
+        private TokenStorageInterface $tokenStorage
     ) {
         parent::__construct();
     }
@@ -36,7 +41,18 @@ class TelegramPollCommand extends Command
                 foreach ($updates as $update) {
                     $io->writeln('Received update: ' . ($update['update_id'] ?? 'unknown'));
                     $this->offset = ($update['update_id'] ?? 0) + 1;
+
+                    $userId = $update['callback_query']['from']['id'] ?? $update['message']['from']['id'] ?? null;
+                    if ($userId) {
+                        $user = $this->entityManager->getRepository(\App\Entity\User::class)->find($userId);
+                        if ($user) {
+                            $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
+                            $this->tokenStorage->setToken($token);
+                        }
+                    }
+
                     $this->updateDispatcher->dispatch($update);
+                    $this->tokenStorage->setToken(null);
                     $io->writeln('  -> Dispatched OK');
                 }
                 sleep(1);
