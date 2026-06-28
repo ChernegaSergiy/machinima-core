@@ -11,12 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 
 #[Route('/api')]
 class InteractionController extends AbstractController
 {
     #[Route('/interact', name: 'api_interact', methods: ['POST'])]
-    public function interact(Request $request, EntityManagerInterface $em): JsonResponse
+    public function interact(Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
         
@@ -117,6 +119,19 @@ class InteractionController extends AbstractController
 
             $em->flush();
         }
+
+        // Broadcast new stats via Mercure
+        $update = new Update(
+            'machinima/updates',
+            json_encode([
+                'type' => 'STATS_UPDATE',
+                'content_id' => $contentId,
+                'likes' => $content->getLikesCount(),
+                'dislikes' => $content->getDislikesCount(),
+                'views' => $content->getViewsCount()
+            ])
+        );
+        $hub->publish($update);
 
         return $this->json(['success' => true]);
     }

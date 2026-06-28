@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mercure\HubInterface;
+use Symfony\Component\Mercure\Update;
 
 #[Route('/api')]
 class CommentController extends AbstractController
@@ -46,7 +48,7 @@ class CommentController extends AbstractController
     }
 
     #[Route('/projects/{id}/comments', name: 'api_add_comment', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function addComment(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function addComment(int $id, Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
     {
         $project = $em->getRepository(Content::class)->find($id);
         if (!$project) {
@@ -80,22 +82,35 @@ class CommentController extends AbstractController
         $em->persist($comment);
         $em->flush();
 
+        $responseData = [
+            'id' => $comment->getId(),
+            'content_id' => $project->getId(),
+            'user_id' => $user->getId(),
+            'author_name' => $comment->getAuthorName(),
+            'text' => $comment->getText(),
+            'parent_id' => $comment->getParent() ? $comment->getParent()->getId() : null,
+            'created_at' => $comment->getCreatedAt(),
+        ];
+
+        // Broadcast via Mercure
+        $update = new Update(
+            'machinima/updates',
+            json_encode([
+                'type' => 'NEW_COMMENT',
+                'content_id' => $project->getId(),
+                'comment' => $responseData
+            ])
+        );
+        $hub->publish($update);
+
         return $this->json([
             'success' => true,
-            'data' => [
-                'id' => $comment->getId(),
-                'content_id' => $project->getId(),
-                'user_id' => $user->getId(),
-                'author_name' => $comment->getAuthorName(),
-                'text' => $comment->getText(),
-                'parent_id' => $comment->getParent() ? $comment->getParent()->getId() : null,
-                'created_at' => $comment->getCreatedAt(),
-            ]
+            'data' => $responseData
         ]);
     }
 
     #[Route('/comments/{id}', name: 'api_edit_comment', requirements: ['id' => '\d+'], methods: ['PUT'])]
-    public function editComment(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function editComment(int $id, Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
     {
         $comment = $em->getRepository(Comment::class)->find($id);
         if (!$comment) {
@@ -116,11 +131,22 @@ class CommentController extends AbstractController
         $comment->setUpdatedAt(date('Y-m-d H:i:s'));
         $em->flush();
 
+        $update = new Update(
+            'machinima/updates',
+            json_encode([
+                'type' => 'EDIT_COMMENT',
+                'comment_id' => $comment->getId(),
+                'text' => $body['text'],
+                'updated_at' => $comment->getUpdatedAt()
+            ])
+        );
+        $hub->publish($update);
+
         return $this->json(['success' => true]);
     }
 
     #[Route('/comments/{id}', name: 'api_delete_comment', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function deleteComment(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    public function deleteComment(int $id, Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
     {
         $comment = $em->getRepository(Comment::class)->find($id);
         if (!$comment) {
@@ -144,6 +170,16 @@ class CommentController extends AbstractController
         if ($isOwner || $isModerator) {
             $em->remove($comment);
             $em->flush();
+
+            $update = new Update(
+                'machinima/updates',
+                json_encode([
+                    'type' => 'DELETE_COMMENT',
+                    'comment_id' => $id
+                ])
+            );
+            $hub->publish($update);
+
             return $this->json(['success' => true]);
         }
 
