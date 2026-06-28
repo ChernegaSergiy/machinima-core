@@ -57,9 +57,9 @@
                         </div>
                     </div>
                     <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
-                    <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
+                    <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
                         <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                        <div class="owner-actions" style="display: none; gap: 8px;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
+                        <div class="owner-actions" style="display: none; gap: 8px; flex-wrap: wrap;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
                             <button class="reply-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
                             <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
                         </div>

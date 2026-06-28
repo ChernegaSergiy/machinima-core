@@ -132,7 +132,7 @@ body.is-tma .top-nav { display: none !important; }
 .reply-btn { font-size: 12px; font-weight: 700; color: var(--text); background: var(--surface); border: 2px solid var(--border); padding: 6px 12px; border-radius: var(--radius); cursor: pointer; display: inline-flex; align-items: center; text-transform: uppercase; box-shadow: 2px 2px 0px var(--border); transition: all 0.1s; font-family: 'Unbounded', sans-serif;}
 .reply-btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0px var(--border); }
 .reply-btn i { width: 14px; height: 14px; margin-right: 6px; stroke-width: 2.5px; }
-.comment-reply-wrapper { margin-left: 20px; border-left: 3px solid var(--border); padding-left: 20px; margin-top: 20px; }
+.comment-reply-wrapper { margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px; }
 
 .empty-state { text-align: center; padding: 64px 16px; color: var(--text); border: 2px dashed var(--border); border-radius: var(--radius); margin: 32px 0; background: rgba(0,0,0,0.02); }
 .empty-state i { opacity: 0.8; margin-bottom: 16px; width: 48px; height: 48px; stroke-width: 1.5px; }
