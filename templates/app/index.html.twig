@@ -1,45 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Стрічка | Machinima{% endblock %}
+{% block title %}Стрічка{% endblock %}
 
 {% block body %}
-    <h1 class="ui header">
-        ПОПУЛЯРНЕ
-        <div class="sub header">Найкращі проєкти за рейтингом</div>
-    </h1>
-
-    <div class="ui unstackable items">
-        {% for project in feed %}
-            <div class="item ui segment">
-                <div class="content">
-                    <a class="header" href="#">{{ project.title }}</a>
-                    <div class="meta">
-                        <span class="type">{{ project.type }}</span>
-                        <span>•</span>
-                        <span>{{ project.createdAt|date('d.m.Y') }}</span>
-                    </div>
-                    <div class="description">
-                        <p>{{ project.description|length > 100 ? project.description|slice(0, 100) ~ '...' : project.description }}</p>
-                    </div>
-                    <div class="extra">
-                        <div class="ui label">
-                            <i class="eye icon"></i> {{ project.viewsCount }}
-                        </div>
-                        <div class="ui label">
-                            <i class="heart icon"></i> {{ project.likesCount }}
-                        </div>
-                        <div class="ui right floated primary button">
-                            Деталі
-                            <i class="right chevron icon"></i>
-                        </div>
-                    </div>
-                </div>
+<div class="feed-container">
+    {% for project in feed %}
+    <div class="post-card brutalist-card" style="margin: 0px 16px 16px;">
+        <div class="post-header">
+            <div class="brutalist-avatar avatar">
+                {# Placeholder for avatar #}
+                <i data-lucide="user" style="color: var(--tg-theme-bg-color);"></i>
             </div>
-        {% else %}
-            <div class="ui message">
-                <div class="header">Немає проєктів</div>
-                <p>Стрічка наразі порожня.</p>
+            <div class="post-author-info">
+                <div class="post-author-name">{{ project.title }}</div>
+                <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
             </div>
-        {% endfor %}
+        </div>
+        
+        <div class="post-text line-clamp-2">
+            {{ project.description }}
+        </div>
+        
+        <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+            {% if project.coverFileId %}
+                [Cover Image]
+            {% else %}
+                <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+            {% endif %}
+        </div>
+        
+        <div class="post-actions" style="margin-top: 12px;">
+            <div class="brutalist-button action-button">
+                <i data-lucide="heart"></i> {{ project.likesCount }}
+            </div>
+            <div class="brutalist-button action-button">
+                <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+            </div>
+            <div class="brutalist-button action-button">
+                <i data-lucide="eye"></i> {{ project.viewsCount }}
+            </div>
+        </div>
     </div>
+    {% else %}
+    <div style="padding: 32px; text-align: center; color: var(--tg-theme-hint-color);">
+        Немає проєктів
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -1,111 +1,65 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% block title %}Machinima App{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+    <title>{% block title %}Morf TMA{% endblock %}</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"></script>
-    
-    <style>
-        /* High contrast, clean eHealth/brutalist inspired base */
-        :root {
-            --tg-theme-bg-color: #ffffff;
-            --tg-theme-text-color: #000000;
-            --tg-theme-button-color: #000000;
-            --tg-theme-button-text-color: #ffffff;
-            --primary-color: #000000;
-        }
-
-        body {
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Brutalist / eHealth hybrid modifications for Semantic UI */
-        .ui.segment, .ui.button, .ui.card {
-            border-radius: 0 !important; /* No border-radius as requested */
-            box-shadow: none !important;
-            border: 2px solid #000 !important;
-        }
-
-        .ui.button.primary {
-            background-color: var(--tg-theme-button-color, #000000) !important;
-            color: var(--tg-theme-button-text-color, #ffffff) !important;
-        }
-
-        .ui.menu {
-            border-radius: 0 !important;
-            border: none !important;
-            border-bottom: 2px solid #000 !important;
-            box-shadow: none !important;
-            margin-bottom: 2rem !important;
-        }
-
-        .app-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        h1, h2, h3, h4, h5 {
-            font-weight: 800 !important;
-            letter-spacing: -0.05em;
-            text-transform: uppercase;
-        }
-
-        /* Telegram Web App specific fixes */
-        body.tg-dark {
-            --tg-theme-bg-color: #181818;
-            --tg-theme-text-color: #ffffff;
-            --primary-color: #ffffff;
-        }
-        body.tg-dark .ui.segment, body.tg-dark .ui.card {
-            background-color: #222 !important;
-            border-color: #444 !important;
-            color: #fff !important;
-        }
-        body.tg-dark .ui.header {
-            color: #fff !important;
-        }
-    </style>
-    
-    <script>
-        // Init Telegram Web App
-        window.Telegram.WebApp.ready();
-        window.Telegram.WebApp.expand();
-        
-        // Apply theme classes based on Telegram theme
-        if (window.Telegram.WebApp.colorScheme === 'dark') {
-            document.body.classList.add('tg-dark');
-        }
-    </script>
-    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/App.css">
+    <!-- Using Lucide icons to match the React components -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    {% if app.user %}
-    <div class="ui top attached menu">
-        <a href="{{ path('app_index') }}" class="header item">
-            MACHINIMA
-        </a>
-        <div class="right menu">
-            <a class="item">
-                <i class="user icon"></i> {{ app.user.id }}
-            </a>
-        </div>
-    </div>
-    {% endif %}
-
-    <div class="app-container">
+    <div class="app-container" style="padding-bottom: 100px;">
         {% block body %}{% endblock %}
+
+        {% block tabbar %}
+        {% set current_route = app.request.get('_route') %}
+        <nav class="brutalist-tabbar">
+            <a href="{{ path('app_index') }}" class="tab-item {% if current_route == 'app_index' %}active{% endif %}" style="text-decoration: none;">
+                <i data-lucide="play-square"></i>
+                <span>Стрічка</span>
+            </a>
+            <a href="#" class="tab-item" style="text-decoration: none;">
+                <i data-lucide="layout-grid"></i>
+                <span>Категорії</span>
+            </a>
+            <a href="#" class="tab-item" style="text-decoration: none;">
+                <i data-lucide="users"></i>
+                <span>Автори</span>
+            </a>
+            <a href="#" class="tab-item" style="position: relative; text-decoration: none;">
+                <i data-lucide="bell"></i>
+                <span>Сповіщ.</span>
+            </a>
+        </nav>
+        {% endblock %}
     </div>
 
+    <script>
+        // Init Telegram Web App
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+        
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Optional haptic feedback helper
+        function haptic() {
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // Add haptic to tab clicks
+        document.querySelectorAll('.tab-item').forEach(item => {
+            item.addEventListener('click', haptic);
+        });
+    </script>
     {% block javascripts %}{% endblock %}
 </body>
 </html>
