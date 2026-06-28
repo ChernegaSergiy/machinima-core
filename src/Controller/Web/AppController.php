@@ -127,10 +127,8 @@ class AppController extends AbstractController
         }
 
         $isModerator = false;
-        $user = $this->getUser();
-        if ($user) {
-            $roles = $user->getRoles();
-            $isModerator = in_array('ROLE_MODERATOR', $roles, true) || in_array('ROLE_ADMIN', $roles, true);
+        if ($this->getUser()) {
+            $isModerator = $this->isGranted('ROLE_MODERATOR');
         }
 
         return $this->render('app/post.html.twig', [

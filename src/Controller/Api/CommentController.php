@@ -162,16 +162,10 @@ class CommentController extends AbstractController
 
         $isOwner = $comment->getUser()->getId() === (int)$userId;
         
-        // Check for moderator role if not owner
+        // Check for moderator role using native Symfony role hierarchy
         $isModerator = false;
-        if (!$isOwner) {
-            $user = $em->getRepository(User::class)->find((int)$userId);
-            if ($user) {
-                $roles = $user->getRoles();
-                if (in_array('ROLE_MODERATOR', $roles, true) || in_array('ROLE_ADMIN', $roles, true)) {
-                    $isModerator = true;
-                }
-            }
+        if ($this->getUser()) {
+            $isModerator = $this->isGranted('ROLE_MODERATOR');
         }
 
         if ($isOwner || $isModerator) {

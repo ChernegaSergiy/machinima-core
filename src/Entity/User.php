@@ -150,6 +150,14 @@ class User implements UserInterface
             $roles[] = $roleName;
         }
 
+        if ($this->legacyRole) {
+            $roleName = strtoupper($this->legacyRole);
+            if (!str_starts_with($roleName, 'ROLE_')) {
+                $roleName = 'ROLE_' . $roleName;
+            }
+            $roles[] = $roleName;
+        }
+
         // Guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
