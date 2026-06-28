@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 class ContentStaff
 {
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Content::class)]
+    #[ORM\ManyToOne(targetEntity: Content::class, inversedBy: 'staff')]
     #[ORM\JoinColumn(name: 'content_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Content $content = null;
 

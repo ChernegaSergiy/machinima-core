@@ -11,7 +11,7 @@
                 <i data-lucide="user"></i>
             </div>
             <div class="author-info">
-                <div class="author-name">Автор невідомий</div>
+                <div class="author-name">{% if project.staff|length > 0 %}{{ project.staff|first.author.name }}{% else %}Автор невідомий{% endif %}</div>
                 <div class="author-meta">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
             </div>
         </div>

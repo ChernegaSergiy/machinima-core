@@ -67,9 +67,13 @@ class Content
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Collection $categories;
 
+        #[ORM\OneToMany(mappedBy: "content", targetEntity: ContentStaff::class)]
+    private Collection $staff;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->staff = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -248,6 +252,11 @@ class Content
     /**
      * @return Collection<int, Category>
      */
+    public function getStaff(): Collection
+    {
+        return $this->staff;
+    }
+
     public function getCategories(): Collection
     {
         return $this->categories;
