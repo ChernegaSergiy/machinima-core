@@ -150,7 +150,7 @@ class AppController extends AbstractController
 
         $notifications = $em->getRepository(Notification::class)->findBy(
             ['user' => $user],
-            ['createdAt' => 'DESC']
+            ['id' => 'DESC']
         );
 
         return $this->render('app/notifications.html.twig', [

@@ -33,6 +33,11 @@ class Notification
     #[ORM\Column(name: 'created_at', type: 'text', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?string $createdAt = null;
 
+    public function __construct()
+    {
+        $this->createdAt = date('Y-m-d H:i:s');
+    }
+
     public function getId(): ?int
     {
         return $this->id;
