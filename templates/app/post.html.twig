@@ -41,15 +41,28 @@
     <script>
         (function() {
             var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
-            var isModerator = {{ isModerator ? 'true' : 'false' }};
+            var tgData = window.Telegram?.WebApp?.initData;
+            
+            // Apply owner-specific CSS immediately
             var style = document.createElement('style');
             var css = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
             
-            if (isModerator) {
-                css += '\\n.owner-actions { display: flex !important; }';
-                css += '\\n.owner-actions:not([data-owner-id="' + userId + '"]) .edit-btn { display: none !important; }';
+            // Verify moderator status asynchronously to bypass cache
+            if (tgData) {
+                fetch('/api/me', {
+                    headers: { 'X-Telegram-Init-Data': tgData }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.is_moderator) {
+                        css += '\n.owner-actions { display: flex !important; }';
+                        css += '\n.owner-actions:not([data-owner-id="' + userId + '"]) .edit-btn { display: none !important; }';
+                        style.innerHTML = css;
+                    }
+                })
+                .catch(e => console.error('Failed to verify moderator status:', e));
             }
-            
+
             style.innerHTML = css;
             document.head.appendChild(style);
         })();
