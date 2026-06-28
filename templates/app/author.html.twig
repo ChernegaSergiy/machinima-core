@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block body %}
+<div class="author-page" style="padding-bottom: 100px;">
+    <div style="background-color: var(--tg-theme-bg-color); margin-bottom: 24px; border-bottom: 3px solid var(--tg-theme-text-color);">
+        <div style="padding: 12px 16px; display: flex; align-items: center;">
+            <a href="{{ path('app_authors') }}" class="brutalist-button" style="text-decoration: none;">НАЗАД</a>
+        </div>
+    </div>
+
+    <div style="padding: 0 16px 24px 16px; text-align: center;">
+        <div class="brutalist-avatar" style="width: 80px; height: 80px; margin: 0 auto 16px auto;">
+            <i data-lucide="user" style="color: var(--tg-theme-text-color); width: 40px; height: 40px;"></i>
+        </div>
+        <h1 style="margin: 0 0 8px 0; font-size: 24px; font-weight: 900; text-transform: uppercase;">{{ author.name }}</h1>
+        {% if author.biography %}
+            <p style="margin: 0 0 16px 0; font-size: 15px; line-height: 1.4; font-weight: 500;">{{ author.biography }}</p>
+        {% endif %}
+        {% if author.channelLink %}
+            <a href="{{ author.channelLink }}" target="_blank" class="brutalist-button" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px;">
+                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i> КАНАЛ
+            </a>
+        {% endif %}
+    </div>
+
+    <h2 class="brutalist-section-header" style="margin: 0 16px 16px 16px;">ПРОЄКТИ АВТОРА ({{ projects|length }})</h2>
+
+    <div class="feed-container">
+        {% for project in projects %}
+        <div class="post-card brutalist-card" style="margin: 0px 16px 16px;">
+            <div class="post-header">
+                <div class="post-author-info">
+                    <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;"><div class="post-author-name">{{ project.title }}</div></a>
+                    <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+                </div>
+            </div>
+            
+            <div class="post-text line-clamp-2">
+                {{ project.description }}
+            </div>
+            
+            <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
+                <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+                    {% if project.coverFileId %}
+                        [Cover Image]
+                    {% else %}
+                        <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+                    {% endif %}
+                </div>
+            </a>
+            
+            <div class="post-actions" style="margin-top: 12px;">
+                <div class="brutalist-button action-button">
+                    <i data-lucide="heart"></i> {{ project.likesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="eye"></i> {{ project.viewsCount }}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div style="padding: 32px; text-align: center; color: var(--tg-theme-hint-color);">
+            У цього автора ще немає проєктів
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

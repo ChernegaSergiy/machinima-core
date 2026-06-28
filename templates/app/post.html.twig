@@ -28,8 +28,23 @@
                 {{ post.description }}
             </div>
             
-            <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
-                <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+            <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff; overflow: hidden; position: relative; padding-top: 56.25%;">
+                {% if post.url and ('youtube.com' in post.url or 'youtu.be' in post.url) %}
+                    {% set video_id = post.url|split('v=')|last|split('&')|first %}
+                    {% if 'youtu.be' in post.url %}
+                        {% set video_id = post.url|split('/')|last|split('?')|first %}
+                    {% endif %}
+                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" src="https://www.youtube.com/embed/{{ video_id }}" allowfullscreen></iframe>
+                {% elseif post.url %}
+                    <a href="{{ post.url }}" target="_blank" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #fff; text-decoration: none;">
+                        <i data-lucide="external-link" style="width: 48px; height: 48px; margin-bottom: 8px;"></i>
+                        <br>Відкрити відео
+                    </a>
+                {% elseif post.coverFileId %}
+                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">[Cover Image]</div>
+                {% else %}
+                    <i data-lucide="image" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 48px; height: 48px;"></i>
+                {% endif %}
             </div>
             
             <div class="post-actions" style="margin-top: 12px;">

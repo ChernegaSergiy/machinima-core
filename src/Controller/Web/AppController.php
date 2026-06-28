@@ -50,6 +50,32 @@ class AppController extends AbstractController
         ]);
     }
 
+    #[Route('/author/{id}', name: 'app_author', requirements: ['id' => '\d+'])]
+    public function author(int $id, EntityManagerInterface $em): Response
+    {
+        $author = $em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            throw $this->createNotFoundException();
+        }
+
+        // Fetch projects by this author
+        // Author has telegramUserId, User has userId
+        $user = null;
+        if ($author->getTelegramUserId()) {
+            $user = $em->getRepository(\App\Entity\User::class)->findOneBy(['userId' => $author->getTelegramUserId()]);
+        }
+
+        $projects = [];
+        if ($user) {
+            $projects = $em->getRepository(Content::class)->findBy(['createdBy' => $user], ['createdAt' => 'DESC']);
+        }
+
+        return $this->render('app/author.html.twig', [
+            'author' => $author,
+            'projects' => $projects,
+        ]);
+    }
+
     #[Route('/post/{id}', name: 'app_post', requirements: ['id' => '\d+'])]
     public function post(int $id, EntityManagerInterface $em): Response
     {

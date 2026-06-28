@@ -12,7 +12,7 @@
                 <i data-lucide="user" style="color: var(--tg-theme-bg-color);"></i>
             </div>
             <div class="post-author-info">
-                <div class="post-author-name">{{ project.title }}</div>
+                <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;"><div class="post-author-name">{{ project.title }}</div></a>
                 <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
             </div>
         </div>
@@ -21,13 +21,15 @@
             {{ project.description }}
         </div>
         
-        <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
-            {% if project.coverFileId %}
-                [Cover Image]
-            {% else %}
-                <i data-lucide="image" style="width: 48px; height: 48px;"></i>
-            {% endif %}
-        </div>
+        <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
+            <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+                {% if project.coverFileId %}
+                    [Cover Image]
+                {% else %}
+                    <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+                {% endif %}
+            </div>
+        </a>
         
         <div class="post-actions" style="margin-top: 12px;">
             <div class="brutalist-button action-button">

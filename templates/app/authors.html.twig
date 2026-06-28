@@ -6,7 +6,7 @@
 <div class="brutalist-list">
     <h2 class="brutalist-section-header">Популярні автори</h2>
     {% for author in authors %}
-        <a href="#" class="brutalist-list-item" style="text-decoration: none; color: inherit;">
+        <a href="{{ path('app_author', {id: author.id}) }}" class="brutalist-list-item" style="text-decoration: none; color: inherit;">
             <div class="brutalist-avatar" style="width: 40px; height: 40px; margin-right: 16px;">
                 <i data-lucide="user" style="color: var(--tg-theme-text-color);"></i>
             </div>
