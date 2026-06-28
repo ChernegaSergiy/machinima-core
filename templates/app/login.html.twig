@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Авторизація{% endblock %}
+
+{% block body %}
+<div class="ui active inverted dimmer" id="auth-dimmer">
+    <div class="ui text loader">Перевірка Telegram сесії...</div>
+</div>
+
+<div class="ui placeholder segment" id="error-segment" style="display: none;">
+    <div class="ui icon header">
+        <i class="telegram icon"></i>
+        Доступ лише через Telegram
+    </div>
+    <p>Будь ласка, відкрийте цей додаток через бота в Telegram.</p>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const initData = window.Telegram.WebApp.initData;
+    
+    if (initData) {
+        // We have initData, redirect to home page with initData as query param
+        // The TelegramWebAppAuthenticator will intercept this, validate the hash, 
+        // and log the user in, then the Controller will render the index page.
+        window.location.href = '{{ path('app_index') }}?initData=' + encodeURIComponent(initData);
+    } else {
+        // No initData found (opened in regular browser)
+        document.getElementById('auth-dimmer').classList.remove('active');
+        document.getElementById('error-segment').style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

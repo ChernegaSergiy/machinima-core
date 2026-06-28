@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Стрічка | Machinima{% endblock %}
+
+{% block body %}
+    <h1 class="ui header">
+        ПОПУЛЯРНЕ
+        <div class="sub header">Найкращі проєкти за рейтингом</div>
+    </h1>
+
+    <div class="ui unstackable items">
+        {% for project in feed %}
+            <div class="item ui segment">
+                <div class="content">
+                    <a class="header" href="#">{{ project.title }}</a>
+                    <div class="meta">
+                        <span class="type">{{ project.type }}</span>
+                        <span>•</span>
+                        <span>{{ project.createdAt|date('d.m.Y') }}</span>
+                    </div>
+                    <div class="description">
+                        <p>{{ project.description|length > 100 ? project.description|slice(0, 100) ~ '...' : project.description }}</p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui label">
+                            <i class="eye icon"></i> {{ project.viewsCount }}
+                        </div>
+                        <div class="ui label">
+                            <i class="heart icon"></i> {{ project.likesCount }}
+                        </div>
+                        <div class="ui right floated primary button">
+                            Деталі
+                            <i class="right chevron icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="ui message">
+                <div class="header">Немає проєктів</div>
+                <p>Стрічка наразі порожня.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
