@@ -126,10 +126,18 @@ class AppController extends AbstractController
             }
         }
 
+        $isModerator = false;
+        $user = $this->getUser();
+        if ($user) {
+            $roles = $user->getRoles();
+            $isModerator = in_array('ROLE_MODERATOR', $roles, true) || in_array('ROLE_ADMIN', $roles, true);
+        }
+
         return $this->render('app/post.html.twig', [
             'post' => $post,
             'commentTree' => $commentTree,
-            'commentsCount' => count($comments)
+            'commentsCount' => count($comments),
+            'isModerator' => $isModerator
         ]);
     }
 

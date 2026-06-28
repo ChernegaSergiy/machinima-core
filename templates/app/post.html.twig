@@ -41,8 +41,16 @@
     <script>
         (function() {
             var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+            var isModerator = {{ isModerator ? 'true' : 'false' }};
             var style = document.createElement('style');
-            style.innerHTML = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
+            var css = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
+            
+            if (isModerator) {
+                css += '\\n.owner-actions { display: flex !important; }';
+                css += '\\n.owner-actions:not([data-owner-id="' + userId + '"]) .edit-btn { display: none !important; }';
+            }
+            
+            style.innerHTML = css;
             document.head.appendChild(style);
         })();
     </script>
@@ -69,8 +77,8 @@
                         <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
                             <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
                             <div class="owner-actions" style="display: none; gap: 8px; flex-wrap: wrap;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                                <button class="reply-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
-                                <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
+                                <button class="reply-btn edit-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
+                                <button class="reply-btn delete-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
                             </div>
                         </div>
                         
@@ -161,8 +169,8 @@
                 <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
                     <button class="reply-btn" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
                     <div class="owner-actions" style="display: flex; gap: 8px; flex-wrap: wrap;" data-owner-id="${c.user_id}" data-cid="${c.id}">
-                        <button class="reply-btn" style="color: var(--text);" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
-                        <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
+                        <button class="reply-btn edit-btn" style="color: var(--text);" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
+                        <button class="reply-btn delete-btn" style="color: #d32f2f;" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
                     </div>
                 </div>
                 <div class="comment-reply-wrapper" id="replies-${c.id}" style="display:none; margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px;"></div>
