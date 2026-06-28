@@ -17,7 +17,19 @@ class AppController extends AbstractController
     #[Route('/', name: 'app_index')]
     public function index(EntityManagerInterface $em): Response
     {
-        $feed = $em->getRepository(Content::class)->findBy([], ['trendingScore' => 'DESC'], 20);
+        $qb = $em->getRepository(Content::class)->createQueryBuilder('c');
+        
+        if (!$this->isGranted('ROLE_MODERATOR')) {
+            $qb->leftJoin('c.staff', 'cs')
+               ->leftJoin('cs.author', 'a')
+               ->andWhere('a.state != :privateState OR a.state IS NULL')
+               ->setParameter('privateState', 'private');
+        }
+
+        $feed = $qb->orderBy('c.trendingScore', 'DESC')
+                   ->setMaxResults(20)
+                   ->getQuery()
+                   ->getResult();
 
         return $this->render('app/index.html.twig', [
             'feed' => $feed,
@@ -41,11 +53,19 @@ class AppController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $projects = $em->getRepository(Content::class)->createQueryBuilder('c')
+        $qb = $em->getRepository(Content::class)->createQueryBuilder('c')
             ->join('c.categories', 'cat')
             ->where('cat.id = :categoryId')
-            ->setParameter('categoryId', $id)
-            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('categoryId', $id);
+
+        if (!$this->isGranted('ROLE_MODERATOR')) {
+            $qb->leftJoin('c.staff', 'cs')
+               ->leftJoin('cs.author', 'a')
+               ->andWhere('a.state != :privateState OR a.state IS NULL')
+               ->setParameter('privateState', 'private');
+        }
+
+        $projects = $qb->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult();
 
@@ -58,7 +78,13 @@ class AppController extends AbstractController
     #[Route('/authors', name: 'app_authors')]
     public function authors(EntityManagerInterface $em): Response
     {
-        $authors = $em->getRepository(Author::class)->findAll();
+        $qb = $em->getRepository(Author::class)->createQueryBuilder('a');
+        if (!$this->isGranted('ROLE_MODERATOR')) {
+            $qb->andWhere('a.state != :privateState OR a.state IS NULL')
+               ->setParameter('privateState', 'private');
+        }
+        $authors = $qb->getQuery()->getResult();
+        
         return $this->render('app/authors.html.twig', [
             'authors' => $authors,
         ]);
@@ -68,7 +94,7 @@ class AppController extends AbstractController
     public function author(int $id, EntityManagerInterface $em): Response
     {
         $author = $em->getRepository(Author::class)->find($id);
-        if (!$author) {
+        if (!$author || ($author->getState() === 'private' && !$this->isGranted('ROLE_MODERATOR'))) {
             throw $this->createNotFoundException();
         }
 
@@ -96,6 +122,14 @@ class AppController extends AbstractController
         $post = $em->getRepository(Content::class)->find($id);
         if (!$post) {
             throw $this->createNotFoundException();
+        }
+
+        if (!$this->isGranted('ROLE_MODERATOR')) {
+            foreach ($post->getStaff() as $staff) {
+                if ($staff->getAuthor() && $staff->getAuthor()->getState() === 'private') {
+                    throw $this->createNotFoundException();
+                }
+            }
         }
         
         $comments = $em->getRepository(Comment::class)->findBy(['content' => $post], ['createdAt' => 'ASC']);
