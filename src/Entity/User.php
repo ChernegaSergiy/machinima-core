@@ -141,13 +141,9 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = [];
-        // Map custom database roles to Symfony's expected ROLE_ format
+        // Map custom database roles to Symfony's expected ROLE_ format, including hierarchy
         foreach ($this->roles as $roleEntity) {
-            $roleName = strtoupper($roleEntity->getRoleName());
-            if (!str_starts_with($roleName, 'ROLE_')) {
-                $roleName = 'ROLE_' . $roleName;
-            }
-            $roles[] = $roleName;
+            $this->addRoleAndChildren($roleEntity, $roles);
         }
 
         if ($this->legacyRole) {
@@ -162,6 +158,21 @@ class User implements UserInterface
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
+    }
+
+    private function addRoleAndChildren(Role $role, array &$roles): void
+    {
+        $roleName = strtoupper($role->getRoleName());
+        if (!str_starts_with($roleName, 'ROLE_')) {
+            $roleName = 'ROLE_' . $roleName;
+        }
+        
+        if (!in_array($roleName, $roles, true)) {
+            $roles[] = $roleName;
+            foreach ($role->getChildren() as $childRole) {
+                $this->addRoleAndChildren($childRole, $roles);
+            }
+        }
     }
 
     /**
