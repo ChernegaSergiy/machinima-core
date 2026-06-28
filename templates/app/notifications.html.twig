@@ -45,7 +45,11 @@ async function markAllAsRead() {
         }
         const res = await fetch('/api/notifications/read', { method: 'POST', headers: headers });
         if (res.ok) {
-            window.location.reload();
+            if (typeof Turbo !== 'undefined') {
+                Turbo.visit(window.location.href, { action: "replace" });
+            } else {
+                window.location.reload();
+            }
         }
     } catch(e) {
         console.error(e);
