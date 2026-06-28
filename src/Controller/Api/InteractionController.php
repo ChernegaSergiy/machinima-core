@@ -131,7 +131,11 @@ class InteractionController extends AbstractController
                 'views' => $content->getViewsCount()
             ])
         );
-        $hub->publish($update);
+        try {
+            $hub->publish($update);
+        } catch (\Throwable $e) {
+            // Ignore Mercure errors if hub is not running
+        }
 
         return $this->json(['success' => true]);
     }
