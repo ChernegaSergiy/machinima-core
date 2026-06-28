@@ -66,7 +66,7 @@ h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, 
 }
 .post-actions { display: flex; align-items: center; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--border); }
 .action-item { 
-    display: inline-flex; align-items: center; justify-content: center;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     font-size: 14px; font-weight: 700; color: var(--text); 
     cursor: pointer; transition: all 0.1s;
     padding: 6px 12px;
@@ -78,7 +78,7 @@ h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, 
 }
 .action-item:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border); }
 .action-item i { width: 18px; height: 18px; stroke-width: 2.5px; display: flex; flex-shrink: 0; }
-.action-item span { margin-left: 6px; display: inline-block; }
+.action-item span { display: inline-block; }
 .action-item.btn-dislike span { display: none; }
 
 /* Top Nav */
