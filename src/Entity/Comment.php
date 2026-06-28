@@ -31,7 +31,7 @@ class Comment
     private ?string $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: Comment::class)]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     private ?Comment $parent = null;
 
     #[ORM\Column(name: 'updated_at', type: 'text', nullable: true)]
