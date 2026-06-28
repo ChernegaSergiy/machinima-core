@@ -162,10 +162,7 @@ class User implements UserInterface
 
     private function addRoleAndChildren(Role $role, array &$roles): void
     {
-        $roleName = strtoupper($role->getRoleName());
-        if (!str_starts_with($roleName, 'ROLE_')) {
-            $roleName = 'ROLE_' . $roleName;
-        }
+        $roleName = $role->getRoleName();
         
         if (!in_array($roleName, $roles, true)) {
             $roles[] = $roleName;
