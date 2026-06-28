@@ -36,15 +36,15 @@
             {% endif %}
         </a>
         
-        <div class="post-actions">
-            <div class="action-item">
-                <i data-lucide="heart"></i> {{ project.likesCount }}
+        <div class="post-actions" data-post-id="{{ project.id }}">
+            <div class="action-item" onclick="interactFeed({{ project.id }}, 'like', this)" style="cursor:pointer;">
+                <i data-lucide="heart"></i> <span class="likes-count">{{ project.likesCount }}</span>
             </div>
-            <div class="action-item">
-                <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+            <div class="action-item" onclick="interactFeed({{ project.id }}, 'dislike', this)" style="cursor:pointer;">
+                <i data-lucide="thumbs-down"></i> <span class="dislikes-count">{{ project.dislikesCount }}</span>
             </div>
             <div class="action-item ml-auto">
-                <i data-lucide="eye"></i> {{ project.viewsCount }}
+                <i data-lucide="eye"></i> <span class="views-count">{{ project.viewsCount }}</span>
             </div>
         </div>
     </div>

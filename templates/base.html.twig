@@ -103,6 +103,33 @@
                 event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = tgData;
             }
         });
+
+        // Global interaction logic for feed items
+        window.interactFeed = async function(contentId, type, btnElement) {
+            try {
+                const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+                const res = await fetch('/api/interact', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                    },
+                    body: JSON.stringify({
+                        content_id: contentId,
+                        type: type,
+                        user_id: tgUserId
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.reload(); // Quick refresh to show updated numbers for now
+                } else {
+                    alert('Помилка: ' + data.error);
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        };
     </script>
     {% block javascripts %}{% endblock %}
 </body>
