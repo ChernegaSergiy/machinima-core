@@ -1,93 +1,94 @@
-/* Search Bar Native iOS style */
-.search-container {
-  padding: 10px 16px;
-  background-color: var(--tg-theme-bg-color);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  border-bottom: 0.5px solid var(--tg-theme-separator-color);
-}
+/* ==========================================
+   TMA PREMIUM DESIGN SYSTEM
+   ========================================== */
 
-.search-bar {
-  background-color: var(--tg-theme-secondary-bg-color);
-  border-radius: 10px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-}
-
-.search-bar svg {
-  width: 16px;
-  height: 16px;
-  fill: var(--tg-theme-hint-color);
-  margin-right: 6px;
-}
-
-.search-bar input {
-  border: none;
-  background: transparent;
-  color: var(--tg-theme-text-color);
-  font-size: 17px;
+.app-container {
   width: 100%;
-  outline: none;
+  position: relative;
+  background-color: var(--tg-theme-secondary-bg-color);
+  min-height: 100vh;
 }
 
-.search-bar input::placeholder {
-  color: var(--tg-theme-hint-color);
-}
-
-/* Segmented Control (Tabs) */
-.segmented-control {
-  margin: 16px;
-  background-color: var(--tg-theme-separator-color);
-  border-radius: 8px;
-  display: flex;
-  padding: 2px;
-}
-
-.segment {
-  flex: 1;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--tg-theme-text-color);
-  border-radius: 6px;
-  transition: background-color 0.2s;
-}
-
-.segment.active {
-  background-color: var(--tg-theme-bg-color);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-/* Post Block */
-.feed-container {
-  padding: 0;
-}
-
-.post-card {
-  background-color: var(--tg-theme-bg-color);
-  margin-bottom: 8px;
-  padding: 16px;
+/* Tabbar - Glassmorphism */
+.tma-tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(var(--tg-theme-bg-color-rgb, 255, 255, 255), 0.85); /* Telegram usually doesn't provide RGB vars, so we use a trick or fallback */
+  background-color: var(--tg-theme-bg-color); /* Fallback */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-top: 0.5px solid var(--tg-theme-separator-color);
-  border-bottom: 0.5px solid var(--tg-theme-separator-color);
+  display: flex;
+  z-index: 1000;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
+@supports (backdrop-filter: blur(20px)) {
+  .tma-tabbar {
+      background-color: transparent;
+      /* Hack to get semi-transparent bg based on theme text color (dark/light inversion) */
+      background-image: linear-gradient(to bottom, rgba(120, 120, 120, 0.1), rgba(120, 120, 120, 0.1));
+  }
+}
+
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--tg-theme-hint-color);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+  transition: color var(--tma-transition-fast), transform var(--tma-transition-fast);
+}
+
+.tab-item svg {
+  margin-bottom: 4px;
+  stroke-width: 2.2px;
+  transition: transform var(--tma-transition-fast);
+}
+
+.tab-item:active svg {
+  transform: scale(0.9);
+}
+
+.tab-item.active {
+  color: var(--tg-theme-button-color);
+}
+.tab-item.active svg {
+  stroke: var(--tg-theme-button-color);
+}
+
+/* Feed Container */
+.feed-container {
+  padding: 16px 0;
+}
+
+/* Cards - Modern iOS-like */
+.tma-card {
+  background-color: var(--tg-theme-bg-color);
+  border-radius: var(--tma-radius-lg);
+  box-shadow: var(--tma-shadow-sm);
+  padding: 16px;
+  margin: 0 16px 16px;
+  transition: transform var(--tma-transition-fast), box-shadow var(--tma-transition-fast);
+  border: 0.5px solid var(--tg-theme-separator-color);
+}
+
+.tma-card:active {
+  transform: scale(0.98);
+}
+
+/* Post Header inside Card */
 .post-header {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: var(--tg-theme-secondary-bg-color);
-  margin-right: 12px;
-  object-fit: cover;
+  margin-bottom: 14px;
 }
 
 .post-author-info {
@@ -96,41 +97,65 @@
 
 .post-author-name {
   font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 2px;
+  font-weight: 700;
+  color: var(--tg-theme-text-color);
+  letter-spacing: -0.3px;
 }
 
 .post-time {
   font-size: 13px;
   color: var(--tg-theme-hint-color);
+  margin-top: 2px;
 }
 
-.post-title {
-  font-size: 17px;
-  font-weight: 700;
-  margin-bottom: 6px;
-  line-height: 1.3;
-}
-
-.post-text {
-  font-size: 16px;
-  line-height: 1.4;
-  margin-bottom: 12px;
-}
-
-.post-media {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 12px;
+/* Avatars */
+.tma-avatar {
   background-color: var(--tg-theme-secondary-bg-color);
-  object-fit: cover;
-  aspect-ratio: 16 / 9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  flex-shrink: 0;
 }
 
+.tma-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Media (Images/Videos) */
+.tma-media {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: var(--tma-radius-md);
+  background-color: var(--tg-theme-secondary-bg-color);
+  overflow: hidden;
+  position: relative;
+  margin: 12px 0;
+  box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.1);
+}
+
+/* Text */
+.post-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--tg-theme-text-color);
+  margin-bottom: 12px;
+  font-weight: 400;
+}
+
+/* Actions (Like, Dislike, Eye) */
 .post-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
+  margin-top: 14px;
 }
 
 .action-button {
@@ -138,412 +163,149 @@
   align-items: center;
   color: var(--tg-theme-hint-color);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   background: var(--tg-theme-secondary-bg-color);
-  padding: 6px 12px;
-  border-radius: 16px;
+  padding: 6px 14px;
+  border-radius: var(--tma-radius-pill);
+  transition: all var(--tma-transition-fast);
 }
 
 .action-button svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;
+  stroke-width: 2.5px;
   margin-right: 6px;
 }
 
-.action-button.active {
+.action-button:active {
+  transform: scale(0.95);
+  background-color: var(--tg-theme-separator-color);
+}
+
+.action-button.active-like {
   color: #ff3b30;
   background: rgba(255, 59, 48, 0.1);
 }
 
-/* Native List for Categories */
-.native-list {
-  background-color: var(--tg-theme-bg-color);
-  border-top: 0.5px solid var(--tg-theme-separator-color);
-  border-bottom: 0.5px solid var(--tg-theme-separator-color);
-  margin-bottom: 20px;
+.action-button.active-dislike {
+  color: #007aff;
+  background: rgba(0, 122, 255, 0.1);
 }
 
-.native-list-item {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px;
-  border-bottom: 0.5px solid var(--tg-theme-separator-color);
-}
-
-.native-list-item:last-child {
-  border-bottom: none;
-}
-
-.native-list-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  background-color: var(--tg-theme-button-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 12px;
-}
-
-.native-list-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: #fff;
-}
-
-.native-list-text {
-  flex: 1;
-  font-size: 17px;
-}
-
-.native-list-chevron {
-  color: var(--tg-theme-hint-color);
-}
-
-/* Fixed CTA Button */
-.main-button {
+/* General Buttons */
+.tma-button {
   background-color: var(--tg-theme-button-color);
   color: var(--tg-theme-button-text-color);
-  text-align: center;
-  padding: 14px;
-  font-size: 17px;
+  padding: 12px 20px;
   font-weight: 600;
-  border-radius: 12px;
-  margin: 16px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.section-title {
-  padding: 16px 16px 8px;
-  font-size: 13px;
-  text-transform: uppercase;
-  color: var(--tg-theme-hint-color);
-  font-weight: 500;
-}
-
-/* PC / Desktop Responsive Constraint */
-.app-container {
-  width: 100%;
-  position: relative;
-  background-color: var(--tg-theme-secondary-bg-color);
-  min-height: 100vh;
-}
-
-.main-tabbar {
-  background-color: var(--tg-theme-bg-color) !important;
-  opacity: 1 !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  border-top: 0.5px solid var(--tg-theme-separator-color);
-}
-
-/* Force native blue accent for the selected tab */
-.main-tabbar [aria-selected="true"],
-.main-tabbar .tgui-tabbar-item--selected,
-.main-tabbar [aria-selected="true"] span,
-.main-tabbar [aria-selected="true"] svg,
-.main-tabbar .tgui-tabbar-item--selected span,
-.main-tabbar .tgui-tabbar-item--selected svg {
-  color: var(--tg-theme-button-color) !important;
-}
-
-/* Remove grey tap highlight on iOS */
-.main-tabbar *, nav * {
-  -webkit-tap-highlight-color: transparent !important;
-}
-
-/* ==========================================
-   MINIMALIST BRUTALISM (NEO-BRUTALISM) OVERRIDES 
-   ========================================== */
-
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
-
-body, * {
-  font-family: 'Space Grotesk', sans-serif;
-  box-sizing: border-box;
-}
-
-.app-container, body {
-  background-color: var(--tg-theme-secondary-bg-color);
-  margin: 0;
-}
-
-/* Brutalist Tabbar */
-.brutalist-tabbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background-color: var(--tg-theme-bg-color);
-  border-top: 3px solid var(--tg-theme-text-color);
-  display: flex;
-  z-index: 1000;
-}
-
-.tab-item {
-  display: flex;
-  flex-direction: column;
+  font-size: 15px;
+  border-radius: var(--tma-radius-md);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--tg-theme-text-color);
-  font-size: 11px;
-  font-weight: 800;
-  text-transform: uppercase;
-  cursor: pointer;
-  flex: 1;
-  border-right: 3px solid var(--tg-theme-text-color);
-  transition: background-color 0.1s;
-}
-
-.tab-item:last-child {
-  border-right: none;
-}
-
-.tab-item svg {
-  margin-bottom: 4px;
-}
-
-.tab-item.active {
-  background-color: var(--tg-theme-text-color);
-  color: var(--tg-theme-bg-color);
-}
-.tab-item.active svg {
-  stroke: var(--tg-theme-bg-color);
-}
-
-/* Cards */
-.brutalist-card {
-  background-color: var(--tg-theme-bg-color);
-  border: 3px solid var(--tg-theme-text-color);
-  box-shadow: 6px 6px 0px var(--tg-theme-text-color);
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.brutalist-card:active {
-  transform: translate(3px, 3px);
-  box-shadow: 3px 3px 0px var(--tg-theme-text-color);
-}
-
-.brutalist-media {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  border: 3px solid var(--tg-theme-text-color);
-}
-
-/* Avatar */
-.brutalist-avatar {
-  background-color: var(--tg-theme-secondary-bg-color);
-  border: 2px solid var(--tg-theme-text-color);
-  box-shadow: 2px 2px 0px var(--tg-theme-text-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.brutalist-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Buttons */
-.brutalist-button {
-  background-color: var(--tg-theme-bg-color);
-  border: 2px solid var(--tg-theme-text-color);
-  box-shadow: 3px 3px 0px var(--tg-theme-text-color);
-  color: var(--tg-theme-text-color);
-  padding: 8px 16px;
-  font-weight: 700;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
   gap: 8px;
   cursor: pointer;
-  outline: none;
-  transition: transform 0.1s, box-shadow 0.1s;
+  border: none;
+  transition: opacity var(--tma-transition-fast), transform var(--tma-transition-fast);
+  text-decoration: none;
 }
 
-.brutalist-button:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px var(--tg-theme-text-color);
+.tma-button:active {
+  transform: scale(0.96);
+  opacity: 0.8;
 }
 
-.brutalist-button.active-like {
-  background-color: var(--tg-theme-button-color);
-  color: #fff;
-}
-
-.brutalist-button.active-dislike {
-  background-color: #ff3b30;
-  color: #fff;
-}
-
-/* Lists */
-.brutalist-list {
+/* Modern List for Categories & Authors */
+.tma-list {
   background-color: var(--tg-theme-bg-color);
-  border-top: 3px solid var(--tg-theme-text-color);
-  border-bottom: 3px solid var(--tg-theme-text-color);
-  margin-bottom: 24px;
+  border-radius: var(--tma-radius-lg);
+  margin: 16px;
+  overflow: hidden;
+  box-shadow: var(--tma-shadow-sm);
+  border: 0.5px solid var(--tg-theme-separator-color);
 }
 
-.brutalist-section-header {
-  font-size: 14px;
-  font-weight: 700;
+.tma-section-header {
+  font-size: 13px;
+  font-weight: 600;
   text-transform: uppercase;
-  padding: 12px 16px;
+  letter-spacing: 0.5px;
+  padding: 24px 16px 8px;
   margin: 0;
   color: var(--tg-theme-hint-color);
-  border-bottom: 3px solid var(--tg-theme-text-color);
 }
 
-.brutalist-list-item {
+.tma-list-item {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 2px solid var(--tg-theme-text-color);
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--tg-theme-separator-color);
+  transition: background-color var(--tma-transition-fast);
   cursor: pointer;
 }
 
-.brutalist-list-item:last-child {
+.tma-list-item:last-child {
   border-bottom: none;
 }
 
-.brutalist-list-item:active {
+.tma-list-item:active {
   background-color: var(--tg-theme-secondary-bg-color);
 }
 
-.brutalist-list-icon {
+.tma-list-icon {
   width: 32px;
   height: 32px;
-  border: 2px solid var(--tg-theme-text-color);
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--tg-theme-button-color), #0a84ff);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 16px;
-  box-shadow: 2px 2px 0 var(--tg-theme-text-color);
+  margin-right: 14px;
+  flex-shrink: 0;
 }
 
-.brutalist-list-text {
+.tma-list-icon svg {
+  color: #fff;
+  stroke: #fff;
+}
+
+.tma-list-text {
   flex: 1;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
+  color: var(--tg-theme-text-color);
 }
 
-/* ==========================================
-   MINIMALIST BRUTALISM (NEO-BRUTALISM) OVERRIDES 
-   ========================================== */
-
-/* Import brutalist font */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap');
-
-body, * {
-  font-family: 'Space Grotesk', sans-serif !important;
+.tma-list-item i[data-lucide="chevron-right"] {
+  color: var(--tg-theme-hint-color);
+  opacity: 0.5;
 }
 
-/* Base App background */
-.app-container, body {
-  background-color: var(--tg-theme-secondary-bg-color) !important;
+/* Custom Overrides for Author & Category pages */
+.author-page .tma-avatar,
+.category-page .tma-list-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 16px auto;
+  box-shadow: var(--tma-shadow-md);
 }
 
-/* Brutalist Cards */
-.tgui-2b467ec7db6c0e52 /* TGUI Card class */,
-[class^="tgui-card"],
-.post-card, 
-div[style*="margin: 0px 16px 16px"] /* targeted from PostCard */,
-.tgui-list {
-  background-color: var(--tg-theme-bg-color) !important;
-  border: 3px solid var(--tg-theme-text-color) !important;
-  border-radius: 0px !important;
-  box-shadow: 6px 6px 0px var(--tg-theme-text-color) !important;
-  transition: transform 0.1s, box-shadow 0.1s;
-  overflow: visible !important;
-  margin-bottom: 24px !important;
+.category-page .tma-list-icon {
+  border-radius: 20px; /* Squircle for category */
 }
 
-/* Active states for cards */
-div[style*="margin: 0px 16px 16px"]:active {
-  transform: translate(3px, 3px);
-  box-shadow: 3px 3px 0px var(--tg-theme-text-color) !important;
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Brutalist Avatars (Square!) */
-.tgui-avatar, 
-.avatar,
-.tgui-c533ea981cb7040e {
-  border-radius: 0px !important;
-  border: 2px solid var(--tg-theme-text-color) !important;
-  box-shadow: 2px 2px 0px var(--tg-theme-text-color) !important;
+.tma-card, .tma-list {
+  animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-/* Images inside cards */
-img[style*="border-radius: 12px"] {
-  border-radius: 0px !important;
-  border: 2px solid var(--tg-theme-text-color) !important;
-}
-
-/* Tabbar */
-.main-tabbar {
-  border-top: 3px solid var(--tg-theme-text-color) !important;
-  box-shadow: 0px -4px 0px var(--tg-theme-text-color) !important;
-  padding-top: 4px;
-}
-
-/* Interaction Buttons (Like, Dislike, Share) */
-div[style*="border-radius: 12px"][style*="padding: 6px 12px"] {
-  border-radius: 0px !important;
-  border: 2px solid var(--tg-theme-text-color) !important;
-  box-shadow: 3px 3px 0px var(--tg-theme-text-color) !important;
-  background-color: var(--tg-theme-bg-color) !important;
-}
-
-div[style*="border-radius: 12px"][style*="padding: 6px 12px"]:active {
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px var(--tg-theme-text-color) !important;
-}
-
-/* Active Interaction Buttons (e.g. Liked) */
-div[style*="color: var(--tg-theme-button-color)"],
-div[style*="color: rgb(255, 59, 48)"] {
-  background-color: var(--tg-theme-button-color) !important;
-  color: var(--tg-theme-button-text-color) !important;
-  border-color: var(--tg-theme-text-color) !important;
-}
-
-/* Dislike active */
-div[style*="color: rgb(255, 59, 48)"] {
-  background-color: #ff3b30 !important;
-  color: #fff !important;
-}
-
-/* Titles and Typography */
-h1, h2, h3, .tgui-title, .section-title {
-  font-weight: 700 !important;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-}
-
-/* Brutalist Segmented Control (Tabs at the top) */
-.tgui-segmented-control {
-  border-radius: 0px !important;
-  border: 2px solid var(--tg-theme-text-color) !important;
-  background-color: transparent !important;
-  padding: 0 !important;
-  box-shadow: 4px 4px 0px var(--tg-theme-text-color) !important;
-}
-
-.tgui-segmented-control-item {
-  border-radius: 0px !important;
-  border-right: 2px solid var(--tg-theme-text-color) !important;
-}
-.tgui-segmented-control-item:last-child {
-  border-right: none !important;
-}
-
-.tgui-segmented-control-item--active {
-  background-color: var(--tg-theme-text-color) !important;
-  color: var(--tg-theme-bg-color) !important;
-}
+.feed-container .tma-card:nth-child(1) { animation-delay: 0.05s; }
+.feed-container .tma-card:nth-child(2) { animation-delay: 0.1s; }
+.feed-container .tma-card:nth-child(3) { animation-delay: 0.15s; }
+.feed-container .tma-card:nth-child(4) { animation-delay: 0.2s; }

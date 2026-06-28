@@ -3,14 +3,14 @@
 {% block title %}Категорії{% endblock %}
 
 {% block body %}
-<div class="brutalist-list">
-    <h2 class="brutalist-section-header">Жанри</h2>
+<div class="tma-list">
+    <h2 class="tma-section-header">Жанри</h2>
     {% for category in categories %}
-        <a href="{{ path('app_category', {id: category.id}) }}" class="brutalist-list-item" style="text-decoration: none; color: inherit;">
-            <div class="brutalist-list-icon" style="background-color: var(--tg-theme-button-color);">
+        <a href="{{ path('app_category', {id: category.id}) }}" class="tma-list-item" style="text-decoration: none; color: inherit;">
+            <div class="tma-list-icon" style="background-color: var(--tg-theme-button-color);">
                 <i data-lucide="layout-grid" style="color: #fff; width: 18px; height: 18px;"></i>
             </div>
-            <div class="brutalist-list-text">{{ category.name }}</div>
+            <div class="tma-list-text">{{ category.name }}</div>
             <i data-lucide="chevron-right" style="color: var(--tg-theme-hint-color);"></i>
         </a>
     {% else %}

@@ -16,7 +16,7 @@
 
         {% block tabbar %}
         {% set current_route = app.request.attributes.get('_route') %}
-        <nav class="brutalist-tabbar">
+        <nav class="tma-tabbar">
             <a href="{{ path('app_index') }}" class="tab-item {% if current_route == 'app_index' %}active{% endif %}" style="text-decoration: none;">
                 <i data-lucide="play-square"></i>
                 <span>Стрічка</span>

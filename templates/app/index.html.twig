@@ -5,9 +5,9 @@
 {% block body %}
 <div class="feed-container">
     {% for project in feed %}
-    <div class="post-card brutalist-card" style="margin: 0px 16px 16px;">
+    <div class="post-card tma-card" style="margin: 0px 16px 16px;">
         <div class="post-header">
-            <div class="brutalist-avatar avatar">
+            <div class="tma-avatar avatar">
                 {# Placeholder for avatar #}
                 <i data-lucide="user" style="color: var(--tg-theme-bg-color);"></i>
             </div>
@@ -22,7 +22,7 @@
         </div>
         
         <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
-            <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+            <div class="tma-media" style="display: flex; align-items: center; justify-content: center; color: #fff;">
                 {% if project.coverFileId %}
                     [Cover Image]
                 {% else %}
@@ -32,13 +32,13 @@
         </a>
         
         <div class="post-actions" style="margin-top: 12px;">
-            <div class="brutalist-button action-button">
+            <div class="tma-button action-button">
                 <i data-lucide="heart"></i> {{ project.likesCount }}
             </div>
-            <div class="brutalist-button action-button">
+            <div class="tma-button action-button">
                 <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
             </div>
-            <div class="brutalist-button action-button">
+            <div class="tma-button action-button">
                 <i data-lucide="eye"></i> {{ project.viewsCount }}
             </div>
         </div>
