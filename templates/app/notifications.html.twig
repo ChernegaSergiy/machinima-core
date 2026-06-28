@@ -13,7 +13,7 @@
     </div>
     
     {% for notif in notifications %}
-        {% set target_url = notif.targetId ? path('app_post_show', {'id': notif.targetId}) : '#' %}
+        {% set target_url = notif.targetId ? path('app_post', {'id': notif.targetId}) : '#' %}
         <a href="{{ target_url }}" class="list-item block no-underline {% if not notif.isRead %}unread{% endif %}" style="color:inherit;text-decoration:none;display:flex;">
             <div class="list-icon"><i data-lucide="bell"></i></div>
             <div class="list-content">
