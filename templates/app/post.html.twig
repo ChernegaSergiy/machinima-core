@@ -128,6 +128,12 @@
     window.editModeId = null;
 
     window.interact = async function(type, btnElement) {
+        if (btnElement && btnElement.style.pointerEvents === 'none') return;
+        if (btnElement) {
+            btnElement.style.pointerEvents = 'none';
+            btnElement.style.opacity = '0.5';
+        }
+        
         let step = 'init';
         try {
             step = 'tgData';
@@ -143,7 +149,8 @@
             }
 
             step = 'fetch_call';
-            const res = await fetch('/api/interact', {
+            const targetUrl = window.location.origin + '/api/interact';
+            const res = await fetch(targetUrl, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
@@ -187,6 +194,11 @@
             console.error('Interaction error at step ' + step + ':', e);
             if (type !== 'view') {
                 alert(`Мережева помилка (крок: ${step}): ` + e.name + ' - ' + e.message);
+            }
+        } finally {
+            if (btnElement) {
+                btnElement.style.pointerEvents = 'auto';
+                btnElement.style.opacity = '1';
             }
         }
     };
