@@ -21,15 +21,15 @@
                 <i data-lucide="play-square"></i>
                 <span>Стрічка</span>
             </a>
-            <a href="#" class="tab-item" style="text-decoration: none;">
+            <a href="{{ path('app_categories') }}" class="tab-item {% if current_route == 'app_categories' %}active{% endif %}" style="text-decoration: none;">
                 <i data-lucide="layout-grid"></i>
                 <span>Категорії</span>
             </a>
-            <a href="#" class="tab-item" style="text-decoration: none;">
+            <a href="{{ path('app_authors') }}" class="tab-item {% if current_route == 'app_authors' %}active{% endif %}" style="text-decoration: none;">
                 <i data-lucide="users"></i>
                 <span>Автори</span>
             </a>
-            <a href="#" class="tab-item" style="position: relative; text-decoration: none;">
+            <a href="{{ path('app_notifications') }}" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}" style="position: relative; text-decoration: none;">
                 <i data-lucide="bell"></i>
                 <span>Сповіщ.</span>
             </a>

@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Сповіщення{% endblock %}
+
+{% block body %}
+<div class="notifications-page" style="padding: 16px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 4px solid var(--tg-theme-text-color); padding-bottom: 16px;">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="bell" style="width: 28px; height: 28px;"></i>
+            СПОВІЩЕННЯ
+        </h2>
+        
+        {% set unread_count = notifications|filter(n => not n.isRead)|length %}
+        {% if unread_count > 0 %}
+            <button onclick="markAllRead()" class="brutalist-button" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
+                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> ПРОЧИТАНО
+            </button>
+        {% endif %}
+    </div>
+
+    {% if notifications|length == 0 %}
+        <div style="text-align: center; padding: 40px; border: 3px dashed var(--tg-theme-text-color); font-weight: 800; text-transform: uppercase;">
+            <i data-lucide="bell" style="width: 48px; height: 48px; margin-bottom: 16px;"></i><br>
+            Немає сповіщень
+        </div>
+    {% else %}
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+            {% for notif in notifications %}
+                <div onclick="handleClick({{ notif.id }}, {{ notif.isRead ? 'true' : 'false' }}, '{{ notif.type }}', '{{ notif.targetId }}')"
+                    style="
+                        border: 3px solid var(--tg-theme-text-color);
+                        background-color: {{ notif.isRead ? 'var(--tg-theme-bg-color)' : 'var(--tg-theme-secondary-bg-color)' }};
+                        box-shadow: {{ notif.isRead ? 'none' : '4px 4px 0 var(--tg-theme-text-color)' }};
+                        transform: {{ notif.isRead ? 'translate(4px, 4px)' : 'none' }};
+                        padding: 16px;
+                        cursor: pointer;
+                        transition: all 0.1s ease;
+                        display: flex;
+                        gap: 12px;
+                        align-items: flex-start;
+                    "
+                >
+                    <div style="padding: 8px; background-color: var(--tg-theme-text-color); color: var(--tg-theme-bg-color); border-radius: 50%;">
+                        {% if notif.type == 'new_comment' %}
+                            <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
+                        {% else %}
+                            <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                        {% endif %}
+                    </div>
+                    <div style="flex: 1;">
+                        <div style="font-weight: 800; margin-bottom: 4px; font-size: 15px;">
+                            {% if notif.type == 'new_comment' %}НОВИЙ КОМЕНТАР{% else %}СПОВІЩЕННЯ{% endif %}
+                            {% if not notif.isRead %}
+                                <span style="color: #e74c3c; margin-left: 8px; font-size: 12px;">● НОВЕ</span>
+                            {% endif %}
+                        </div>
+                        <div style="font-size: 14px; line-height: 1.4; font-weight: 600;">
+                            {{ notif.message }}
+                        </div>
+                        <div style="font-size: 12px; color: var(--tg-theme-hint-color); margin-top: 8px; font-weight: 700;">
+                            {{ notif.createdAt|date('d.m.Y H:i') }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    const currentUserId = {{ app.user ? app.user.id : 1 }};
+
+    function markAllRead() {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        fetch(`/api/user/${currentUserId}/notifications/read-all`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' }
+        }).then(() => {
+            window.location.reload();
+        }).catch(err => console.error(err));
+    }
+
+    function handleClick(id, isRead, type, targetId) {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        
+        const proceed = () => {
+            if (type === 'new_comment' && targetId) {
+                window.location.href = `/post/${targetId}`;
+            }
+        };
+
+        if (!isRead) {
+            fetch(`/api/notifications/${id}/read`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: currentUserId })
+            }).then(() => {
+                proceed();
+            }).catch(err => console.error(err));
+        } else {
+            proceed();
+        }
+    }
+</script>
+{% endblock %}

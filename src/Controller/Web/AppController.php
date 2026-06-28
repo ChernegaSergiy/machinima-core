@@ -6,6 +6,7 @@ use App\Entity\Content;
 use App\Entity\Category;
 use App\Entity\Author;
 use App\Entity\Comment;
+use App\Entity\Notification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,6 +85,25 @@ class AppController extends AbstractController
             'post' => $post,
             'commentTree' => $commentTree,
             'commentsCount' => count($comments)
+        ]);
+    }
+
+    #[Route('/notifications', name: 'app_notifications')]
+    public function notifications(EntityManagerInterface $em): Response
+    {
+        /** @var \App\Entity\User|null $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $notifications = $em->getRepository(Notification::class)->findBy(
+            ['user' => $user],
+            ['createdAt' => 'DESC']
+        );
+
+        return $this->render('app/notifications.html.twig', [
+            'notifications' => $notifications,
         ]);
     }
 

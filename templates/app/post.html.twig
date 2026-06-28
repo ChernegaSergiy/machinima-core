@@ -33,14 +33,14 @@
             </div>
             
             <div class="post-actions" style="margin-top: 12px;">
-                <div class="brutalist-button action-button">
-                    <i data-lucide="heart"></i> {{ post.likesCount }}
+                <div class="brutalist-button action-button" onclick="interact('like')">
+                    <i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span>
+                </div>
+                <div class="brutalist-button action-button" onclick="interact('dislike')">
+                    <i data-lucide="thumbs-down"></i> <span id="dislikes-count">{{ post.dislikesCount }}</span>
                 </div>
                 <div class="brutalist-button action-button">
-                    <i data-lucide="thumbs-down"></i> {{ post.dislikesCount }}
-                </div>
-                <div class="brutalist-button action-button">
-                    <i data-lucide="eye"></i> {{ post.viewsCount }}
+                    <i data-lucide="eye"></i> <span id="views-count">{{ post.viewsCount }}</span>
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@
                             {{ comment.text }}
                         </div>
                         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                            <button class="brutalist-button" style="padding: 4px 8px; font-size: 12px;">
+                            <button class="brutalist-button" style="padding: 4px 8px; font-size: 12px;" onclick="setReply({{ comment.id }}, '{{ comment.authorName|escape('js') }}')">
                                 <i data-lucide="reply" style="width: 14px; height: 14px; margin-right: 4px;"></i> ВІДПОВІСТИ
                             </button>
                         </div>
@@ -99,13 +99,92 @@
     <!-- Sticky form -->
     <div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--tg-theme-secondary-bg-color); border-top: 3px solid var(--tg-theme-text-color); z-index: 100;">
         <div style="padding: 12px 16px;">
-            <form style="display: flex; gap: 12px;">
-                <input type="text" placeholder="НАПИСАТИ..." style="flex: 1; padding: 12px; border: 3px solid var(--tg-theme-text-color); background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); font-size: 16px; font-weight: 700; font-family: inherit; outline: none; box-shadow: inset 2px 2px 0 var(--tg-theme-text-color);" />
-                <button type="button" class="brutalist-button" style="padding: 0 16px; background-color: var(--tg-theme-button-color); color: #fff;">
+            <form id="comment-form" onsubmit="submitComment(event)" style="display: flex; gap: 12px;">
+                <input id="comment-input" type="text" placeholder="НАПИСАТИ..." style="flex: 1; padding: 12px; border: 3px solid var(--tg-theme-text-color); background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); font-size: 16px; font-weight: 700; font-family: inherit; outline: none; box-shadow: inset 2px 2px 0 var(--tg-theme-text-color);" />
+                <button type="submit" class="brutalist-button" style="padding: 0 16px; background-color: var(--tg-theme-button-color); color: #fff;">
                     <i data-lucide="send" style="width: 24px; height: 24px;"></i>
                 </button>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    const postId = {{ post.id }};
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    const currentUserId = tgUser?.id || 1;
+    const authorName = tgUser?.first_name || 'Анонім';
+    let replyToId = null;
+
+    function interact(type) {
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+        fetch('/api/interact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content_id: postId,
+                user_id: currentUserId,
+                type: type
+            })
+        }).catch(err => console.error(err));
+    }
+
+    function submitComment(e) {
+        e.preventDefault();
+        const input = document.getElementById('comment-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        fetch(`/api/projects/${postId}/comments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: currentUserId,
+                author_name: authorName,
+                text: text,
+                parent_id: replyToId
+            })
+        }).then(res => res.json()).then(data => {
+            if(data.success) {
+                input.value = '';
+                replyToId = null;
+                input.placeholder = 'НАПИСАТИ...';
+                // Reload to display the new comment immediately
+                window.location.reload();
+            }
+        });
+    }
+
+    function setReply(id, name) {
+        replyToId = id;
+        const input = document.getElementById('comment-input');
+        input.placeholder = `ВІДПОВІДЬ ДЛЯ ${name.toUpperCase()}...`;
+        input.focus();
+    }
+
+    // Listen to Mercure events for real-time updates without polling
+    try {
+        const mercureUrl = new URL('/.well-known/mercure', window.location.origin);
+        mercureUrl.searchParams.append('topic', 'machinima/updates');
+        
+        const eventSource = new EventSource(mercureUrl.href);
+        eventSource.onmessage = event => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'STATS_UPDATE' && data.content_id === postId) {
+                document.getElementById('likes-count').innerText = data.likes;
+                document.getElementById('dislikes-count').innerText = data.dislikes;
+                document.getElementById('views-count').innerText = data.views;
+            } else if (data.type === 'NEW_COMMENT' && data.content_id === postId) {
+                // If another user commented, just reload the page to render the new tree
+                window.location.reload();
+            }
+        };
+    } catch (e) {
+        console.error('Mercure connection failed', e);
+    }
+</script>
 {% endblock %}
