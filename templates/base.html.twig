@@ -31,6 +31,20 @@
             let cookieStr = "tma_init_data=" + encodeURIComponent(window.Telegram.WebApp.initData) + "; path=/; max-age=86400;";
             if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
             document.cookie = cookieStr;
+
+            // Fallback for strict browsers (like WebKitGTK on Linux/Fedora) that drop JS cookies
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.href && link.href.startsWith(window.location.origin) && window.Telegram?.WebApp?.initData) {
+                    try {
+                        const url = new URL(link.href);
+                        if (!url.searchParams.has('initData')) {
+                            url.searchParams.set('initData', window.Telegram.WebApp.initData);
+                            link.href = url.toString();
+                        }
+                    } catch(err) {}
+                }
+            });
         }
     </script>
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
