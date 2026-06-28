@@ -38,43 +38,54 @@
         </div>
     </div>
 
+    <script>
+        (function() {
+            var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+            var style = document.createElement('style');
+            style.innerHTML = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
+            document.head.appendChild(style);
+        })();
+    </script>
     <h2 class="comment-section-title">Коментарі ({{ commentsCount }})</h2>
     
-    {% if commentsCount == 0 %}
-        <div class="empty-state">
-            <i data-lucide="message-square"></i>
-            <div class="empty-state-text">Немає коментарів</div>
-        </div>
-    {% else %}
-        {% macro render_comment_tree(tree) %}
-            {% for item in tree %}
-                <div class="comment-item">
-                    <div class="comment-header">
-                        <div class="comment-avatar"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" /></div>
-                        <div>
-                            <div class="comment-author">{{ item.entity.authorName }}</div>
-                            <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>
+    <div id="comments-list">
+        {% if commentsCount == 0 %}
+            <div class="empty-state">
+                <i data-lucide="message-square"></i>
+                <div class="empty-state-text">Немає коментарів</div>
+            </div>
+        {% else %}
+            {% macro render_comment_tree(tree) %}
+                {% for item in tree %}
+                    <div class="comment-item" id="comment-item-{{ item.entity.id }}">
+                        <div class="comment-header">
+                            <div class="comment-avatar"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" /></div>
+                            <div>
+                                <div class="comment-author">{{ item.entity.authorName }}</div>
+                                <div class="comment-date">{{ item.entity.createdAt|date('d.m.Y H:i') }}</div>
+                            </div>
+                        </div>
+                        <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
+                        <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                            <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
+                            <div class="owner-actions" style="display: none; gap: 8px; flex-wrap: wrap;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
+                                <button class="reply-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
+                                <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
+                            </div>
+                        </div>
+                        
+                        <div class="comment-reply-wrapper" id="replies-{{ item.entity.id }}" style="{% if item.children|length == 0 %}display:none;{% endif %} margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px;">
+                            {% if item.children|length > 0 %}
+                                {{ _self.render_comment_tree(item.children) }}
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
-                    <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
-                        <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                        <div class="owner-actions" style="display: none; gap: 8px; flex-wrap: wrap;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                            <button class="reply-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
-                            <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
-                        </div>
-                    </div>
-                    
-                    {% if item.children|length > 0 %}
-                        <div class="comment-reply-wrapper">
-                            {{ _self.render_comment_tree(item.children) }}
-                        </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% endmacro %}
-        {{ _self.render_comment_tree(commentTree) }}
-    {% endif %}
+                {% endfor %}
+            {% endmacro %}
+            
+            {{ _self.render_comment_tree(commentTree) }}
+        {% endif %}
+    </div>
 </div>
 
 <div class="comment-bar">
@@ -90,12 +101,6 @@
     const postId = {{ post.id }};
     let replyToId = null;
     let editModeId = null;
-
-    document.querySelectorAll('.owner-actions').forEach(el => {
-        if (parseInt(el.getAttribute('data-owner-id')) === currentUserId) {
-            el.style.display = 'flex';
-        }
-    });
 
     function setReply(id, name) {
         replyToId = id;
@@ -125,12 +130,55 @@
             });
             const data = await res.json();
             if (data.success) {
-                if (typeof window.Turbo !== 'undefined') window.Turbo.visit(window.location.href);
-                else window.location.reload();
+                const item = document.getElementById('comment-item-' + id);
+                if (item) item.remove();
             } else {
                 alert('Помилка: ' + (data.error || 'Не вдалося видалити'));
             }
         } catch (e) { alert('Помилка мережі'); }
+    }
+
+    function appendCommentToDOM(c) {
+        const html = `
+            <div class="comment-item" id="comment-item-${c.id}">
+                <div class="comment-header">
+                    <div class="comment-avatar"><img src="/avatar/${c.user_id}" loading="lazy" /></div>
+                    <div>
+                        <div class="comment-author">${c.author_name}</div>
+                        <div class="comment-date">Зараз</div>
+                    </div>
+                </div>
+                <div class="comment-text" id="comment-text-${c.id}">${c.text}</div>
+                <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                    <button class="reply-btn" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
+                    <div class="owner-actions" style="display: flex; gap: 8px; flex-wrap: wrap;" data-owner-id="${c.user_id}" data-cid="${c.id}">
+                        <button class="reply-btn" style="color: var(--text);" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
+                        <button class="reply-btn" style="color: #d32f2f;" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
+                    </div>
+                </div>
+                <div class="comment-reply-wrapper" id="replies-${c.id}" style="display:none; margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px;"></div>
+            </div>
+        `;
+        
+        const emptyState = document.querySelector('.empty-state');
+        if (emptyState) emptyState.remove();
+
+        if (c.parent_id) {
+            const parentWrapper = document.getElementById(`replies-${c.parent_id}`);
+            if (parentWrapper) {
+                parentWrapper.style.display = 'block';
+                parentWrapper.insertAdjacentHTML('beforeend', html);
+            }
+        } else {
+            const list = document.getElementById('comments-list');
+            if (list) {
+                list.insertAdjacentHTML('beforeend', html);
+            }
+        }
+        
+        if (window.lucide) {
+            window.lucide.createIcons();
+        }
     }
 
     async function submitComment(e) {
@@ -162,12 +210,16 @@
             
             const data = await res.json();
             if (data.success) {
+                if (editModeId) {
+                    document.getElementById(`comment-text-${editModeId}`).innerText = text;
+                } else {
+                    appendCommentToDOM(data.data);
+                }
+                
                 input.value = '';
                 replyToId = null;
                 editModeId = null;
                 input.placeholder = 'Написати коментар...';
-                if (typeof window.Turbo !== 'undefined') window.Turbo.visit(window.location.href);
-                else window.location.reload();
             } else {
                 alert('Помилка: ' + (data.error || 'Не вдалося зберегти'));
             }
