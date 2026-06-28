@@ -15,18 +15,13 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $botToken: '%env(TELEGRAM_BOT_TOKEN)%'
+            $workflow: '@state_machine.content_publishing'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-
-    morfeditorial\services\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/services/'
-        public: true
-        exclude: '../vendor/morfeditorial/machinima-bot/src/services/ContentItem.php'
-        bind:
-            $workflow: '@state_machine.content_publishing'
+        exclude: '../src/Entity/'
 
     morfeditorial\screens\:
         resource: '../vendor/morfeditorial/machinima-bot/src/screens/'
@@ -46,31 +41,31 @@ services:
         public: true
 
     role_service:
-        alias: morfeditorial\services\RoleService
+        alias: App\Service\RoleService
         public: true
 
     user_service:
-        alias: morfeditorial\services\UserService
+        alias: App\Service\UserService
         public: true
 
     user_state_service:
-        alias: morfeditorial\services\UserStateService
+        alias: App\Service\UserStateService
         public: true
 
     author_service:
-        alias: morfeditorial\services\AuthorService
+        alias: App\Service\AuthorService
         public: true
 
     content_service:
-        alias: morfeditorial\services\ContentService
+        alias: App\Service\ContentService
         public: true
 
     notification_service:
-        alias: morfeditorial\services\NotificationService
+        alias: App\Service\NotificationService
         public: true
 
     rating_service:
-        alias: morfeditorial\services\RatingService
+        alias: App\Service\RatingService
         public: true
 
     token_storage:
