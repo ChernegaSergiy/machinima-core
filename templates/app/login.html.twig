@@ -28,8 +28,12 @@
             
             document.querySelector('.profile-bio').innerText = 'Авторизація...';
             
-            // Set cookie directly from JS (bypasses SameSite/Secure iframe blocking issues in Safari/Web)
-            document.cookie = "tma_init_data=" + encodeURIComponent(initData) + "; path=/; max-age=86400;";
+            // Set cookie directly from JS, carefully handling iframe SameSite rules
+            let cookieStr = "tma_init_data=" + encodeURIComponent(initData) + "; path=/; max-age=86400;";
+            if (window.location.protocol === 'https:') {
+                cookieStr += " SameSite=None; Secure;";
+            }
+            document.cookie = cookieStr;
             
             // Redirect immediately
             window.location.href = '/';
