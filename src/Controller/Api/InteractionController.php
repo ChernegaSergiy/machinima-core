@@ -137,6 +137,11 @@ class InteractionController extends AbstractController
             // Ignore Mercure errors if hub is not running
         }
 
-        return $this->json(['success' => true]);
+        return $this->json([
+            'success' => true,
+            'likes' => $content->getLikesCount(),
+            'dislikes' => $content->getDislikesCount(),
+            'views' => $content->getViewsCount()
+        ]);
     }
 }

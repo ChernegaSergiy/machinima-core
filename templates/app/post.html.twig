@@ -128,14 +128,23 @@
     window.editModeId = null;
 
     window.interact = async function(type) {
+        let step = 'init';
         try {
+            step = 'tgData';
             const tgData = window.Telegram?.WebApp?.initData;
+            
+            step = 'headers';
             const headers = { 'Content-Type': 'application/json' };
             if (tgData && typeof tgData === 'string') {
-                headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+                const cleaned = tgData.replace(/[^\x20-\x7E]/g, '').trim();
+                if (cleaned.length > 0) {
+                    headers['X-Telegram-Init-Data'] = cleaned;
+                }
             }
 
-            const res = await fetch('/api/interact', {
+            step = 'fetch_call';
+            const targetUrl = window.location.origin + '/api/interact';
+            const res = await fetch(targetUrl, {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify({
@@ -144,16 +153,23 @@
                     user_id: window.currentUserId
                 })
             });
+
+            step = 'json_parse';
             const data = await res.json();
+            
+            step = 'success_check';
             if (data.success && type !== 'view') {
-                window.location.reload();
+                const likesEl = document.getElementById('likes-count');
+                const dislikesEl = document.getElementById('dislikes-count');
+                if (likesEl && data.likes !== undefined) likesEl.innerText = data.likes;
+                if (dislikesEl && data.dislikes !== undefined) dislikesEl.innerText = data.dislikes;
             } else if (!data.success && type !== 'view') {
                 alert('Помилка лайку: ' + data.error);
             }
         } catch (e) {
-            console.error('Interaction error:', e);
+            console.error('Interaction error at step ' + step + ':', e);
             if (type !== 'view') {
-                alert('Мережева помилка при оцінці: ' + e.message);
+                alert(`Мережева помилка (крок: ${step}): ` + e.name + ' - ' + e.message);
             }
         }
     };

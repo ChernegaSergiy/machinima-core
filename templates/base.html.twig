@@ -125,7 +125,15 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    window.location.reload(); // Quick refresh to show updated numbers for now
+                    if (btnElement && type !== 'view') {
+                        const postActions = btnElement.closest('.post-actions');
+                        if (postActions) {
+                            const likesEl = postActions.querySelector('.likes-count');
+                            const dislikesEl = postActions.querySelector('.dislikes-count');
+                            if (likesEl && data.likes !== undefined) likesEl.innerText = data.likes;
+                            if (dislikesEl && data.dislikes !== undefined) dislikesEl.innerText = data.dislikes;
+                        }
+                    }
                 } else {
                     alert('Помилка: ' + data.error);
                 }
