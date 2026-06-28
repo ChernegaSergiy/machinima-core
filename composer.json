@@ -11,6 +11,7 @@
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6",
         "morfeditorial/machinima-bot": "*@dev",
+        "morfeditorial/telegram-bot-bundle": "@dev",
         "phpdocumentor/reflection-docblock": "^6.0",
         "phpstan/phpdoc-parser": "^2.3",
         "symfony/console": "8.1.*",
@@ -83,6 +84,10 @@
         "symfony/maker-bundle": "^1.67"
     },
     "repositories": [{
+        "name": "bundle",
+        "type": "path",
+        "url": "../telegram-bot-bundle"
+    },{
         "name": "bot",
         "type": "path",
         "url": "../machinima-bot"

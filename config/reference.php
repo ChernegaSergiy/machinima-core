@@ -1276,6 +1276,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         html_to_text_converter?: scalar|Param|null, // A service implementing the "Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface". // Default: null
  *     },
  * }
+ * @psalm-type TelegramBotConfig = array{
+ *     token?: scalar|Param|null, // The Telegram Bot API token.
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1286,6 +1289,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     mercure?: MercureConfig,
  *     twig?: TwigConfig,
+ *     telegram_bot?: TelegramBotConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1297,6 +1301,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
+ *         telegram_bot?: TelegramBotConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1308,6 +1313,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
+ *         telegram_bot?: TelegramBotConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1319,6 +1325,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
+ *         telegram_bot?: TelegramBotConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

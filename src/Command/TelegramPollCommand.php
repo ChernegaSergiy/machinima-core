@@ -8,7 +8,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
+use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
 
 #[AsCommand(
     name: 'app:telegram:poll',
@@ -16,9 +17,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class TelegramPollCommand extends Command
 {
+    private int $offset = 0;
+
     public function __construct(
-        private string $botToken,
-        private ContainerInterface $container
+        private TelegramClient $telegramClient,
+        private UpdateDispatcher $updateDispatcher
     ) {
         parent::__construct();
     }
@@ -28,14 +31,13 @@ class TelegramPollCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->success('Starting Telegram Bot Polling...');
 
-        $bot = new MyBot($this->botToken, $this->container);
-
         while (true) {
             try {
-                $updates = $bot->getUpdates();
+                $updates = $this->telegramClient->getUpdates($this->offset);
                 foreach ($updates as $update) {
                     $io->writeln('Received update: ' . ($update['update_id'] ?? 'unknown'));
-                    $bot->handleUpdate($update);
+                    $this->offset = ($update['update_id'] ?? 0) + 1;
+                    $this->updateDispatcher->dispatch($update);
                 }
                 sleep(1);
             } catch (\Exception $e) {

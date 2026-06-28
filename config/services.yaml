@@ -28,6 +28,14 @@ services:
         bind:
             $workflow: '@state_machine.content_publishing'
 
+    morfeditorial\screens\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/screens/'
+        public: true
+
+    morfeditorial\commands\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/commands/'
+        public: true
+
     morfeditorial\Translator:
         public: true
 
