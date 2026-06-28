@@ -43,6 +43,30 @@
         if (tg) {
             tg.ready();
             tg.expand();
+            
+            if (tg.initData) {
+                // We are inside Telegram Mini App
+                
+                // Hide manual HTML back buttons
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelectorAll('.header-action-bar').forEach(el => {
+                        el.style.display = 'none';
+                    });
+                });
+
+                // Configure Native Telegram Back Button
+                const currentRoute = '{{ app.request.attributes.get("_route") }}';
+                const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications'];
+                
+                if (!rootRoutes.includes(currentRoute)) {
+                    tg.BackButton.show();
+                    tg.BackButton.onClick(() => {
+                        window.history.back();
+                    });
+                } else {
+                    tg.BackButton.hide();
+                }
+            }
         }
         
         // Initialize Lucide icons
