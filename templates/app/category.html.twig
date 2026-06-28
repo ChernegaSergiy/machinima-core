@@ -29,7 +29,15 @@
         <div class="post-desc">{{ project.description }}</div>
         
         <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
-            <i data-lucide="image" style="width:32px; height:32px;"></i>
+            {% if project.coverFileId %}
+                {% if project.coverFileId starts with 'http' %}
+                    <img src="{{ project.coverFileId }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                {% else %}
+                    <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                {% endif %}
+            {% else %}
+                <i data-lucide="image" style="width:32px; height:32px;"></i>
+            {% endif %}
         </a>
         
         <div class="post-actions">
