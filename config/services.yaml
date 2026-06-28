@@ -21,13 +21,21 @@ services:
     App\:
         resource: '../src/'
 
-    morfeditorial\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/'
-        exclude:
-            - '../vendor/morfeditorial/machinima-bot/src/MyBot.php'
-            - '../vendor/morfeditorial/machinima-bot/src/screens/'
-            - '../vendor/morfeditorial/machinima-bot/src/panels/'
-            - '../vendor/morfeditorial/machinima-bot/src/commands/'
+    morfeditorial\services\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/services/'
+        public: true
+        exclude: '../vendor/morfeditorial/machinima-bot/src/services/ContentItem.php'
+        bind:
+            $workflow: '@state_machine.content_publishing'
+
+    morfeditorial\Translator:
+        public: true
+
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+    
+    translator:
+        alias: morfeditorial\Translator
+        public: true
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

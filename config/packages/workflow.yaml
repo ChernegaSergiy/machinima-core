@@ -1,2 +1,26 @@
 framework:
-    workflows: null
+    workflows:
+        content_publishing:
+            type: 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'method'
+                property: 'status'
+            supports:
+                - morfeditorial\services\ContentItem
+            places:
+                - draft
+                - review
+                - published
+                - rejected
+            transitions:
+                submit:
+                    from: draft
+                    to: review
+                publish:
+                    from: review
+                    to: published
+                reject:
+                    from: review
+                    to: rejected
