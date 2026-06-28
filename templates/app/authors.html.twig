@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Автори{% endblock %}
+
+{% block body %}
+<div class="brutalist-list">
+    <h2 class="brutalist-section-header">Популярні автори</h2>
+    {% for author in authors %}
+        <a href="#" class="brutalist-list-item" style="text-decoration: none; color: inherit;">
+            <div class="brutalist-avatar" style="width: 40px; height: 40px; margin-right: 16px;">
+                <i data-lucide="user" style="color: var(--tg-theme-text-color);"></i>
+            </div>
+            <div class="brutalist-list-text">{{ author.name }}</div>
+            <i data-lucide="chevron-right" style="color: var(--tg-theme-hint-color);"></i>
+        </a>
+    {% else %}
+        <div style="padding: 16px; text-align: center; color: var(--tg-theme-hint-color);">
+            Немає авторів
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

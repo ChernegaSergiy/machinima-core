@@ -3,6 +3,9 @@
 namespace App\Controller\Web;
 
 use App\Entity\Content;
+use App\Entity\Category;
+use App\Entity\Author;
+use App\Entity\Comment;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +28,62 @@ class AppController extends AbstractController
 
         return $this->render('app/index.html.twig', [
             'feed' => $feed,
+        ]);
+    }
+
+    #[Route('/categories', name: 'app_categories')]
+    public function categories(EntityManagerInterface $em): Response
+    {
+        $categories = $em->getRepository(Category::class)->findAll();
+        return $this->render('app/categories.html.twig', [
+            'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/authors', name: 'app_authors')]
+    public function authors(EntityManagerInterface $em): Response
+    {
+        $authors = $em->getRepository(Author::class)->findAll();
+        return $this->render('app/authors.html.twig', [
+            'authors' => $authors,
+        ]);
+    }
+
+    #[Route('/post/{id}', name: 'app_post', requirements: ['id' => '\d+'])]
+    public function post(int $id, EntityManagerInterface $em): Response
+    {
+        $post = $em->getRepository(Content::class)->find($id);
+        if (!$post) {
+            throw $this->createNotFoundException();
+        }
+        
+        $comments = $em->getRepository(Comment::class)->findBy(['content' => $post], ['createdAt' => 'ASC']);
+        
+        // Build comment tree
+        $commentTree = [];
+        $commentMap = [];
+        foreach ($comments as $comment) {
+            $commentMap[$comment->getId()] = [
+                'entity' => $comment,
+                'children' => []
+            ];
+        }
+        
+        foreach ($comments as $comment) {
+            if ($comment->getParent()) {
+                $parentId = $comment->getParent()->getId();
+                if (isset($commentMap[$parentId])) {
+                    $commentMap[$parentId]['children'][] = &$commentMap[$comment->getId()];
+                }
+            } else {
+                $commentTree[] = &$commentMap[$comment->getId()];
+            }
+        }
+
+        return $this->render('app/post.html.twig', [
+            'post' => $post,
+            'commentTree' => $commentTree,
+            'commentsCount' => count($comments)
         ]);
     }
 

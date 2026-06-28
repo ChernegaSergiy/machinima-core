@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block tabbar %}{# Hide tabbar on post view #}{% endblock %}
+
+{% block body %}
+<div class="post-view-page" style="padding-bottom: 140px;">
+    <div style="background-color: var(--tg-theme-bg-color); margin-bottom: 24px; border-bottom: 3px solid var(--tg-theme-text-color);">
+        <div style="padding: 12px 16px; display: flex; align-items: center;">
+            <a href="{{ path('app_index') }}" class="brutalist-button" style="text-decoration: none;">НАЗАД</a>
+        </div>
+    </div>
+
+    <div style="pointer-events: none;">
+        <div class="post-card brutalist-card" style="margin: 0px 16px 16px;">
+            <div class="post-header">
+                <div class="brutalist-avatar avatar">
+                    <i data-lucide="user" style="color: var(--tg-theme-bg-color);"></i>
+                </div>
+                <div class="post-author-info">
+                    <div class="post-author-name">{{ post.title }}</div>
+                    <div class="post-time">{{ post.type }} • {{ post.createdAt|date('d.m.Y') }}</div>
+                </div>
+            </div>
+            
+            <div class="post-text line-clamp-2">
+                {{ post.description }}
+            </div>
+            
+            <div class="brutalist-media" style="background-color: #333; display: flex; align-items: center; justify-content: center; color: #fff;">
+                <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+            </div>
+            
+            <div class="post-actions" style="margin-top: 12px;">
+                <div class="brutalist-button action-button">
+                    <i data-lucide="heart"></i> {{ post.likesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="thumbs-down"></i> {{ post.dislikesCount }}
+                </div>
+                <div class="brutalist-button action-button">
+                    <i data-lucide="eye"></i> {{ post.viewsCount }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="padding: 0 16px;">
+        <h3 class="brutalist-section-header" style="border: none; padding: 0 0 8px 0; font-size: 20px;">
+            КОМЕНТАРІ ({{ commentsCount }})
+        </h3>
+        
+        {% if commentsCount == 0 %}
+            <div style="padding: 24px; border: 3px dashed var(--tg-theme-text-color); text-align: center; font-weight: 600;">
+                ЩЕ НЕМАЄ КОМЕНТАРІВ. БУДЬ ПЕРШИМ!
+            </div>
+        {% else %}
+            {% macro render_comment(node, depth) %}
+                {% import _self as macros %}
+                {% set comment = node.entity %}
+                <div style="margin-top: {% if depth == 0 %}16px{% else %}8px{% endif %}; margin-left: {% if depth > 0 %}24px{% else %}0{% endif %}; border-left: {% if depth > 0 %}3px solid var(--tg-theme-text-color){% else %}none{% endif %}; padding-left: {% if depth > 0 %}12px{% else %}0{% endif %};">
+                    <div style="border: 3px solid var(--tg-theme-text-color); background-color: var(--tg-theme-bg-color); box-shadow: {% if depth == 0 %}4px 4px 0 var(--tg-theme-text-color){% else %}2px 2px 0 var(--tg-theme-text-color){% endif %}; padding: 12px; position: relative;">
+                        <div style="display: flex; align-items: center; margin-bottom: 8px; border-bottom: 2px solid var(--tg-theme-text-color); padding-bottom: 8px;">
+                            <div class="brutalist-avatar" style="width: 32px; height: 32px; margin-right: 10px;">
+                                <span style="font-size: 14px; font-weight: 800;">{{ comment.authorName|first|upper }}</span>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 800; font-size: 14px; text-transform: uppercase;">{{ comment.authorName }}</div>
+                                <div style="font-size: 11px; color: var(--tg-theme-hint-color); font-weight: 600;">
+                                    {{ comment.createdAt|date('d.m.y H:i') }}
+                                </div>
+                            </div>
+                        </div>
+                        <div style="font-size: 15px; font-weight: 500; line-height: 1.4; word-break: break-word; margin-bottom: 12px;">
+                            {{ comment.text }}
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="brutalist-button" style="padding: 4px 8px; font-size: 12px;">
+                                <i data-lucide="reply" style="width: 14px; height: 14px; margin-right: 4px;"></i> ВІДПОВІСТИ
+                            </button>
+                        </div>
+                    </div>
+                    {% for child in node.children %}
+                        {{ macros.render_comment(child, depth + 1) }}
+                    {% endfor %}
+                </div>
+            {% endmacro %}
+            
+            {% import _self as recursive %}
+            <div>
+                {% for node in commentTree %}
+                    {{ recursive.render_comment(node, 0) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Sticky form -->
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--tg-theme-secondary-bg-color); border-top: 3px solid var(--tg-theme-text-color); z-index: 100;">
+        <div style="padding: 12px 16px;">
+            <form style="display: flex; gap: 12px;">
+                <input type="text" placeholder="НАПИСАТИ..." style="flex: 1; padding: 12px; border: 3px solid var(--tg-theme-text-color); background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); font-size: 16px; font-weight: 700; font-family: inherit; outline: none; box-shadow: inset 2px 2px 0 var(--tg-theme-text-color);" />
+                <button type="button" class="brutalist-button" style="padding: 0 16px; background-color: var(--tg-theme-button-color); color: #fff;">
+                    <i data-lucide="send" style="width: 24px; height: 24px;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
