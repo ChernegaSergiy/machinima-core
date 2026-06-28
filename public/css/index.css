@@ -1,49 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
 :root {
-  /* eHealth Inspired Palette */
-  --eh-primary: #0d6efd; /* Medical Blue */
-  --eh-primary-hover: #0b5ed7;
-  --eh-success: #198754;
-  --eh-danger: #dc3545;
-  --eh-bg: #f8f9fa; /* Very light gray */
-  --eh-surface: #ffffff; /* White cards */
-  --eh-text-main: #212529; /* Dark gray text */
-  --eh-text-muted: #6c757d; /* Muted text */
-  --eh-border: #dee2e6; /* Thin light border */
-
-  /* Map to TMA variables for fallback/integration if needed */
-  --tg-theme-bg-color: var(--eh-surface);
-  --tg-theme-secondary-bg-color: var(--eh-bg);
-  --tg-theme-text-color: var(--eh-text-main);
-  --tg-theme-hint-color: var(--eh-text-muted);
-  --tg-theme-link-color: var(--eh-primary);
-  --tg-theme-button-color: var(--eh-primary);
+  /* Override TMA vars for a stunning default dark theme */
+  --premium-bg: #090a0f;
+  --premium-surface: rgba(255, 255, 255, 0.03);
+  --premium-surface-hover: rgba(255, 255, 255, 0.08);
+  --premium-border: rgba(255, 255, 255, 0.06);
+  --premium-text-main: #ffffff;
+  --premium-text-muted: #8b8d98;
+  --premium-accent: #6366f1; /* Indigo */
+  --premium-accent-glow: rgba(99, 102, 241, 0.4);
+  --premium-gradient: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+  
+  /* Hard map Telegram vars to our premium dark mode to ensure it looks stunning */
+  --tg-theme-bg-color: var(--premium-bg);
+  --tg-theme-secondary-bg-color: var(--premium-surface);
+  --tg-theme-text-color: var(--premium-text-main);
+  --tg-theme-hint-color: var(--premium-text-muted);
+  --tg-theme-button-color: var(--premium-accent);
   --tg-theme-button-text-color: #ffffff;
-  --tg-theme-separator-color: var(--eh-border);
+  --tg-theme-separator-color: var(--premium-border);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* eHealth Dark Mode - High contrast, accessible */
-    --eh-bg: #121212;
-    --eh-surface: #1e1e1e;
-    --eh-text-main: #e9ecef;
-    --eh-text-muted: #adb5bd;
-    --eh-border: #343a40;
-    --eh-primary: #0d6efd;
-  }
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 body {
-  background-color: var(--eh-bg);
-  color: var(--eh-text-main);
-  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  background-color: var(--premium-bg);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08), transparent 25%);
+  background-attachment: fixed;
+  color: var(--premium-text-main);
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   line-height: 1.6;
+}
+
+h1, h2, h3, .post-author-name {
+  font-family: 'Outfit', sans-serif;
 }
 
 * {
@@ -58,6 +55,16 @@ body {
 }
 
 a {
-  color: var(--eh-primary);
+  color: var(--premium-accent);
   text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:active {
+  opacity: 0.7;
+}
+
+/* Scrollbar hiding for sleek look */
+::-webkit-scrollbar {
+  display: none;
 }
