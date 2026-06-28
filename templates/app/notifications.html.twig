@@ -5,7 +5,7 @@
 {% block body %}
 <div class="notifications-page" style="padding: 16px;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px;">
-        <h2 style="margin: 0; font-size: 24px; font-weight: 700;display: flex; align-items: center; gap: 8px;">
+        <h2 style="margin: 0; font-size: 24px; display: flex; align-items: center; gap: 8px;">
             <i data-lucide="bell" style="width: 28px; height: 28px;"></i>
             СПОВІЩЕННЯ
         </h2>
@@ -19,7 +19,7 @@
     </div>
 
     {% if notifications|length == 0 %}
-        <div style="text-align: center; padding: 40px; border: 3px dashed var(--tg-theme-text-color); font-weight: 800; ">
+        <div style="text-align: center; padding: 40px; ">
             <i data-lucide="bell" style="width: 48px; height: 48px; margin-bottom: 16px;"></i><br>
             Немає сповіщень
         </div>
@@ -29,7 +29,6 @@
                 <div onclick="handleClick({{ notif.id }}, {{ notif.isRead ? 'true' : 'false' }}, '{{ notif.type }}', '{{ notif.targetId }}')"
                     style="
                         background-color: {{ notif.isRead ? 'var(--tg-theme-bg-color)' : 'var(--tg-theme-secondary-bg-color)' }};
-                        box-shadow: {{ notif.isRead ? 'none' : '4px 4px 0 var(--tg-theme-text-color)' }};
                         transform: {{ notif.isRead ? 'translate(4px, 4px)' : 'none' }};
                         padding: 16px;
                         cursor: pointer;
@@ -39,7 +38,7 @@
                         align-items: flex-start;
                     "
                 >
-                    <div style="padding: 8px; background-color: var(--tg-theme-text-color); color: var(--tg-theme-bg-color); border-radius: 50%;">
+                    <div style="padding: 8px; background-color: var(--tg-theme-text-color); color: var(--tg-theme-bg-color); ">
                         {% if notif.type == 'new_comment' %}
                             <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
                         {% else %}
@@ -47,7 +46,7 @@
                         {% endif %}
                     </div>
                     <div style="flex: 1;">
-                        <div style="font-weight: 800; margin-bottom: 4px; font-size: 15px;">
+                        <div style="margin-bottom: 4px; font-size: 15px;">
                             {% if notif.type == 'new_comment' %}НОВИЙ КОМЕНТАР{% else %}СПОВІЩЕННЯ{% endif %}
                             {% if not notif.isRead %}
                                 <span style="color: #e74c3c; margin-left: 8px; font-size: 12px;">● НОВЕ</span>
@@ -56,7 +55,7 @@
                         <div style="font-size: 14px; line-height: 1.4; font-weight: 600;">
                             {{ notif.message }}
                         </div>
-                        <div style="font-size: 12px; color: var(--tg-theme-hint-color); margin-top: 8px; font-weight: 700;">
+                        <div style="font-size: 12px; color: var(--tg-theme-hint-color); margin-top: 8px; ">
                             {{ notif.createdAt|date('d.m.Y H:i') }}
                         </div>
                     </div>

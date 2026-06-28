@@ -4,9 +4,9 @@
 
 {% block body %}
 <div class="category-page" style="padding-bottom: 100px;">
-    <div style="background-color: var(--tg-theme-bg-color); margin-bottom: 24px; ">
+    <div style="margin-bottom: 24px; ">
         <div style="padding: 12px 16px; display: flex; align-items: center;">
-            <a href="{{ path('app_categories') }}" class="tma-button" style="text-decoration: none;">НАЗАД</a>
+            <a href="{{ path('app_categories') }}" class="tma-button" style="text-decoration: none;">Назад</a>
         </div>
     </div>
 
@@ -14,10 +14,10 @@
         <div class="tma-list-icon" style="width: 64px; height: 64px; margin: 0 auto 16px auto; background-color: var(--tg-theme-button-color);">
             <i data-lucide="layout-grid" style="color: #fff; width: 32px; height: 32px;"></i>
         </div>
-        <h1 style="margin: 0; font-size: 24px; font-weight: 700;">{{ category.name }}</h1>
+        <h1 style="margin: 0; font-size: 24px; ">{{ category.name }}</h1>
     </div>
 
-    <h2 class="tma-section-header" style="margin: 0 16px 16px 16px;">ПРОЄКТИ ({{ projects|length }})</h2>
+    <h2 class="tma-section-header" style="margin: 0 16px 16px 16px;">Проєкти ({{ projects|length }})</h2>
 
     <div class="feed-container">
         {% for project in projects %}
