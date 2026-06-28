@@ -133,8 +133,22 @@
                                 const oldLikes = parseInt(likesEl.innerText);
                                 likesEl.innerText = data.likes;
                                 if (type === 'like') {
-                                    if (data.likes > oldLikes) btnElement.classList.add('active');
-                                    else if (data.likes < oldLikes) btnElement.classList.remove('active');
+                                    if (data.likes > oldLikes) {
+                                        btnElement.classList.add('active');
+                                        const dislikeBtn = postActions.querySelector('.btn-dislike');
+                                        if (dislikeBtn) dislikeBtn.classList.remove('active');
+                                    } else if (data.likes < oldLikes) {
+                                        btnElement.classList.remove('active');
+                                    }
+                                }
+                            }
+                            
+                            // For dislikes, we just toggle the active class and remove active from like
+                            if (type === 'dislike') {
+                                btnElement.classList.toggle('active');
+                                if (btnElement.classList.contains('active')) {
+                                    const likeBtn = postActions.querySelector('.btn-like');
+                                    if (likeBtn) likeBtn.classList.remove('active');
                                 }
                             }
                         }
@@ -154,13 +168,17 @@
             try {
                 const res = await fetch('/api/user/' + tgUserId + '/interactions');
                 const data = await res.json();
-                if (data.success && data.likes) {
-                    const likedIds = data.likes;
+                if (data.success) {
+                    const likedIds = data.likes || [];
+                    const dislikedIds = data.dislikes || [];
                     document.querySelectorAll('.post-actions').forEach(actions => {
                         const postId = parseInt(actions.getAttribute('data-post-id'));
                         if (likedIds.includes(postId)) {
                             const likeBtn = actions.querySelector('.btn-like');
                             if (likeBtn) likeBtn.classList.add('active');
+                        } else if (dislikedIds.includes(postId)) {
+                            const dislikeBtn = actions.querySelector('.btn-dislike');
+                            if (dislikeBtn) dislikeBtn.classList.add('active');
                         }
                     });
                 }

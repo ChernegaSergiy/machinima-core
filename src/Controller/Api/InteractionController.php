@@ -155,15 +155,19 @@ class InteractionController extends AbstractController
 
         $interactions = $em->getRepository(ContentInteraction::class)->findBy(['user' => $user]);
         $likedIds = [];
+        $dislikedIds = [];
         foreach ($interactions as $interaction) {
             if ($interaction->getInteractionType() === 'like') {
                 $likedIds[] = $interaction->getContent()->getId();
+            } elseif ($interaction->getInteractionType() === 'dislike') {
+                $dislikedIds[] = $interaction->getContent()->getId();
             }
         }
 
         return $this->json([
             'success' => true,
-            'likes' => $likedIds
+            'likes' => $likedIds,
+            'dislikes' => $dislikedIds
         ]);
     }
 }
