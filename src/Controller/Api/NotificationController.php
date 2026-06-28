@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Controller\Api;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
+
+class NotificationController extends AbstractController
+{
+    #[Route('/api/notifications/read', name: 'api_notifications_read', methods: ['POST'])]
+    public function markAllAsRead(EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $em->createQuery('UPDATE App\Entity\Notification n SET n.isRead = true WHERE n.user = :user AND n.isRead = false')
+           ->setParameter('user', $user)
+           ->execute();
+
+        return $this->json(['success' => true]);
+    }
+}

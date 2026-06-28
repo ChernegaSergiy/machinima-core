@@ -8,19 +8,20 @@
         <h1 class="page-title">Сповіщення</h1>
         {% set unread_count = notifications|filter(n => not n.isRead)|length %}
         {% if unread_count > 0 %}
-            <button class="action-button small-btn"><i data-lucide="check-circle" style="width:16px;height:16px;margin-right:6px;"></i> Прочитано</button>
+            <button class="action-button small-btn" onclick="markAllAsRead()"><i data-lucide="check-circle" style="width:16px;height:16px;margin-right:6px;"></i> Прочитано</button>
         {% endif %}
     </div>
     
     {% for notif in notifications %}
-        <div class="list-item {% if not notif.isRead %}unread{% endif %}">
+        {% set target_url = notif.targetId ? path('app_post_show', {'id': notif.targetId}) : '#' %}
+        <a href="{{ target_url }}" class="list-item block no-underline {% if not notif.isRead %}unread{% endif %}" style="color:inherit;text-decoration:none;display:flex;">
             <div class="list-icon"><i data-lucide="bell"></i></div>
             <div class="list-content">
                 <div class="list-title">Сповіщення {% if not notif.isRead %}<span class="badge">Нове</span>{% endif %}</div>
                 <div class="list-desc">{{ notif.message }}</div>
                 <div class="list-meta">{{ notif.createdAt|date('d.m.Y H:i') }}</div>
             </div>
-        </div>
+        </a>
     {% else %}
         <div class="empty-state">
             <i data-lucide="bell-off"></i>
@@ -28,4 +29,27 @@
         </div>
     {% endfor %}
 </div>
+
+<script>
+async function markAllAsRead() {
+    try {
+        const btn = document.querySelector('button[onclick="markAllAsRead()"]');
+        if (btn) {
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+        }
+        const tgData = window.Telegram?.WebApp?.initData;
+        const headers = { 'Content-Type': 'application/json' };
+        if (tgData && typeof tgData === 'string') {
+            headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+        }
+        const res = await fetch('/api/notifications/read', { method: 'POST', headers: headers });
+        if (res.ok) {
+            window.location.reload();
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+</script>
 {% endblock %}
