@@ -106,11 +106,6 @@
 
         // Global interaction logic for feed items
         window.interactFeed = async function(contentId, type, btnElement) {
-            if (btnElement && btnElement.style.pointerEvents === 'none') return;
-            if (btnElement) {
-                btnElement.style.pointerEvents = 'none';
-                btnElement.style.opacity = '0.5';
-            }
             try {
                 const tgData = window.Telegram?.WebApp?.initData;
                 const headers = { 'Content-Type': 'application/json' };
@@ -161,11 +156,6 @@
                 }
             } catch(e) {
                 console.error(e);
-            } finally {
-                if (btnElement) {
-                    btnElement.style.pointerEvents = 'auto';
-                    btnElement.style.opacity = '1';
-                }
             }
         };
 
