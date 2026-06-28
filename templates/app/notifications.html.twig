@@ -3,59 +3,50 @@
 {% block title %}Сповіщення{% endblock %}
 
 {% block body %}
-<div class="notifications-page" style="padding: 16px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px;">
-        <h2 style="margin: 0; font-size: 24px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="bell" style="width: 28px; height: 28px;"></i>
+<div class="pb-32 max-w-xl mx-auto p-4">
+    <div class="flex justify-between items-center mb-6 pb-4 border-b-3">
+        <h2 class="text-xl font-bold uppercase text-brutal flex items-center gap-2 m-0">
+            <i data-lucide="bell" class="w-8 h-8"></i>
             СПОВІЩЕННЯ
         </h2>
         
         {% set unread_count = notifications|filter(n => not n.isRead)|length %}
         {% if unread_count > 0 %}
-            <button onclick="markAllRead()" class="tma-button" style="padding: 6px 12px; font-size: 12px; display: flex; align-items: center; gap: 4px;">
-                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> ПРОЧИТАНО
+            <button onclick="markAllRead()" class="inline-flex items-center justify-center px-3 py-2 text-xs font-bold uppercase text-brutal bg-brutal border-3 shadow-brutal-sm active-brutal-sm cursor-pointer transition-all outline-none">
+                <i data-lucide="check-circle" class="icon-sm mr-1"></i> ПРОЧИТАНО
             </button>
         {% endif %}
     </div>
 
     {% if notifications|length == 0 %}
-        <div style="text-align: center; padding: 40px; ">
-            <i data-lucide="bell" style="width: 48px; height: 48px; margin-bottom: 16px;"></i><br>
-            Немає сповіщень
+        <div class="p-8 text-center text-brutal border-3 flex flex-col items-center">
+            <i data-lucide="bell" class="icon-lg mb-4 opacity-50"></i>
+            <span class="font-bold uppercase opacity-50">Немає сповіщень</span>
         </div>
     {% else %}
-        <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="flex flex-col gap-4">
             {% for notif in notifications %}
                 <div onclick="handleClick({{ notif.id }}, {{ notif.isRead ? 'true' : 'false' }}, '{{ notif.type }}', '{{ notif.targetId }}')"
-                    style="
-                        background-color: {{ notif.isRead ? 'var(--tg-theme-bg-color)' : 'var(--tg-theme-secondary-bg-color)' }};
-                        transform: {{ notif.isRead ? 'translate(4px, 4px)' : 'none' }};
-                        padding: 16px;
-                        cursor: pointer;
-                        transition: all 0.1s ease;
-                        display: flex;
-                        gap: 12px;
-                        align-items: flex-start;
-                    "
+                    class="p-4 border-3 flex gap-3 cursor-pointer transition-all {% if notif.isRead %}bg-brutal active-brutal-sm{% else %}bg-brutal-secondary shadow-brutal active-bg-brutal{% endif %}"
                 >
-                    <div style="padding: 8px; background-color: var(--tg-theme-text-color); color: var(--tg-theme-bg-color); ">
+                    <div class="w-10 h-10 shrink-0 flex items-center justify-center bg-brutal-border text-brutal-bg border-2">
                         {% if notif.type == 'new_comment' %}
-                            <i data-lucide="message-circle" style="width: 20px; height: 20px;"></i>
+                            <i data-lucide="message-circle" class="icon-sm"></i>
                         {% else %}
-                            <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+                            <i data-lucide="bell" class="icon-sm"></i>
                         {% endif %}
                     </div>
-                    <div style="flex: 1;">
-                        <div style="margin-bottom: 4px; font-size: 15px;">
+                    <div class="flex-1">
+                        <div class="mb-1 text-sm font-bold uppercase text-brutal">
                             {% if notif.type == 'new_comment' %}НОВИЙ КОМЕНТАР{% else %}СПОВІЩЕННЯ{% endif %}
                             {% if not notif.isRead %}
-                                <span style="color: #e74c3c; margin-left: 8px; font-size: 12px;">● НОВЕ</span>
+                                <span class="ml-2 text-xs text-brutal-bg bg-brutal-border px-1">НОВЕ</span>
                             {% endif %}
                         </div>
-                        <div style="font-size: 14px; line-height: 1.4; font-weight: 600;">
+                        <div class="text-base font-semibold text-brutal break-words">
                             {{ notif.message }}
                         </div>
-                        <div style="font-size: 12px; color: var(--tg-theme-hint-color); margin-top: 8px; ">
+                        <div class="mt-2 text-xs font-bold text-brutal opacity-80">
                             {{ notif.createdAt|date('d.m.Y H:i') }}
                         </div>
                     </div>
@@ -78,7 +69,11 @@
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' }
         }).then(() => {
-            window.location.reload();
+            if (typeof window.Turbo !== 'undefined') {
+                window.Turbo.visit(window.location.href);
+            } else {
+                window.location.reload();
+            }
         }).catch(err => console.error(err));
     }
 
@@ -89,7 +84,11 @@
         
         const proceed = () => {
             if (type === 'new_comment' && targetId) {
-                window.location.href = `/post/${targetId}`;
+                if (typeof window.Turbo !== 'undefined') {
+                    window.Turbo.visit(`/post/${targetId}`);
+                } else {
+                    window.location.href = `/post/${targetId}`;
+                }
             }
         };
 

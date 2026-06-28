@@ -3,48 +3,53 @@
 {% block title %}Стрічка{% endblock %}
 
 {% block body %}
-<div class="feed-container">
+<div class="py-4 max-w-xl mx-auto">
     {% for project in feed %}
-    <div class="post-card tma-card" style="margin: 0px 16px 16px;">
-        <div class="post-header">
-            <div class="tma-avatar avatar">
-                {# Placeholder for avatar #}
-                <i data-lucide="user" style="color: var(--tg-theme-bg-color);"></i>
+    <div class="bg-brutal border-3 rounded-none p-4 mx-4 mb-6 shadow-brutal transition-all active-brutal">
+        <div class="flex items-center mb-3">
+            <div class="w-11 h-11 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3">
+                <i data-lucide="user" class="text-brutal"></i>
             </div>
-            <div class="post-author-info">
-                <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;"><div class="post-author-name">{{ project.title }}</div></a>
-                <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+            <div class="flex-1">
+                <div class="text-base font-bold tracking-tight text-brutal mb-1">Автор невідомий</div>
+                <div class="text-sm font-semibold text-brutal opacity-80">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
             </div>
         </div>
         
-        <div class="post-text line-clamp-2">
+        <div class="mb-2">
+            <a href="{{ path('app_post', {id: project.id}) }}">
+                <h3 class="text-xl font-bold tracking-tight text-brutal m-0">{{ project.title }}</h3>
+            </a>
+        </div>
+        
+        <div class="text-base font-semibold line-clamp-2 text-brutal mb-4">
             {{ project.description }}
         </div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
-            <div class="tma-media" style="display: flex; align-items: center; justify-content: center; color: #fff;">
+        <a href="{{ path('app_post', {id: project.id}) }}">
+            <div class="w-full aspect-video bg-brutal-secondary border-3 my-4 flex items-center justify-center text-brutal relative overflow-hidden">
                 {% if project.coverFileId %}
-                    [Cover Image]
+                    <span class="font-bold uppercase">[Cover Image]</span>
                 {% else %}
-                    <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+                    <i data-lucide="image" class="icon-lg"></i>
                 {% endif %}
             </div>
         </a>
         
-        <div class="post-actions" style="margin-top: 12px;">
-            <div class="tma-button action-button">
-                <i data-lucide="heart"></i> {{ project.likesCount }}
+        <div class="flex items-center gap-3 pt-4 mt-4 border-t-3">
+            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                <i data-lucide="heart" class="icon-sm mr-2"></i> {{ project.likesCount }}
             </div>
-            <div class="tma-button action-button">
-                <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                <i data-lucide="thumbs-down" class="icon-sm mr-2"></i> {{ project.dislikesCount }}
             </div>
-            <div class="tma-button action-button">
-                <i data-lucide="eye"></i> {{ project.viewsCount }}
+            <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                <i data-lucide="eye" class="icon-sm mr-2"></i> {{ project.viewsCount }}
             </div>
         </div>
     </div>
     {% else %}
-    <div style="padding: 32px; text-align: center; color: var(--tg-theme-hint-color);">
+    <div class="p-6 text-center text-brutal opacity-50 font-bold uppercase">
         Немає проєктів
     </div>
     {% endfor %}

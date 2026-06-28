@@ -11,26 +11,26 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div class="app-container" style="padding-bottom: 100px;">
+    <div class="w-full min-h-screen bg-brutal pb-32">
         {% block body %}{% endblock %}
 
         {% block tabbar %}
         {% set current_route = app.request.attributes.get('_route') %}
-        <nav class="tma-tabbar">
-            <a href="{{ path('app_index') }}" class="tab-item {% if current_route == 'app_index' %}active{% endif %}" style="text-decoration: none;">
-                <i data-lucide="play-square"></i>
+        <nav class="fixed bottom-0 left-0 right-0 w-full max-w-xl mx-auto h-16 bg-brutal border-t-3 flex z-100 pb-safe">
+            <a href="{{ path('app_index') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_index' %}bg-brutal-border text-brutal-bg{% endif %}">
+                <i data-lucide="play-square" class="icon-md mb-1"></i>
                 <span>Стрічка</span>
             </a>
-            <a href="{{ path('app_categories') }}" class="tab-item {% if current_route == 'app_categories' %}active{% endif %}" style="text-decoration: none;">
-                <i data-lucide="layout-grid"></i>
+            <a href="{{ path('app_categories') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_categories' %}bg-brutal-border text-brutal-bg{% endif %}">
+                <i data-lucide="layout-grid" class="icon-md mb-1"></i>
                 <span>Категорії</span>
             </a>
-            <a href="{{ path('app_authors') }}" class="tab-item {% if current_route == 'app_authors' %}active{% endif %}" style="text-decoration: none;">
-                <i data-lucide="users"></i>
+            <a href="{{ path('app_authors') }}" class="flex flex-col items-center justify-center flex-1 border-r-3 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_authors' %}bg-brutal-border text-brutal-bg{% endif %}">
+                <i data-lucide="users" class="icon-md mb-1"></i>
                 <span>Автори</span>
             </a>
-            <a href="{{ path('app_notifications') }}" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}" style="position: relative; text-decoration: none;">
-                <i data-lucide="bell"></i>
+            <a href="{{ path('app_notifications') }}" class="flex flex-col items-center justify-center flex-1 text-brutal text-xs font-bold uppercase tracking-wide cursor-pointer transition-all active-bg-brutal {% if current_route == 'app_notifications' %}bg-brutal-border text-brutal-bg{% endif %}">
+                <i data-lucide="bell" class="icon-md mb-1"></i>
                 <span>Сповіщ.</span>
             </a>
         </nav>

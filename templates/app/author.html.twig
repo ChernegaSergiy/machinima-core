@@ -3,68 +3,77 @@
 {% block title %}{{ author.name }}{% endblock %}
 
 {% block body %}
-<div class="author-page" style="padding-bottom: 100px;">
-    <div class="header-action-bar">
-        <a href="{{ path('app_authors') }}" class="tma-button">
-            <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i> Назад
+<div class="pb-32 max-w-xl mx-auto">
+    <div class="sticky top-0 z-50 bg-brutal border-b-3 p-3 px-4 flex items-center mb-6">
+        <a href="{{ path('app_authors') }}" class="inline-flex items-center justify-center px-4 py-2 font-bold uppercase text-brutal bg-brutal border-3 shadow-brutal-sm active-brutal-sm transition-all">
+            <i data-lucide="arrow-left" class="icon-sm mr-2"></i> Назад
         </a>
     </div>
 
-    <div style="padding: 0 16px 24px 16px; text-align: center;">
-        <div class="tma-avatar" style="width: 80px; height: 80px; margin: 0 auto 16px auto;">
-            <i data-lucide="user" style="color: var(--tg-theme-text-color); width: 40px; height: 40px;"></i>
+    <div class="px-4 text-center mb-6 pb-6 border-b-3">
+        <div class="w-24 h-24 mx-auto mb-4 bg-brutal-secondary border-3 rounded-none flex items-center justify-center shadow-brutal">
+            <i data-lucide="user" class="icon-lg text-brutal"></i>
         </div>
-        <h1 style="margin: 0 0 8px 0; font-size: 24px; ">{{ author.name }}</h1>
+        <h1 class="text-xl font-bold uppercase text-brutal mb-2">{{ author.name }}</h1>
         {% if author.biography %}
-            <p style="margin: 0 0 16px 0; font-size: 15px; line-height: 1.4; font-weight: 500;">{{ author.biography }}</p>
+            <p class="text-base font-semibold text-brutal mb-4">{{ author.biography }}</p>
         {% endif %}
         {% if author.channelLink %}
-            <a href="{{ author.channelLink }}" target="_blank" class="tma-button" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px;">
-                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i> Канал
+            <a href="{{ author.channelLink }}" target="_blank" class="inline-flex items-center justify-center px-4 py-2 font-bold uppercase text-brutal-bg bg-brutal-border border-3 shadow-brutal active-brutal transition-all">
+                <i data-lucide="external-link" class="icon-sm mr-2"></i> Канал
             </a>
         {% endif %}
     </div>
 
-    <h2 class="tma-section-header" style="margin: 0 16px 16px 16px;">Проєкти автора ({{ projects|length }})</h2>
+    <h2 class="text-lg font-bold uppercase text-brutal-bg bg-brutal-border p-3 mx-4 mb-4 tracking-wide border-3">Проєкти автора ({{ projects|length }})</h2>
 
-    <div class="feed-container">
+    <div>
         {% for project in projects %}
-        <div class="post-card tma-card" style="margin: 0px 16px 16px;">
-            <div class="post-header">
-                <div class="post-author-info">
-                    <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;"><div class="post-author-name">{{ project.title }}</div></a>
-                    <div class="post-time">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
+        <div class="bg-brutal border-3 rounded-none p-4 mx-4 mb-6 shadow-brutal transition-all active-brutal">
+            <div class="flex items-center mb-3">
+                <div class="w-11 h-11 shrink-0 flex items-center justify-center bg-brutal-secondary border-2 rounded-none mr-3">
+                    <i data-lucide="user" class="text-brutal"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="text-base font-bold tracking-tight text-brutal mb-1">{{ author.name }}</div>
+                    <div class="text-sm font-semibold text-brutal opacity-80">{{ project.type }} • {{ project.createdAt|date('d.m.Y') }}</div>
                 </div>
             </div>
             
-            <div class="post-text line-clamp-2">
+            <div class="mb-2">
+                <a href="{{ path('app_post', {id: project.id}) }}">
+                    <h3 class="text-xl font-bold tracking-tight text-brutal m-0">{{ project.title }}</h3>
+                </a>
+            </div>
+            
+            <div class="text-base font-semibold line-clamp-2 text-brutal mb-4">
                 {{ project.description }}
             </div>
             
-            <a href="{{ path('app_post', {id: project.id}) }}" style="text-decoration: none; color: inherit;">
-                <div class="tma-media" style="display: flex; align-items: center; justify-content: center; color: #fff;">
+            <a href="{{ path('app_post', {id: project.id}) }}">
+                <div class="w-full aspect-video bg-brutal-secondary border-3 my-4 flex items-center justify-center text-brutal relative overflow-hidden">
                     {% if project.coverFileId %}
-                        [Cover Image]
+                        <span class="font-bold uppercase">[Cover Image]</span>
                     {% else %}
-                        <i data-lucide="image" style="width: 48px; height: 48px;"></i>
+                        <i data-lucide="image" class="icon-lg"></i>
                     {% endif %}
                 </div>
             </a>
             
-            <div class="post-actions" style="margin-top: 12px;">
-                <div class="tma-button action-button">
-                    <i data-lucide="heart"></i> {{ project.likesCount }}
+            <div class="flex items-center gap-3 pt-4 mt-4 border-t-3">
+                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                    <i data-lucide="heart" class="icon-sm mr-2"></i> {{ project.likesCount }}
                 </div>
-                <div class="tma-button action-button">
-                    <i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}
+                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                    <i data-lucide="thumbs-down" class="icon-sm mr-2"></i> {{ project.dislikesCount }}
                 </div>
-                <div class="tma-button action-button">
-                    <i data-lucide="eye"></i> {{ project.viewsCount }}
+                <div class="flex items-center px-3 py-2 bg-brutal border-2 rounded-none shadow-brutal-sm text-brutal text-sm font-bold cursor-pointer transition-all active-brutal-sm">
+                    <i data-lucide="eye" class="icon-sm mr-2"></i> {{ project.viewsCount }}
                 </div>
             </div>
         </div>
         {% else %}
-        <div style="padding: 32px; text-align: center; color: var(--tg-theme-hint-color);">
+        <div class="p-6 text-center text-brutal opacity-50 font-bold uppercase mx-4 border-3">
             У цього автора ще немає проєктів
         </div>
         {% endfor %}

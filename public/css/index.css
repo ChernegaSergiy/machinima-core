@@ -1,51 +1,167 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap');
+
 :root {
-  /* Strict eHealth & Semantic UI Inspired Palette (Light Theme Only) */
-  --eh-bg: #f3f4f6; /* Soft application background */
-  --eh-surface: #ffffff; /* Pure white for cards */
-  --eh-text-main: #1f2937; /* High contrast text */
-  --eh-text-muted: #6b7280; /* Secondary text */
-  --eh-border: #e5e7eb; /* Soft borders */
-  --eh-primary: #2185d0; /* Semantic UI standard blue */
-  --eh-primary-hover: #1678c2;
-  --eh-danger: #db2828; /* Semantic UI red */
-  --eh-danger-bg: #ffe8e6;
-
-  /* Overriding Telegram TMA defaults to FORCE the clean eHealth look */
-  --tg-theme-bg-color: var(--eh-surface);
-  --tg-theme-secondary-bg-color: var(--eh-bg);
-  --tg-theme-text-color: var(--eh-text-main);
-  --tg-theme-hint-color: var(--eh-text-muted);
-  --tg-theme-link-color: var(--eh-primary);
-  --tg-theme-button-color: var(--eh-primary);
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-separator-color: var(--eh-border);
+  --brutal-border: var(--tg-theme-text-color, #1e293b);
+  --brutal-bg: var(--tg-theme-bg-color, #ffffff);
+  /* Use a softer secondary background so white cards pop beautifully */
+  --brutal-secondary: var(--tg-theme-secondary-bg-color, #f8fafc);
+  --brutal-accent: var(--tg-theme-button-color, #3b82f6);
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 body {
-  background-color: var(--eh-bg);
-  color: var(--eh-text-main);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Set body to secondary so cards stand out */
+  background-color: var(--brutal-secondary);
+  color: var(--brutal-border);
+  font-family: 'Outfit', -apple-system, sans-serif;
+  margin: 0; padding: 0;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+a { text-decoration: none; color: inherit; }
 
-a {
-  color: var(--eh-primary);
-  text-decoration: none;
-}
+/* Layout */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.flex-1 { flex: 1; }
+.shrink-0 { flex-shrink: 0; }
+.grid { display: grid; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.inset-0 { top: 0; bottom: 0; left: 0; right: 0; }
+.top-0 { top: 0; }
+.bottom-0 { bottom: 0; }
+.top-1\/2 { top: 50%; }
+.left-1\/2 { left: 50%; }
+.-translate-x-1\/2 { transform: translateX(-50%); }
+.-translate-y-1\/2 { transform: translateY(-50%); }
+.transform-center { transform: translate(-50%, -50%); }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-screen { min-height: 100vh; }
+.max-w-xl { max-width: 600px; }
+.overflow-hidden { overflow: hidden; }
+.z-50 { z-index: 50; }
+.z-100 { z-index: 100; }
 
+/* Spacing */
+.p-0 { padding: 0; } .p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; } .p-8 { padding: 32px; }
+.px-3 { padding-left: 12px; padding-right: 12px; } .px-4 { padding-left: 16px; padding-right: 16px; }
+.py-2 { padding-top: 8px; padding-bottom: 8px; } .py-3 { padding-top: 12px; padding-bottom: 12px; } .py-4 { padding-top: 16px; padding-bottom: 16px; }
+.pt-4 { padding-top: 16px; } .pb-2 { padding-bottom: 8px; } .pb-4 { padding-bottom: 16px; } .pb-6 { padding-bottom: 24px; }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); } .pb-32 { padding-bottom: 120px; }
+.m-0 { margin: 0; } .m-4 { margin: 16px; }
+.mx-auto { margin-left: auto; margin-right: auto; } .mx-4 { margin-left: 16px; margin-right: 16px; }
+.my-4 { margin-top: 16px; margin-bottom: 16px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; }
+.mr-2 { margin-right: 8px; } .mr-3 { margin-right: 12px; } .mr-4 { margin-right: 16px; }
+.ml-2 { margin-left: 8px; } .ml-6 { margin-left: 24px; }
+.gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; }
+
+/* Borders - Softened Neo-Brutalism */
+.border-2 { border: 2px solid var(--brutal-border); }
+.border-3 { border: 2px solid var(--brutal-border); } /* Mapped to 2px for elegance */
+.border-b-3 { border-bottom: 2px solid var(--brutal-border); }
+.border-t-3 { border-top: 2px solid var(--brutal-border); }
+.border-r-3 { border-right: 2px solid var(--brutal-border); }
+.border-l-3 { border-left: 2px solid var(--brutal-border); }
+.border-dashed { border-style: dashed; }
+
+/* Beautiful Radius Overrides */
+.rounded-none { border-radius: 20px; } /* Cards are beautifully rounded now */
+.w-11.rounded-none, .w-8.rounded-none, .w-24.rounded-none, .w-12.rounded-none { border-radius: 50%; } /* Avatars are perfect circles */
+.px-3.py-2.rounded-none { border-radius: 12px; } /* Action buttons */
+.rounded-full { border-radius: 9999px; }
+.aspect-video { border-radius: 16px; } /* Video blocks are rounded */
+
+/* Soft Shadows */
+.shadow-brutal { box-shadow: 4px 4px 0 var(--brutal-border); }
+.shadow-brutal-sm { box-shadow: 2px 2px 0 var(--brutal-border); }
+
+/* Interactive Elegance */
+.transition-all { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.active-brutal:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0 transparent; }
+.active-brutal-sm:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0 transparent; }
+.active-bg-brutal:hover { background-color: rgba(0,0,0,0.03); }
+.active-bg-brutal:active { background-color: var(--brutal-border); color: var(--brutal-bg); }
+
+/* Colors */
+.bg-brutal { background-color: var(--brutal-bg); }
+.bg-brutal-secondary { background-color: var(--brutal-secondary); }
+.bg-brutal-border { background-color: var(--brutal-border); }
+.text-brutal { color: var(--brutal-border); }
+.text-brutal-bg { color: var(--brutal-bg); }
+.text-brutal-accent { color: var(--brutal-accent); }
+
+/* Typography */
+.text-xs { font-size: 12px; }
+.text-sm { font-size: 14px; }
+.text-base { font-size: 16px; }
+.text-lg { font-size: 18px; }
+.text-xl { font-size: 22px; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Turn off aggressive yelling for general content */
+.uppercase { text-transform: none; } 
+/* Explicitly keep uppercase for specific UI elements */
+.text-xs.uppercase { text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; } /* Tab bar */
+.bg-brutal-border.uppercase { text-transform: uppercase; letter-spacing: 0.02em; } /* Primary badges */
+.fixed.bottom-0 .uppercase { text-transform: uppercase; } /* Comment input placeholder */
+
+.text-center { text-align: center; }
+.break-words { word-break: break-word; }
+.tracking-tight { letter-spacing: -0.01em; }
+.tracking-wide { letter-spacing: normal; }
+
+/* Utils */
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.aspect-video { aspect-ratio: 16 / 9; }
+.object-cover { object-fit: cover; }
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+.cursor-pointer { cursor: pointer; }
+.opacity-80 { opacity: 0.8; }
+.opacity-50 { opacity: 0.5; }
+.outline-none { outline: none; }
+
+/* Component Fine-tuning */
+.icon-md { width: 22px; height: 22px; }
+.icon-sm { width: 18px; height: 18px; }
+.icon-lg { width: 32px; height: 32px; }
+
+/* Make the tabbar elegant */
+nav.fixed.bottom-0 {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    overflow: hidden;
+    /* Soften the top border of the nav */
+    border-top: 2px solid var(--brutal-border);
+}
+
+/* Comment input bar elegant */
+div.fixed.bottom-0.z-100 {
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+}
+
+/* Inputs and Buttons in Comment Bar */
+input#comment-input {
+    border-radius: 12px;
+}
+button[type="submit"] {
+    border-radius: 12px;
 }

@@ -2,32 +2,42 @@
 
 {% block title %}Авторизація{% endblock %}
 
+{% block tabbar %}{% endblock %}
+
 {% block body %}
-<div class="ui active inverted dimmer" id="auth-dimmer">
-    <div class="ui text loader">Перевірка Telegram сесії...</div>
+<div class="min-h-screen max-w-xl mx-auto flex flex-col items-center justify-center p-4">
+    <div id="auth-dimmer" class="w-full bg-brutal border-3 shadow-brutal p-8 text-center flex flex-col items-center">
+        <i data-lucide="loader" class="icon-lg text-brutal mb-4" style="animation: spin 2s linear infinite;"></i>
+        <h2 class="text-xl font-bold uppercase text-brutal m-0">Перевірка Telegram сесії...</h2>
+    </div>
+
+    <div id="error-segment" class="w-full bg-brutal-secondary border-3 shadow-brutal p-8 text-center flex flex-col items-center" style="display: none;">
+        <i data-lucide="smartphone" class="icon-lg text-brutal mb-4"></i>
+        <h2 class="text-xl font-bold uppercase text-brutal m-0 mb-2">Доступ лише через Telegram</h2>
+        <p class="text-base font-semibold text-brutal opacity-80 m-0">Будь ласка, відкрийте цей додаток через бота в Telegram.</p>
+    </div>
 </div>
 
-<div class="ui placeholder segment" id="error-segment" style="display: none;">
-    <div class="ui icon header">
-        <i class="telegram icon"></i>
-        Доступ лише через Telegram
-    </div>
-    <p>Будь ласка, відкрийте цей додаток через бота в Telegram.</p>
-</div>
+<style>
+@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const initData = window.Telegram.WebApp.initData;
+    // If Lucide is available, render icons immediately
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    const initData = window.Telegram?.WebApp?.initData;
     
     if (initData) {
         // We have initData, redirect to home page with initData as query param
-        // The TelegramWebAppAuthenticator will intercept this, validate the hash, 
-        // and log the user in, then the Controller will render the index page.
         window.location.href = '{{ path('app_index') }}?initData=' + encodeURIComponent(initData);
     } else {
         // No initData found (opened in regular browser)
-        document.getElementById('auth-dimmer').classList.remove('active');
-        document.getElementById('error-segment').style.display = 'block';
+        document.getElementById('auth-dimmer').style.display = 'none';
+        document.getElementById('error-segment').style.display = 'flex';
     }
 });
 </script>
