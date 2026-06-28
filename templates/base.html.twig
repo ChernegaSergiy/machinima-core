@@ -69,8 +69,11 @@
             <span>Автори</span>
         </a>
         <a href="{{ path('app_notifications') }}" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}">
-            <i data-lucide="bell"></i>
-            <span>Сповіщ.</span>
+            <div style="position: relative;">
+                <i data-lucide="bell"></i>
+                <span id="unread-count-badge" style="display: none; position: absolute; top: -6px; right: -8px; background: var(--text); color: var(--surface); font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 4px; border-radius: 4px; border: 1px solid var(--surface); line-height: 1;">0</span>
+            </div>
+            <span style="margin-top: 4px;">Сповіщ.</span>
         </a>
     </nav>
     {% endblock %}
@@ -193,6 +196,19 @@
                             if (dislikeBtn) dislikeBtn.classList.add('active');
                         }
                     });
+                }
+            } catch(e) {}
+
+            try {
+                const tgData = window.Telegram?.WebApp?.initData;
+                const unreadRes = await fetch('/api/notifications/unread-count' + (tgData ? '?initData=' + encodeURIComponent(tgData) : ''));
+                const unreadData = await unreadRes.json();
+                const badge = document.getElementById('unread-count-badge');
+                if (badge && unreadData.count > 0) {
+                    badge.innerText = unreadData.count > 99 ? '99+' : unreadData.count;
+                    badge.style.display = 'block';
+                } else if (badge) {
+                    badge.style.display = 'none';
                 }
             } catch(e) {}
         });

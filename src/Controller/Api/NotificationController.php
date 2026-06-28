@@ -24,6 +24,17 @@ class NotificationController extends AbstractController
         return $this->json(['success' => true]);
     }
 
+    #[Route('/api/notifications/unread-count', name: 'api_notifications_unread_count', methods: ['GET'])]
+    public function unreadCount(EntityManagerInterface $em): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['count' => 0]);
+        }
+        $count = $em->getRepository(\App\Entity\Notification::class)->count(['user' => $user, 'isRead' => false]);
+        return $this->json(['count' => $count]);
+    }
+
     #[Route('/notifications/{id}/redirect', name: 'app_notification_redirect', methods: ['GET'])]
     public function readAndRedirect(int $id, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
     {
