@@ -81,10 +81,10 @@ class AppController extends AbstractController
         }
 
         // Fetch projects by this author
-        // Author has telegramUserId, User has userId
+        // Author has telegramUserId, User has id
         $user = null;
         if ($author->getTelegramUserId()) {
-            $user = $em->getRepository(\App\Entity\User::class)->findOneBy(['userId' => $author->getTelegramUserId()]);
+            $user = $em->getRepository(\App\Entity\User::class)->findOneBy(['id' => $author->getTelegramUserId()]);
         }
 
         $projects = [];
