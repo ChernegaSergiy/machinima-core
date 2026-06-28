@@ -5,10 +5,11 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_data')]
-class User
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'user_id', type: 'integer')]
@@ -103,7 +104,7 @@ class User
     /**
      * @return Collection<int, Role>
      */
-    public function getRoles(): Collection
+    public function getUserRoles(): Collection
     {
         return $this->roles;
     }
@@ -122,5 +123,44 @@ class User
         $this->roles->removeElement($role);
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->id;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = [];
+        // Map custom database roles to Symfony's expected ROLE_ format
+        foreach ($this->roles as $roleEntity) {
+            $roleName = strtoupper($roleEntity->getRoleName());
+            if (!str_starts_with($roleName, 'ROLE_')) {
+                $roleName = 'ROLE_' . $roleName;
+            }
+            $roles[] = $roleName;
+        }
+
+        // Guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
     }
 }
