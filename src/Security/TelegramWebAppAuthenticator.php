@@ -28,12 +28,12 @@ class TelegramWebAppAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('X-Telegram-Init-Data') || $request->query->has('initData') || $request->request->has('initData');
+        return $request->headers->has('X-Telegram-Init-Data') || $request->query->has('initData') || $request->request->has('initData') || $request->cookies->has('tma_init_data');
     }
 
     public function authenticate(Request $request): Passport
     {
-        $initData = $request->headers->get('X-Telegram-Init-Data') ?? $request->query->get('initData') ?? $request->request->get('initData');
+        $initData = $request->headers->get('X-Telegram-Init-Data') ?? $request->query->get('initData') ?? $request->request->get('initData') ?? $request->cookies->get('tma_init_data');
 
         if (null === $initData) {
             throw new CustomUserMessageAuthenticationException('No Telegram init data provided');

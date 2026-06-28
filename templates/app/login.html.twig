@@ -26,24 +26,13 @@
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
             const initData = window.Telegram.WebApp.initData;
             
-            // Show a loading state if desired, but we'll be fast
             document.querySelector('.profile-bio').innerText = 'Авторизація...';
             
-            fetch('/login', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'X-Telegram-Init-Data': initData
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href = '/';
-                } else {
-                    document.querySelector('.profile-bio').innerText = 'Помилка авторизації. Перевірте підключення.';
-                }
-            }).catch(e => {
-                document.querySelector('.profile-bio').innerText = 'Помилка мережі.';
-            });
+            // Set cookie directly from JS (bypasses SameSite/Secure iframe blocking issues in Safari/Web)
+            document.cookie = "tma_init_data=" + encodeURIComponent(initData) + "; path=/; max-age=86400;";
+            
+            // Redirect immediately
+            window.location.href = '/';
         }
     });
 </script>
