@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
-use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
+use morfeditorial\TelegramBotBundle\Client\TelegramClient;
+use morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

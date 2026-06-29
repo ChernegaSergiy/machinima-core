@@ -1308,7 +1308,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Morfeditorial\\TelegramBotBundle\\": "src/"
+                    "morfeditorial\\TelegramBotBundle\\": "src/"
                 }
             },
             "license": [

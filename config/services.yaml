@@ -67,7 +67,7 @@ services:
               ]
         public: true
 
-    Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher:
+    morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher:
         arguments:
             $commands: !tagged_iterator telegram_bot.command
             $screens: !tagged_iterator telegram_bot.screen
