@@ -8,10 +8,11 @@ framework:
                 type: 'method'
                 property: 'status'
             supports:
-                - morfeditorial\services\ContentItem
+                - App\Entity\ContentItem
             places:
                 - draft
                 - review
+                - pending_review
                 - published
                 - rejected
             transitions:
@@ -22,5 +23,8 @@ framework:
                     from: review
                     to: published
                 reject:
-                    from: review
+                    from: [review, pending_review]
                     to: rejected
+                redraft:
+                    from: [review, rejected, pending_review]
+                    to: draft

@@ -91,7 +91,6 @@ class InteractionController extends AbstractController
                     }
                 } else {
                     // Switch interaction
-                    $oldType = $interaction->getInteractionType();
                     $interaction->setInteractionType($type);
                     if ($type === 'like') {
                         $content->setLikesCount($content->getLikesCount() + 1);
