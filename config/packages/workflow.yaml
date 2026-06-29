@@ -8,7 +8,7 @@ framework:
                 type: 'method'
                 property: 'status'
             supports:
-                - App\Entity\ContentItem
+                - morfeditorial\services\ContentItem
             places:
                 - draft
                 - review
