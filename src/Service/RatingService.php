@@ -10,9 +10,7 @@ use App\Entity\ContentInteraction;
 use App\Entity\ContentView;
 use App\Entity\Content;
 use App\Entity\User;
-use morfeditorial\contracts\RatingServiceInterface;
-
-class RatingService implements RatingServiceInterface
+class RatingService
 {
     private Connection $db;
 

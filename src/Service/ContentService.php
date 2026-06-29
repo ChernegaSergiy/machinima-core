@@ -14,9 +14,8 @@ use App\Entity\ContentStaff;
 use App\Entity\User;
 use App\Entity\Author;
 use App\Model\ContentItem;
-use morfeditorial\contracts\ContentServiceInterface;
 
-class ContentService implements ContentServiceInterface
+class ContentService
 {
     private Connection $db;
 

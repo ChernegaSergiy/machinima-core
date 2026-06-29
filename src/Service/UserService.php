@@ -6,9 +6,7 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
-use morfeditorial\contracts\UserServiceInterface;
-
-class UserService implements UserServiceInterface
+class UserService
 {
     public function __construct(private EntityManagerInterface $em)
     {

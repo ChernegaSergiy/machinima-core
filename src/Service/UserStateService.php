@@ -7,9 +7,7 @@ namespace App\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\UserState;
 use App\Entity\User;
-use morfeditorial\contracts\UserStateServiceInterface;
-
-class UserStateService implements UserStateServiceInterface
+class UserStateService
 {
     public function __construct(private EntityManagerInterface $em)
     {

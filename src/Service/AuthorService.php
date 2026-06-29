@@ -8,9 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Author;
 use App\Entity\Content;
 use App\Entity\ContentStaff;
-use morfeditorial\contracts\AuthorServiceInterface;
-
-class AuthorService implements AuthorServiceInterface
+class AuthorService
 {
     private const STATE_PRIVATE = 'private';
     private const STATE_PUBLIC = 'public';

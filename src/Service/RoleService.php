@@ -8,9 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\Author;
-use morfeditorial\contracts\RoleServiceInterface;
-
-class RoleService implements RoleServiceInterface
+class RoleService
 {
     public function __construct(private EntityManagerInterface $em)
     {

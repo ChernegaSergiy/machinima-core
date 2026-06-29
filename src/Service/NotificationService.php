@@ -8,9 +8,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Notification;
 use App\Entity\User;
-use morfeditorial\contracts\NotificationServiceInterface;
-
-class NotificationService implements NotificationServiceInterface
+class NotificationService
 {
     private Connection $db;
 
