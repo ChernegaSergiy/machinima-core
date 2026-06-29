@@ -23,12 +23,12 @@ services:
         resource: '../src/'
         exclude: '../src/Entity/'
 
-    Morfeditorial\screens\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/screens/'
+    Morfeditorial\Screens\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/Screens/'
         public: true
 
-    Morfeditorial\commands\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/commands/'
+    Morfeditorial\Commands\:
+        resource: '../vendor/morfeditorial/machinima-bot/src/Commands/'
         public: true
 
     Morfeditorial\Translator:
