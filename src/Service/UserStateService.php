@@ -25,11 +25,12 @@ class UserStateService implements UserStateServiceInterface
             $this->em->flush();
         }
 
-        $this->clearState($user_id);
-
-        $state = new UserState();
-        $state->setUser($user);
-        $state->setStateKey($key);
+        $state = $this->em->getRepository(UserState::class)->findOneBy(['user' => $user, 'stateKey' => $key]);
+        if (!$state) {
+            $state = new UserState();
+            $state->setUser($user);
+            $state->setStateKey($key);
+        }
         $state->setStateValue(json_encode($value));
 
         $this->em->persist($state);
