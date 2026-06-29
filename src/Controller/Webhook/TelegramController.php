@@ -2,7 +2,7 @@
 
 namespace App\Controller\Webhook;
 
-use morfeditorial\MyBot;
+use Morfeditorial\MyBot;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;

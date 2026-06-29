@@ -23,21 +23,21 @@ services:
         resource: '../src/'
         exclude: '../src/Entity/'
 
-    morfeditorial\screens\:
+    Morfeditorial\screens\:
         resource: '../vendor/morfeditorial/machinima-bot/src/screens/'
         public: true
 
-    morfeditorial\commands\:
+    Morfeditorial\commands\:
         resource: '../vendor/morfeditorial/machinima-bot/src/commands/'
         public: true
 
-    morfeditorial\Translator:
+    Morfeditorial\Translator:
         public: true
 
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
     
     bot_translator:
-        alias: morfeditorial\Translator
+        alias: Morfeditorial\Translator
         public: true
 
     role_service:
@@ -67,7 +67,7 @@ services:
               ]
         public: true
 
-    morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher:
+    Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher:
         arguments:
             $commands: !tagged_iterator telegram_bot.command
             $screens: !tagged_iterator telegram_bot.screen

@@ -1278,7 +1278,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "morfeditorial\\": "src/"
+                    "Morfeditorial\\": "src/"
                 }
             },
             "transport-options": {
@@ -1308,7 +1308,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "morfeditorial\\TelegramBotBundle\\": "src/"
+                    "Morfeditorial\\TelegramBotBundle\\": "src/"
                 }
             },
             "license": [
