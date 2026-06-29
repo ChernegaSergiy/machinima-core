@@ -13,7 +13,7 @@ use App\Entity\Category;
 use App\Entity\ContentStaff;
 use App\Entity\User;
 use App\Entity\Author;
-use morfeditorial\services\ContentItem;
+use App\Model\ContentItem;
 use morfeditorial\contracts\ContentServiceInterface;
 
 class ContentService implements ContentServiceInterface
