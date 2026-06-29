@@ -5,6 +5,7 @@ namespace App\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
 use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
+use Morfeditorial\Translator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -26,6 +27,7 @@ class TelegramPollCommand extends Command
         private UpdateDispatcher $updateDispatcher,
         private EntityManagerInterface $entityManager,
         private TokenStorageInterface $tokenStorage,
+        private Translator $translator,
     ) {
         parent::__construct();
     }
@@ -49,6 +51,9 @@ class TelegramPollCommand extends Command
                             $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
                             $this->tokenStorage->setToken($token);
                         }
+
+                        $languageCode = $update['message']['from']['language_code'] ?? $update['callback_query']['from']['language_code'] ?? 'en';
+                        $this->translator->setUserLocale($languageCode);
                     }
 
                     $this->updateDispatcher->dispatch($update);
