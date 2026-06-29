@@ -43,6 +43,11 @@ class AuthorRepository extends ServiceEntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
+    public function findByTelegramId(int $telegramUserId): ?Author
+    {
+        return $this->findOneBy(['telegramUserId' => $telegramUserId]);
+    }
+
     public function getAuthorProjects(int $author_id, int $limit = 10, int $offset = 0): array
     {
         $em = $this->getEntityManager();
