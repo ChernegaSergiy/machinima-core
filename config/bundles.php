@@ -9,4 +9,5 @@ return [
     Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Morfeditorial\TelegramBotBundle\TelegramBotBundle::class => ['all' => true],
+    Morfeditorial\MachinimaBotBundle::class => ['all' => true],
 ];

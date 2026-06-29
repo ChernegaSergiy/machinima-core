@@ -23,22 +23,7 @@ services:
         resource: '../src/'
         exclude: '../src/Entity/'
 
-    Morfeditorial\Screens\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/Screens/'
-        public: true
-
-    Morfeditorial\Commands\:
-        resource: '../vendor/morfeditorial/machinima-bot/src/Commands/'
-        public: true
-
-    Morfeditorial\Translator:
-        public: true
-
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
-    
-    bot_translator:
-        alias: Morfeditorial\Translator
-        public: true
 
     role_service:
         alias: App\Service\RoleService

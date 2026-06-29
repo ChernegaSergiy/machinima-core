@@ -1264,18 +1264,19 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-bot",
-                "reference": "2bac8dd239cec4b572bccf1672c90e61486d20b0"
+                "reference": "39505d998a0b0f99d971f3629e8b4c84076775ba"
             },
             "require": {
                 "morfeditorial/telegram-bot-bundle": "*@dev",
                 "php": ">=8.2",
                 "symfony/dependency-injection": "^8.1",
+                "symfony/http-kernel": "^8.1",
                 "symfony/workflow": "^8.1"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.95"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Morfeditorial\\": "src/"
@@ -1291,7 +1292,7 @@
             "dist": {
                 "type": "path",
                 "url": "../telegram-bot-bundle",
-                "reference": "be4e824c99c3b45c48f30b1d08f7210a07fcb5bc"
+                "reference": "5b2f02adac611e32d86128eb538f221e4d13f513"
             },
             "require": {
                 "php": ">=8.2",
