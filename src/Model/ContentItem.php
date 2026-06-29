@@ -8,20 +8,21 @@ class ContentItem
 {
     public function __construct(
         private int $id,
-        private string $status
-    ) {}
+        private string $status,
+    ) {
+    }
 
-    public function getId() : int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getStatus() : string
+    public function getStatus(): string
     {
         return $this->status;
     }
 
-    public function setStatus(string $status) : void
+    public function setStatus(string $status): void
     {
         $this->status = $status;
     }

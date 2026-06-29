@@ -10,9 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api')]
 class InteractionController extends AbstractController
@@ -21,7 +21,7 @@ class InteractionController extends AbstractController
     public function interact(Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
-        
+
         if (!isset($body['content_id'], $body['type'])) {
             return $this->json(['success' => false, 'error' => 'Missing content_id or type'], 400);
         }
@@ -35,24 +35,24 @@ class InteractionController extends AbstractController
             return $this->json(['success' => false, 'error' => 'Content not found'], 404);
         }
 
-        if ($type === 'view') {
+        if ('view' === $type) {
             // Register view
             $user = $userId ? $em->getRepository(User::class)->find($userId) : null;
-            
+
             // Avoid duplicate views from same user
             if ($user) {
                 $existingView = $em->getRepository(ContentView::class)->findOneBy([
                     'user' => $user,
-                    'content' => $content
+                    'content' => $content,
                 ]);
-                
+
                 if (!$existingView) {
                     $view = new ContentView();
                     $view->setUser($user);
                     $view->setContent($content);
                     $view->setCreatedAt(date('Y-m-d H:i:s'));
                     $em->persist($view);
-                    
+
                     $content->setViewsCount($content->getViewsCount() + 1);
                     $em->flush();
                 }
@@ -77,14 +77,14 @@ class InteractionController extends AbstractController
 
             $interaction = $em->getRepository(ContentInteraction::class)->findOneBy([
                 'user' => $user,
-                'content' => $content
+                'content' => $content,
             ]);
 
             if ($interaction) {
                 if ($interaction->getInteractionType() === $type) {
                     // Remove interaction
                     $em->remove($interaction);
-                    if ($type === 'like') {
+                    if ('like' === $type) {
                         $content->setLikesCount(max(0, $content->getLikesCount() - 1));
                     } else {
                         $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
@@ -92,7 +92,7 @@ class InteractionController extends AbstractController
                 } else {
                     // Switch interaction
                     $interaction->setInteractionType($type);
-                    if ($type === 'like') {
+                    if ('like' === $type) {
                         $content->setLikesCount($content->getLikesCount() + 1);
                         $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
                     } else {
@@ -109,7 +109,7 @@ class InteractionController extends AbstractController
                 $interaction->setCreatedAt(date('Y-m-d H:i:s'));
                 $em->persist($interaction);
 
-                if ($type === 'like') {
+                if ('like' === $type) {
                     $content->setLikesCount($content->getLikesCount() + 1);
                 } else {
                     $content->setDislikesCount($content->getDislikesCount() + 1);
@@ -127,7 +127,7 @@ class InteractionController extends AbstractController
                 'content_id' => $contentId,
                 'likes' => $content->getLikesCount(),
                 'dislikes' => $content->getDislikesCount(),
-                'views' => $content->getViewsCount()
+                'views' => $content->getViewsCount(),
             ])
         );
         try {
@@ -140,7 +140,7 @@ class InteractionController extends AbstractController
             'success' => true,
             'likes' => $content->getLikesCount(),
             'dislikes' => $content->getDislikesCount(),
-            'views' => $content->getViewsCount()
+            'views' => $content->getViewsCount(),
         ]);
     }
 
@@ -156,9 +156,9 @@ class InteractionController extends AbstractController
         $likedIds = [];
         $dislikedIds = [];
         foreach ($interactions as $interaction) {
-            if ($interaction->getInteractionType() === 'like') {
+            if ('like' === $interaction->getInteractionType()) {
                 $likedIds[] = $interaction->getContent()->getId();
-            } elseif ($interaction->getInteractionType() === 'dislike') {
+            } elseif ('dislike' === $interaction->getInteractionType()) {
                 $dislikedIds[] = $interaction->getContent()->getId();
             }
         }
@@ -166,7 +166,7 @@ class InteractionController extends AbstractController
         return $this->json([
             'success' => true,
             'likes' => $likedIds,
-            'dislikes' => $dislikedIds
+            'dislikes' => $dislikedIds,
         ]);
     }
 }

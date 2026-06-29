@@ -17,10 +17,10 @@ class ProjectController extends AbstractController
     public function feed(EntityManagerInterface $em): JsonResponse
     {
         $projects = $em->getRepository(Content::class)->findBy([], ['trendingScore' => 'DESC'], 20);
-        
+
         return $this->json([
             'success' => true,
-            'data' => array_map([$this, 'serializeProject'], $projects)
+            'data' => array_map([$this, 'serializeProject'], $projects),
         ]);
     }
 
@@ -40,7 +40,7 @@ class ProjectController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'data' => $this->serializeProject($project)
+            'data' => $this->serializeProject($project),
         ]);
     }
 
@@ -55,7 +55,7 @@ class ProjectController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'data' => $this->serializeProject($project)
+            'data' => $this->serializeProject($project),
         ]);
     }
 
@@ -65,14 +65,14 @@ class ProjectController extends AbstractController
         $queryBuilder = $em->getRepository(Content::class)->createQueryBuilder('c');
         $projects = $queryBuilder
             ->where('c.title LIKE :query OR c.description LIKE :query')
-            ->setParameter('query', '%' . $query . '%')
+            ->setParameter('query', '%'.$query.'%')
             ->setMaxResults(20)
             ->getQuery()
             ->getResult();
 
         return $this->json([
             'success' => true,
-            'data' => array_map([$this, 'serializeProject'], $projects)
+            'data' => array_map([$this, 'serializeProject'], $projects),
         ]);
     }
 
@@ -106,7 +106,7 @@ class ProjectController extends AbstractController
                 'id' => $cat->getId(),
                 'name' => $cat->getName(),
                 'parent_id' => $cat->getParent() ? $cat->getParent()->getId() : null,
-            ]
+            ],
         ]);
     }
 
@@ -133,7 +133,7 @@ class ProjectController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'data' => array_map([$this, 'serializeProject'], $projects)
+            'data' => array_map([$this, 'serializeProject'], $projects),
         ]);
     }
 

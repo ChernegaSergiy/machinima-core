@@ -47,13 +47,13 @@ class TelegramWebAppAuthenticator extends AbstractAuthenticator
 
         $telegramId = $userData['id'];
 
-        return new SelfValidatingPassport(new UserBadge((string)$telegramId, function ($userIdentifier) {
-            $user = $this->entityManager->getRepository(User::class)->find((int)$userIdentifier);
+        return new SelfValidatingPassport(new UserBadge((string) $telegramId, function ($userIdentifier) {
+            $user = $this->entityManager->getRepository(User::class)->find((int) $userIdentifier);
 
             if (!$user) {
                 // Creates a new user in the DB dynamically if they don't exist yet
                 $user = new User();
-                $user->setId((int)$userIdentifier);
+                $user->setId((int) $userIdentifier);
                 $this->entityManager->persist($user);
                 $this->entityManager->flush();
             }
@@ -71,7 +71,7 @@ class TelegramWebAppAuthenticator extends AbstractAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
@@ -92,7 +92,7 @@ class TelegramWebAppAuthenticator extends AbstractAuthenticator
 
         $dataCheckString = [];
         foreach ($parsedData as $key => $value) {
-            $dataCheckString[] = $key . '=' . $value;
+            $dataCheckString[] = $key.'='.$value;
         }
         $dataCheckString = implode("\n", $dataCheckString);
 

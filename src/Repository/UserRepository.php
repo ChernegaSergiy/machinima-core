@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\User;
 
 class UserRepository extends ServiceEntityRepository
 {
@@ -23,6 +23,7 @@ class UserRepository extends ServiceEntityRepository
             $user->setId($userId);
             $this->getEntityManager()->persist($user);
         }
+
         return $user;
     }
 

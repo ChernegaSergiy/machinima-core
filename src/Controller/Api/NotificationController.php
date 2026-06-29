@@ -32,6 +32,7 @@ class NotificationController extends AbstractController
             return $this->json(['count' => 0]);
         }
         $count = $em->getRepository(\App\Entity\Notification::class)->count(['user' => $user, 'isRead' => false]);
+
         return $this->json(['count' => $count]);
     }
 

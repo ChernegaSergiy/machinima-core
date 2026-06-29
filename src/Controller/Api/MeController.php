@@ -14,12 +14,12 @@ class MeController extends AbstractController
     {
         $user = $this->getUser();
         // Fallback: check if the user is Serhii explicitly, or if the role resolves
-        $isModerator = $this->isGranted('ROLE_MODERATOR') || ($user && $user->getUserIdentifier() === '5261721781');
-        
+        $isModerator = $this->isGranted('ROLE_MODERATOR') || ($user && '5261721781' === $user->getUserIdentifier());
+
         return $this->json([
             'success' => true,
             'is_moderator' => $isModerator,
-            'user' => $user ? $user->getUserIdentifier() : null
+            'user' => $user ? $user->getUserIdentifier() : null,
         ]);
     }
 }

@@ -18,10 +18,10 @@ class AuthorController extends AbstractController
     {
         // Simple mock for top authors: just get public authors ordered by ID
         $authors = $em->getRepository(Author::class)->findBy(['state' => 'public'], ['id' => 'DESC'], 10);
-        
+
         return $this->json([
             'success' => true,
-            'data' => array_map([$this, 'serializeAuthor'], $authors)
+            'data' => array_map([$this, 'serializeAuthor'], $authors),
         ]);
     }
 
@@ -30,13 +30,13 @@ class AuthorController extends AbstractController
     {
         $author = $em->getRepository(Author::class)->find($id);
 
-        if (!$author || $author->getState() !== 'public') {
+        if (!$author || 'public' !== $author->getState()) {
             return $this->json(['success' => false, 'error' => 'Author not found'], 404);
         }
 
         return $this->json([
             'success' => true,
-            'data' => $this->serializeAuthor($author)
+            'data' => $this->serializeAuthor($author),
         ]);
     }
 
@@ -45,7 +45,7 @@ class AuthorController extends AbstractController
     {
         $author = $em->getRepository(Author::class)->find($id);
 
-        if (!$author || $author->getState() !== 'public') {
+        if (!$author || 'public' !== $author->getState()) {
             return $this->json(['success' => false, 'error' => 'Author not found'], 404);
         }
 
@@ -78,7 +78,7 @@ class AuthorController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'data' => $projects
+            'data' => $projects,
         ]);
     }
 

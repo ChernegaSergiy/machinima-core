@@ -9,9 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
+use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api')]
 class CommentController extends AbstractController
@@ -20,13 +20,13 @@ class CommentController extends AbstractController
     public function getComments(int $id, EntityManagerInterface $em): JsonResponse
     {
         $project = $em->getRepository(Content::class)->find($id);
-        
+
         if (!$project) {
             return $this->json(['success' => false, 'error' => 'Project not found'], 404);
         }
 
         $comments = $em->getRepository(Comment::class)->findBy(['content' => $project], ['id' => 'ASC']);
-        
+
         $data = [];
         foreach ($comments as $comment) {
             $data[] = [
@@ -43,7 +43,7 @@ class CommentController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -60,7 +60,7 @@ class CommentController extends AbstractController
             return $this->json(['success' => false, 'error' => 'Missing data'], 400);
         }
 
-        $user = $em->getRepository(User::class)->find((int)$body['user_id']);
+        $user = $em->getRepository(User::class)->find((int) $body['user_id']);
         if (!$user) {
             return $this->json(['success' => false, 'error' => 'User not found'], 404);
         }
@@ -73,17 +73,17 @@ class CommentController extends AbstractController
         $comment->setCreatedAt(date('Y-m-d H:i:s'));
 
         if (!empty($body['parent_id'])) {
-            $parent = $em->getRepository(Comment::class)->find((int)$body['parent_id']);
+            $parent = $em->getRepository(Comment::class)->find((int) $body['parent_id']);
             if ($parent) {
                 $comment->setParent($parent);
-                
+
                 // Notify the parent comment's author if it's a different user
                 if ($parent->getUser() !== $user) {
                     $notification = new \App\Entity\Notification();
                     $notification->setUser($parent->getUser());
                     $notification->setType('comment_reply');
                     $notification->setTargetId($project->getId());
-                    $notification->setMessage($comment->getAuthorName() . ' відповів(ла) на ваш коментар.');
+                    $notification->setMessage($comment->getAuthorName().' відповів(ла) на ваш коментар.');
                     $em->persist($notification);
                 }
             }
@@ -108,16 +108,17 @@ class CommentController extends AbstractController
             json_encode([
                 'type' => 'NEW_COMMENT',
                 'content_id' => $project->getId(),
-                'comment' => $responseData
+                'comment' => $responseData,
             ])
         );
         try {
             $hub->publish($update);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $this->json([
             'success' => true,
-            'data' => $responseData
+            'data' => $responseData,
         ]);
     }
 
@@ -135,7 +136,7 @@ class CommentController extends AbstractController
         }
 
         // Check ownership
-        if ($comment->getUser()->getId() !== (int)$body['user_id']) {
+        if ($comment->getUser()->getId() !== (int) $body['user_id']) {
             return $this->json(['success' => false, 'error' => 'Unauthorized'], 403);
         }
 
@@ -149,12 +150,13 @@ class CommentController extends AbstractController
                 'type' => 'EDIT_COMMENT',
                 'comment_id' => $comment->getId(),
                 'text' => $body['text'],
-                'updated_at' => $comment->getUpdatedAt()
+                'updated_at' => $comment->getUpdatedAt(),
             ])
         );
         try {
             $hub->publish($update);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return $this->json(['success' => true]);
     }
@@ -170,8 +172,8 @@ class CommentController extends AbstractController
         $body = json_decode($request->getContent(), true);
         $userId = $body['user_id'] ?? 0;
 
-        $isOwner = $comment->getUser()->getId() === (int)$userId;
-        
+        $isOwner = $comment->getUser()->getId() === (int) $userId;
+
         // Check for moderator role using native Symfony role hierarchy
         $isModerator = false;
         if ($this->getUser()) {
@@ -186,13 +188,14 @@ class CommentController extends AbstractController
                 'machinima/updates',
                 json_encode([
                     'type' => 'DELETE_COMMENT',
-                    'comment_id' => $id
+                    'comment_id' => $id,
                 ])
             );
-            
+
             try {
                 $hub->publish($update);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
 
             return $this->json(['success' => true]);
         }

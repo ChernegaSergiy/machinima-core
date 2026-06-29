@@ -29,7 +29,7 @@ class UserController extends AbstractController
 
         $unreadCount = $em->getRepository(Notification::class)->count([
             'user' => $user,
-            'isRead' => false
+            'isRead' => false,
         ]);
 
         $data = [];
@@ -49,8 +49,8 @@ class UserController extends AbstractController
             'success' => true,
             'data' => [
                 'notifications' => $data,
-                'unread_count' => $unreadCount
-            ]
+                'unread_count' => $unreadCount,
+            ],
         ]);
     }
 
@@ -103,8 +103,8 @@ class UserController extends AbstractController
             'success' => true,
             'data' => [
                 'roles' => $roles,
-                'is_moderator' => $isModerator
-            ]
+                'is_moderator' => $isModerator,
+            ],
         ]);
     }
 }

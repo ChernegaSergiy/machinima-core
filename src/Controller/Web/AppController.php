@@ -2,10 +2,10 @@
 
 namespace App\Controller\Web;
 
-use App\Entity\Content;
-use App\Entity\Category;
 use App\Entity\Author;
+use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Content;
 use App\Entity\Notification;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ class AppController extends AbstractController
     public function index(EntityManagerInterface $em): Response
     {
         $qb = $em->getRepository(Content::class)->createQueryBuilder('c');
-        
+
         if (!$this->isGranted('ROLE_MODERATOR')) {
             $qb->leftJoin('c.staff', 'cs')
                ->leftJoin('cs.author', 'a')
@@ -40,6 +40,7 @@ class AppController extends AbstractController
     public function categories(EntityManagerInterface $em): Response
     {
         $categories = $em->getRepository(Category::class)->findAll();
+
         return $this->render('app/categories.html.twig', [
             'categories' => $categories,
         ]);
@@ -84,7 +85,7 @@ class AppController extends AbstractController
                ->setParameter('privateState', 'private');
         }
         $authors = $qb->getQuery()->getResult();
-        
+
         return $this->render('app/authors.html.twig', [
             'authors' => $authors,
         ]);
@@ -94,7 +95,7 @@ class AppController extends AbstractController
     public function author(int $id, EntityManagerInterface $em): Response
     {
         $author = $em->getRepository(Author::class)->find($id);
-        if (!$author || ($author->getState() === 'private' && !$this->isGranted('ROLE_MODERATOR'))) {
+        if (!$author || ('private' === $author->getState() && !$this->isGranted('ROLE_MODERATOR'))) {
             throw $this->createNotFoundException();
         }
 
@@ -126,24 +127,24 @@ class AppController extends AbstractController
 
         if (!$this->isGranted('ROLE_MODERATOR')) {
             foreach ($post->getStaff() as $staff) {
-                if ($staff->getAuthor() && $staff->getAuthor()->getState() === 'private') {
+                if ($staff->getAuthor() && 'private' === $staff->getAuthor()->getState()) {
                     throw $this->createNotFoundException();
                 }
             }
         }
-        
+
         $comments = $em->getRepository(Comment::class)->findBy(['content' => $post], ['createdAt' => 'ASC']);
-        
+
         // Build comment tree
         $commentTree = [];
         $commentMap = [];
         foreach ($comments as $comment) {
             $commentMap[$comment->getId()] = [
                 'entity' => $comment,
-                'children' => []
+                'children' => [],
             ];
         }
-        
+
         foreach ($comments as $comment) {
             $isOrphan = false;
             if ($comment->getParent()) {
@@ -154,7 +155,7 @@ class AppController extends AbstractController
                     $isOrphan = true;
                 }
             }
-            
+
             if (!$comment->getParent() || $isOrphan) {
                 $commentTree[] = &$commentMap[$comment->getId()];
             }
@@ -169,7 +170,7 @@ class AppController extends AbstractController
             'post' => $post,
             'commentTree' => $commentTree,
             'commentsCount' => count($comments),
-            'isModerator' => $isModerator
+            'isModerator' => $isModerator,
         ]);
     }
 

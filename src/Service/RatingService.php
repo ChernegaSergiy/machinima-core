@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Content;
 use App\Entity\ContentInteraction;
 use App\Entity\ContentView;
-use App\Entity\Content;
 use App\Entity\User;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
+
 class RatingService
 {
     private Connection $db;
@@ -36,7 +37,9 @@ class RatingService
         }
 
         $content = $this->em->getRepository(Content::class)->find($content_id);
-        if (!$content) return false;
+        if (!$content) {
+            return false;
+        }
 
         $existing = $this->em->getRepository(ContentInteraction::class)->findOneBy(['user' => $user, 'content' => $content]);
 
@@ -55,6 +58,7 @@ class RatingService
         }
 
         $this->em->flush();
+
         return $this->recalculateCountersAndScore($content_id);
     }
 
@@ -69,13 +73,16 @@ class RatingService
         foreach ($rows as $row) {
             $result[$row['content_id']] = $row['interaction_type'];
         }
+
         return $result;
     }
 
     public function addView(int $content_id, ?int $user_id = null): bool
     {
         $content = $this->em->getRepository(Content::class)->find($content_id);
-        if (!$content) return false;
+        if (!$content) {
+            return false;
+        }
 
         if ($user_id) {
             $user = $this->em->getRepository(User::class)->find($user_id);
@@ -103,6 +110,7 @@ class RatingService
         }
 
         $this->em->flush();
+
         return $this->recalculateCountersAndScore($content_id);
     }
 
@@ -126,6 +134,7 @@ class RatingService
         $content->setTrendingScore($score);
 
         $this->em->flush();
+
         return true;
     }
 
@@ -153,6 +162,7 @@ class RatingService
         }
 
         $seconds = $date - self::EPOCH;
+
         return round($sign * $order + $seconds / 45000, 7);
     }
 

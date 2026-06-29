@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
+use App\Entity\Author;
 use App\Entity\Role;
 use App\Entity\User;
-use App\Entity\Author;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -57,7 +57,7 @@ class AppInitAdminCommand extends Command
             $modRole->setRoleName('ROLE_MODERATOR');
             $this->em->persist($modRole);
         }
-        
+
         $creatorRole = $roleRepo->findOneBy(['roleName' => 'ROLE_CREATOR']);
         if (!$creatorRole) {
             $creatorRole = new Role();
@@ -112,7 +112,7 @@ class AppInitAdminCommand extends Command
         $author = $authorRepo->findOneBy(['telegramUserId' => $telegramId]);
         if (!$author) {
             $author = new Author();
-            $author->setName('Admin #' . $telegramId);
+            $author->setName('Admin #'.$telegramId);
             $author->setState('private');
             $author->setTelegramUserId($telegramId);
             $this->em->persist($author);

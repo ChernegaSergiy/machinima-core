@@ -149,7 +149,7 @@ class User implements UserInterface
         if ($this->legacyRole) {
             $roleName = strtoupper($this->legacyRole);
             if (!str_starts_with($roleName, 'ROLE_')) {
-                $roleName = 'ROLE_' . $roleName;
+                $roleName = 'ROLE_'.$roleName;
             }
             $roles[] = $roleName;
         }
@@ -163,7 +163,7 @@ class User implements UserInterface
     private function addRoleAndChildren(Role $role, array &$roles): void
     {
         $roleName = $role->getRoleName();
-        
+
         if (!in_array($roleName, $roles, true)) {
             $roles[] = $roleName;
             foreach ($role->getChildren() as $childRole) {

@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Author;
+use App\Entity\Category;
+use App\Entity\Comment;
+use App\Entity\Content;
+use App\Entity\ContentStaff;
+use App\Entity\User;
+use App\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
-use App\Entity\Content;
-use App\Entity\Comment;
-use App\Entity\Category;
-use App\Entity\ContentStaff;
-use App\Entity\User;
-use App\Entity\Author;
-use App\Model\ContentItem;
 
 class ContentService
 {
@@ -21,7 +21,7 @@ class ContentService
 
     public function __construct(
         private EntityManagerInterface $em,
-        private WorkflowInterface $workflow
+        private WorkflowInterface $workflow,
     ) {
         $this->db = $em->getConnection();
     }
@@ -38,6 +38,7 @@ class ContentService
         if ($this->workflow->can($contentItem, $transition)) {
             $this->workflow->apply($contentItem, $transition);
             $this->updateContent($content_id, ['status' => $contentItem->getStatus()]);
+
             return true;
         }
 
@@ -58,7 +59,7 @@ class ContentService
         $user = $this->em->getRepository(User::class)->find($data['created_by']);
         if (!$user) {
             $user = new User();
-            $user->setId((int)$data['created_by']);
+            $user->setId((int) $data['created_by']);
             $this->em->persist($user);
         }
         $content->setCreatedBy($user);
@@ -72,24 +73,42 @@ class ContentService
     public function updateContent(int $id, array $data): bool
     {
         $content = $this->em->getRepository(Content::class)->find($id);
-        if (!$content) return false;
+        if (!$content) {
+            return false;
+        }
 
-        if (array_key_exists('title', $data)) $content->setTitle($data['title']);
-        if (array_key_exists('type', $data)) $content->setType($data['type']);
-        if (array_key_exists('description', $data)) $content->setDescription($data['description']);
-        if (array_key_exists('url', $data)) $content->setUrl($data['url']);
-        if (array_key_exists('release_date', $data)) $content->setReleaseDate($data['release_date']);
-        if (array_key_exists('status', $data)) $content->setStatus($data['status']);
-        if (array_key_exists('cover_file_id', $data)) $content->setCoverFileId($data['cover_file_id']);
+        if (array_key_exists('title', $data)) {
+            $content->setTitle($data['title']);
+        }
+        if (array_key_exists('type', $data)) {
+            $content->setType($data['type']);
+        }
+        if (array_key_exists('description', $data)) {
+            $content->setDescription($data['description']);
+        }
+        if (array_key_exists('url', $data)) {
+            $content->setUrl($data['url']);
+        }
+        if (array_key_exists('release_date', $data)) {
+            $content->setReleaseDate($data['release_date']);
+        }
+        if (array_key_exists('status', $data)) {
+            $content->setStatus($data['status']);
+        }
+        if (array_key_exists('cover_file_id', $data)) {
+            $content->setCoverFileId($data['cover_file_id']);
+        }
 
         $content->setUpdatedAt(date('Y-m-d H:i:s'));
         $this->em->flush();
+
         return true;
     }
 
     public function getContentById(int $id): ?array
     {
         $result = $this->db->fetchAssociative('SELECT * FROM content WHERE id = ?', [$id]);
+
         return $result ?: null;
     }
 
@@ -103,6 +122,7 @@ class ContentService
              WHERE c.id = ? GROUP BY c.id',
             [$id]
         );
+
         return $result ?: null;
     }
 
@@ -137,17 +157,21 @@ class ContentService
     public function editComment(int $comment_id, int $user_id, string $text): bool
     {
         $comment = $this->em->getRepository(Comment::class)->findOneBy(['id' => $comment_id, 'user' => $user_id]);
-        if (!$comment) return false;
+        if (!$comment) {
+            return false;
+        }
 
         $comment->setText($text);
         $comment->setUpdatedAt(date('Y-m-d H:i:s'));
         $this->em->flush();
+
         return true;
     }
 
     public function getCommentById(int $id): ?array
     {
         $result = $this->db->fetchAssociative('SELECT * FROM comments WHERE id = ?', [$id]);
+
         return $result ?: null;
     }
 
@@ -162,10 +186,13 @@ class ContentService
     public function deleteCommentItem(int $id): bool
     {
         $comment = $this->em->getRepository(Comment::class)->find($id);
-        if (!$comment) return false;
+        if (!$comment) {
+            return false;
+        }
 
         $this->em->remove($comment);
         $this->em->flush();
+
         return true;
     }
 
@@ -186,22 +213,27 @@ class ContentService
         }
 
         $project = $this->getContentById($project_id);
+
         return $project && (int) $project['created_by'] === $user_id;
     }
 
     public function deleteContent(int $id): bool
     {
         $content = $this->em->getRepository(Content::class)->find($id);
-        if (!$content) return false;
+        if (!$content) {
+            return false;
+        }
 
         $this->em->remove($content);
         $this->em->flush();
+
         return true;
     }
 
     public function searchContent(string $query): array
     {
-        $likeQuery = '%' . $query . '%';
+        $likeQuery = '%'.$query.'%';
+
         return $this->db->fetchAllAssociative(
             'SELECT * FROM content WHERE (title LIKE ? OR description LIKE ?) AND status = ?',
             [$likeQuery, $likeQuery, 'published']
@@ -211,6 +243,7 @@ class ContentService
     public function getRandomContent(): ?array
     {
         $result = $this->db->fetchAllAssociative('SELECT * FROM content WHERE status = ? ORDER BY RANDOM() LIMIT 1', ['published']);
+
         return $result[0] ?? null;
     }
 
@@ -235,17 +268,21 @@ class ContentService
         $category->setName($name);
         if ($parent_id) {
             $parent = $this->em->getRepository(Category::class)->find($parent_id);
-            if ($parent) $category->setParent($parent);
+            if ($parent) {
+                $category->setParent($parent);
+            }
         }
 
         $this->em->persist($category);
         $this->em->flush();
+
         return $category->getId();
     }
 
     public function getCategoryById(int $id): ?array
     {
         $result = $this->db->fetchAssociative('SELECT * FROM categories WHERE id = ?', [$id]);
+
         return $result ?: null;
     }
 
@@ -256,18 +293,22 @@ class ContentService
 
     public function getCategoriesByParent(?int $parent_id): array
     {
-        $query = 'SELECT * FROM categories WHERE parent_id ' . (null === $parent_id ? 'IS NULL' : '= ?');
+        $query = 'SELECT * FROM categories WHERE parent_id '.(null === $parent_id ? 'IS NULL' : '= ?');
         $params = null === $parent_id ? [] : [$parent_id];
+
         return $this->db->fetchAllAssociative($query, $params);
     }
 
     public function deleteCategory(int $id): bool
     {
         $category = $this->em->getRepository(Category::class)->find($id);
-        if (!$category) return false;
+        if (!$category) {
+            return false;
+        }
 
         $this->em->remove($category);
         $this->em->flush();
+
         return true;
     }
 
@@ -275,12 +316,14 @@ class ContentService
     {
         $content = $this->em->getRepository(Content::class)->find($content_id);
         $author = $this->em->getRepository(Author::class)->find($author_id);
-        if (!$content || !$author) return false;
+        if (!$content || !$author) {
+            return false;
+        }
 
         $existing = $this->em->getRepository(ContentStaff::class)->findOneBy([
             'content' => $content,
             'author' => $author,
-            'role' => $role
+            'role' => $role,
         ]);
 
         if (!$existing) {
@@ -300,7 +343,7 @@ class ContentService
         $staff = $this->em->getRepository(ContentStaff::class)->findOneBy([
             'content' => $content_id,
             'author' => $author_id,
-            'role' => $role
+            'role' => $role,
         ]);
 
         if ($staff) {
@@ -336,7 +379,9 @@ class ContentService
     {
         $content = $this->em->getRepository(Content::class)->find($content_id);
         $category = $this->em->getRepository(Category::class)->find($category_id);
-        if (!$content || !$category) return false;
+        if (!$content || !$category) {
+            return false;
+        }
 
         if (!$content->getCategories()->contains($category)) {
             $content->addCategory($category);
@@ -350,7 +395,9 @@ class ContentService
     {
         $content = $this->em->getRepository(Content::class)->find($content_id);
         $category = $this->em->getRepository(Category::class)->find($category_id);
-        if (!$content || !$category) return false;
+        if (!$content || !$category) {
+            return false;
+        }
 
         if ($content->getCategories()->contains($category)) {
             $content->removeCategory($category);

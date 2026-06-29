@@ -67,7 +67,7 @@ class Content
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private Collection $categories;
 
-        #[ORM\OneToMany(mappedBy: "content", targetEntity: ContentStaff::class)]
+    #[ORM\OneToMany(mappedBy: 'content', targetEntity: ContentStaff::class)]
     private Collection $staff;
 
     public function __construct()

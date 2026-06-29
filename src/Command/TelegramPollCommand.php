@@ -2,16 +2,16 @@
 
 namespace App\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
+use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Morfeditorial\TelegramBotBundle\Client\TelegramClient;
-use Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher;
 
 #[AsCommand(
     name: 'app:telegram:poll',
@@ -25,7 +25,7 @@ class TelegramPollCommand extends Command
         private TelegramClient $telegramClient,
         private UpdateDispatcher $updateDispatcher,
         private EntityManagerInterface $entityManager,
-        private TokenStorageInterface $tokenStorage
+        private TokenStorageInterface $tokenStorage,
     ) {
         parent::__construct();
     }
@@ -39,7 +39,7 @@ class TelegramPollCommand extends Command
             try {
                 $updates = $this->telegramClient->getUpdates($this->offset);
                 foreach ($updates as $update) {
-                    $io->writeln('Received update: ' . ($update['update_id'] ?? 'unknown'));
+                    $io->writeln('Received update: '.($update['update_id'] ?? 'unknown'));
                     $this->offset = ($update['update_id'] ?? 0) + 1;
 
                     $userId = $update['callback_query']['from']['id'] ?? $update['message']['from']['id'] ?? null;

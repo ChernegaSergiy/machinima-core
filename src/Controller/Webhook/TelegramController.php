@@ -4,10 +4,10 @@ namespace App\Controller\Webhook;
 
 use morfeditorial\MyBot;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TelegramController extends AbstractController
 {
@@ -15,10 +15,10 @@ class TelegramController extends AbstractController
     public function handle(Request $request, ContainerInterface $container): Response
     {
         $botToken = $this->getParameter('telegram.bot_token');
-        
+
         // Initialize the bot with the app's container
         $bot = new MyBot($botToken, $container);
-        
+
         $update = json_decode($request->getContent(), true);
         if ($update) {
             $bot->handleUpdate($update);

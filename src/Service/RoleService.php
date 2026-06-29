@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Author;
 use App\Entity\Role;
 use App\Entity\User;
-use App\Entity\Author;
+use Doctrine\ORM\EntityManagerInterface;
+
 class RoleService
 {
     public function __construct(private EntityManagerInterface $em)
@@ -25,6 +26,7 @@ class RoleService
         $role->setRoleName($role_name);
         $this->em->persist($role);
         $this->em->flush();
+
         return true;
     }
 
@@ -39,6 +41,7 @@ class RoleService
 
         $parent->addChild($child);
         $this->em->flush();
+
         return true;
     }
 
@@ -53,6 +56,7 @@ class RoleService
 
         $parent->removeChild($child);
         $this->em->flush();
+
         return true;
     }
 
@@ -63,7 +67,7 @@ class RoleService
 
         foreach ($roles as $parent) {
             foreach ($parent->getChildren() as $child) {
-                $hierarchy['ROLE_' . $parent->getRoleName()][] = 'ROLE_' . $child->getRoleName();
+                $hierarchy['ROLE_'.$parent->getRoleName()][] = 'ROLE_'.$child->getRoleName();
             }
         }
 
@@ -121,7 +125,7 @@ class RoleService
             $author = $this->em->getRepository(Author::class)->findOneBy(['telegramUserId' => $user_id]);
             if (!$author) {
                 $author = new Author();
-                $author->setName('Creator #' . $user_id);
+                $author->setName('Creator #'.$user_id);
                 $author->setState('private');
                 $author->setTelegramUserId($user_id);
                 $this->em->persist($author);
@@ -129,6 +133,7 @@ class RoleService
         }
 
         $this->em->flush();
+
         return 'success';
     }
 
@@ -164,6 +169,7 @@ class RoleService
 
         $user->removeRole($role);
         $this->em->flush();
+
         return true;
     }
 
@@ -173,7 +179,8 @@ class RoleService
         if (!$user) {
             return [];
         }
-        return array_map(fn(Role $r) => $r->getRoleName(), $user->getUserRoles()->toArray());
+
+        return array_map(fn (Role $r) => $r->getRoleName(), $user->getUserRoles()->toArray());
     }
 
     public function getUsersCountByRole(string $role_name): int
@@ -195,13 +202,15 @@ class RoleService
                 $userIds[] = $user->getId();
             }
         }
+
         return $userIds;
     }
 
     public function getAllRoles(): array
     {
         $roles = $this->em->getRepository(Role::class)->findAll();
-        return array_map(fn(Role $r) => ['id' => $r->getId(), 'role_name' => $r->getRoleName()], $roles);
+
+        return array_map(fn (Role $r) => ['id' => $r->getId(), 'role_name' => $r->getRoleName()], $roles);
     }
 
     public function getAllRolesSorted(): array
@@ -250,6 +259,7 @@ class RoleService
         if (!$role) {
             return null;
         }
+
         return ['id' => $role->getId(), 'role_name' => $role->getRoleName()];
     }
 
@@ -265,7 +275,7 @@ class RoleService
             return [];
         }
 
-        return array_map(fn(Role $r) => ['id' => $r->getId(), 'role_name' => $r->getRoleName()], $role->getChildren()->toArray());
+        return array_map(fn (Role $r) => ['id' => $r->getId(), 'role_name' => $r->getRoleName()], $role->getChildren()->toArray());
     }
 
     public function getParents(string $role_name): array
@@ -282,6 +292,7 @@ class RoleService
                 $parents[] = ['id' => $r->getId(), 'role_name' => $r->getRoleName()];
             }
         }
+
         return $parents;
     }
 }

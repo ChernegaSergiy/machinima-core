@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
 use App\Entity\UserState;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 class UserStateRepository extends ServiceEntityRepository
 {
@@ -19,9 +19,12 @@ class UserStateRepository extends ServiceEntityRepository
     public function get(int $userId, string $key = 'default'): mixed
     {
         $user = $this->getEntityManager()->find(User::class, $userId);
-        if (!$user) return null;
+        if (!$user) {
+            return null;
+        }
 
         $state = $this->findOneBy(['user' => $user, 'stateKey' => $key]);
+
         return $state ? json_decode($state->getStateValue(), true) : null;
     }
 
@@ -50,11 +53,15 @@ class UserStateRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $user = $em->find(User::class, $userId);
-        if (!$user) return;
+        if (!$user) {
+            return;
+        }
 
         if ($key) {
             $state = $this->findOneBy(['user' => $user, 'stateKey' => $key]);
-            if ($state) $em->remove($state);
+            if ($state) {
+                $em->remove($state);
+            }
         } else {
             foreach ($this->findBy(['user' => $user]) as $state) {
                 $em->remove($state);
