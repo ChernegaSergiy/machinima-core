@@ -44,18 +44,6 @@ services:
         alias: App\Service\RoleService
         public: true
 
-    user_service:
-        alias: App\Service\UserService
-        public: true
-
-    user_state_service:
-        alias: App\Service\UserStateService
-        public: true
-
-    author_service:
-        alias: App\Service\AuthorService
-        public: true
-
     content_service:
         alias: App\Service\ContentService
         public: true
