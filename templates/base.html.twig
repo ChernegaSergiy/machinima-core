@@ -29,7 +29,14 @@
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             });
         } else {
-            let cookieStr = "tma_init_data=" + encodeURIComponent(window.Telegram.WebApp.initData) + "; path=/; max-age=86400;";
+            const tg = window.Telegram.WebApp;
+            const updateTheme = () => {
+                document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
+            };
+            updateTheme();
+            tg.onEvent('themeChanged', updateTheme);
+
+            let cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
             if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
             document.cookie = cookieStr;
 
