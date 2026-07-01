@@ -1,8 +1,6 @@
 {
     "type": "project",
     "license": "LicenseRef-CSSM-Unlimited-2.0",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "require": {
         "php": ">=8.4",
         "ext-ctype": "*",
@@ -93,5 +91,7 @@
             "type": "path",
             "url": "../machinima-bot"
         }
-    ]
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
