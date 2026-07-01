@@ -82,6 +82,18 @@ class Notification
         return $this;
     }
 
+    public function getTargetType(): ?string
+    {
+        return $this->targetType;
+    }
+
+    public function setTargetType(?string $targetType): self
+    {
+        $this->targetType = $targetType;
+
+        return $this;
+    }
+
     public function getMessage(): ?string
     {
         return $this->message;
