@@ -162,7 +162,7 @@
             } else if (path.includes('/post/')) {
                 // Detailed post skeleton
                 bodyContent = `
-                    <div class="card" style="margin-bottom: 0; border-bottom: none; box-shadow: none;">
+                    <div class="card">
                         <div class="card-header">
                             <div class="avatar skeleton-shimmer"></div>
                             <div class="author-info" style="flex-grow: 1;">
@@ -170,12 +170,17 @@
                                 <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px; margin: 0;"></div>
                             </div>
                         </div>
-                        <div class="skeleton-text skeleton-shimmer title" style="width: 90%; height: 26px; margin-bottom: 16px;"></div>
-                        <div class="skeleton-media skeleton-shimmer"></div>
-                        <div style="margin-top: 20px;">
+                        <div class="skeleton-text skeleton-shimmer" style="width: 85%; height: 28px; margin-bottom: 20px;"></div>
+                        <div style="margin-bottom: 24px;">
                             <div class="skeleton-text skeleton-shimmer body-line"></div>
                             <div class="skeleton-text skeleton-shimmer body-line"></div>
                             <div class="skeleton-text skeleton-shimmer body-line-short"></div>
+                        </div>
+                        <div class="skeleton-media skeleton-shimmer" style="aspect-ratio: auto; min-height: 250px;"></div>
+                        <div class="post-actions">
+                            <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
+                            <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
+                            <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
                         </div>
                     </div>
                 `;
