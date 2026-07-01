@@ -55,6 +55,12 @@ class NotificationController extends AbstractController
                 switch ($notification->getTargetType()) {
                     case 'post':
                         return $this->redirectToRoute('app_post', ['id' => $notification->getTargetId()]);
+                    case 'comment':
+                        $comment = $em->getRepository(\App\Entity\Comment::class)->find($notification->getTargetId());
+                        if ($comment && $comment->getContent()) {
+                            return $this->redirect($this->generateUrl('app_post', ['id' => $comment->getContent()->getId()]) . '#comment-item-' . $comment->getId());
+                        }
+                        break;
                     case 'author':
                         return $this->redirectToRoute('app_author', ['id' => $notification->getTargetId()]);
                     case 'category':
