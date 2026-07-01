@@ -413,6 +413,34 @@
                 }
             } catch(e) {}
             
+            // Listen for real-time updates via Mercure to update notifications badge
+            if (!window.mercureListenerAttached) {
+                try {
+                    const eventSource = new EventSource("{{ mercure('machinima/updates')|escape('js') }}");
+                    eventSource.onmessage = async event => {
+                        const data = JSON.parse(event.data);
+                        // If there's a new comment or interaction, re-fetch unread count
+                        if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
+                            try {
+                                const tgData = window.Telegram?.WebApp?.initData;
+                                const unreadRes = await fetch('/api/notifications/unread-count' + (tgData ? '?initData=' + encodeURIComponent(tgData) : ''));
+                                const unreadData = await unreadRes.json();
+                                const badge = document.getElementById('unread-count-badge');
+                                if (badge && unreadData.count > 0) {
+                                    badge.innerText = unreadData.count > 99 ? '99+' : unreadData.count;
+                                    badge.style.display = 'block';
+                                } else if (badge) {
+                                    badge.style.display = 'none';
+                                }
+                            } catch (e) {}
+                        }
+                    };
+                    window.mercureListenerAttached = true;
+                } catch(e) {
+                    console.log('Mercure listener could not be attached', e);
+                }
+            }
+
             window.formatLocalTimes = function() {
                 document.querySelectorAll('time.local-time:not([data-formatted])').forEach(el => {
                     const date = new Date(el.getAttribute('datetime'));
