@@ -99,17 +99,15 @@ class AppController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        // Fetch projects by this author
-        // Author has telegramUserId, User has id
-        $user = null;
-        if ($author->getTelegramUserId()) {
-            $user = $em->getRepository(\App\Entity\User::class)->findOneBy(['id' => $author->getTelegramUserId()]);
-        }
-
-        $projects = [];
-        if ($user) {
-            $projects = $em->getRepository(Content::class)->findBy(['createdBy' => $user], ['createdAt' => 'DESC']);
-        }
+        $projects = $em->createQueryBuilder()
+            ->select('c')
+            ->from(Content::class, 'c')
+            ->join('c.staff', 's')
+            ->where('s.author = :author')
+            ->setParameter('author', $author)
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('app/author.html.twig', [
             'author' => $author,
