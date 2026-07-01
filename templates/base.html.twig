@@ -134,11 +134,11 @@
                     </div>
                     ${Array(5).fill().map(() => `
                         <div class="list-item">
-                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-icon skeleton-shimmer"></div>
                             <div class="list-content">
                                 <div class="skeleton-text skeleton-shimmer" style="width: 50%; height: 16px; margin: 0;"></div>
                             </div>
-                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); background: var(--background);"></div>
+                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; opacity: 0.3;"></div>
                         </div>
                     `).join('')}
                 `;
@@ -150,12 +150,12 @@
                     </div>
                     ${Array(5).fill().map(() => `
                         <div class="list-item">
-                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-icon skeleton-shimmer"></div>
                             <div class="list-content">
                                 <div class="skeleton-text skeleton-shimmer" style="width: 45%; height: 16px; margin-bottom: 6px;"></div>
-                                <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px; margin: 0;"></div>
+                                <div class="skeleton-text skeleton-shimmer" style="width: 70%; height: 14px; margin: 0;"></div>
                             </div>
-                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); background: var(--background);"></div>
+                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; opacity: 0.3;"></div>
                         </div>
                     `).join('')}
                 `;
@@ -163,7 +163,7 @@
                 // Detailed post skeleton
                 bodyContent = `
                     <div class="card" style="margin-bottom: 0; border-bottom: none; box-shadow: none;">
-                        <div class="card-header" style="margin-bottom: 16px;">
+                        <div class="card-header">
                             <div class="avatar skeleton-shimmer"></div>
                             <div class="author-info" style="flex-grow: 1;">
                                 <div class="skeleton-text skeleton-shimmer" style="width: 40%; height: 16px; margin-bottom: 4px;"></div>
@@ -187,7 +187,7 @@
                     </div>
                     ${Array(4).fill().map(() => `
                         <div class="list-item">
-                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-icon skeleton-shimmer"></div>
                             <div class="list-content">
                                 <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 16px; margin-bottom: 6px;"></div>
                                 <div class="skeleton-text skeleton-shimmer" style="width: 85%; height: 12px; margin-bottom: 6px;"></div>
@@ -203,18 +203,23 @@
                         <h1 class="page-title">${title}</h1>
                     </div>
                     ${Array(2).fill().map(() => `
-                        <div class="skeleton-card">
-                            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-                                <div class="skeleton-avatar skeleton-shimmer"></div>
-                                <div style="margin-left: 12px; flex-grow: 1;">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="avatar skeleton-shimmer"></div>
+                                <div class="author-info" style="flex-grow: 1;">
                                     <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
-                                    <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px;"></div>
+                                    <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
                                 </div>
                             </div>
                             <div class="skeleton-text skeleton-shimmer title"></div>
                             <div class="skeleton-text skeleton-shimmer body-line"></div>
                             <div class="skeleton-text skeleton-shimmer body-line-short"></div>
                             <div class="skeleton-media skeleton-shimmer"></div>
+                            <div class="post-actions" style="border-top: none; padding-top: 0; margin-top: 24px;">
+                                <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
+                                <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
+                                <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
+                            </div>
                         </div>
                     `).join('')}
                 `;
