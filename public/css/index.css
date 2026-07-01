@@ -20,7 +20,7 @@ body {
 }
 
 a { text-decoration: none; color: inherit; }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; overflow-wrap: break-word; word-break: break-word; }
 
 /* Headers / Titles use brutalist font */
 h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, .empty-state-text {
