@@ -94,6 +94,20 @@ class CommentController extends AbstractController
             $em->flush();
         }
 
+        $projectAuthor = $project->getCreatedBy();
+        if ($projectAuthor && $projectAuthor->getId() !== $user->getId()) {
+            if (!$parentUser || $parentUser->getId() !== $projectAuthor->getId()) {
+                $notification = new \App\Entity\Notification();
+                $notification->setUser($projectAuthor);
+                $notification->setType('new_comment');
+                $notification->setTargetId($comment->getId());
+                $notification->setTargetType('comment');
+                $notification->setMessage('Новий коментар до вашого проєкту від '.$comment->getAuthorName().'.');
+                $em->persist($notification);
+                $em->flush();
+            }
+        }
+
         $responseData = [
             'id' => $comment->getId(),
             'content_id' => $project->getId(),
