@@ -60,9 +60,6 @@ class NotificationController extends AbstractController
                     case 'category':
                         return $this->redirectToRoute('app_category', ['id' => $notification->getTargetId()]);
                 }
-            } else if ($notification->getTargetId()) {
-                // Legacy fallback for old notifications without target_type
-                return $this->redirectToRoute('app_post', ['id' => $notification->getTargetId()]);
             }
         }
 
