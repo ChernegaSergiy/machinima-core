@@ -30,6 +30,7 @@ h1, h2, h3, .author-name, .post-title, .page-title, .profile-name, .list-title, 
 }
 
 .container { padding: 16px; padding-bottom: 120px; max-width: 600px; margin: 0 auto; }
+body.is-tma .container { padding-top: 24px; }
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
 
