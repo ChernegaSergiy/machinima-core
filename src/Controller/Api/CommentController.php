@@ -83,6 +83,7 @@ class CommentController extends AbstractController
                     $notification->setUser($parent->getUser());
                     $notification->setType('comment_reply');
                     $notification->setTargetId($project->getId());
+                    $notification->setTargetType('post');
                     $notification->setMessage($comment->getAuthorName().' відповів(ла) на ваш коментар.');
                     $em->persist($notification);
                 }
