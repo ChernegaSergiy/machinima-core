@@ -6,4 +6,4 @@ mercure:
             jwt:
                 secret: '%env(MERCURE_JWT_SECRET)%'
                 publish: '*'
-            bus: messenger.bus.default
+            # bus: messenger.bus.default
