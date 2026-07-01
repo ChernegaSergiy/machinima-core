@@ -1,4 +1,6 @@
 {
+    "name": "morfeditorial/machinima-app",
+    "description": "The official Telegram Mini App for the Machinima platform.",
     "type": "project",
     "license": "LicenseRef-CSSM-Unlimited-2.0",
     "require": {
