@@ -112,37 +112,108 @@
             initApp();
         }
 
-        // Smooth Page Transitions using Turbo
-        document.addEventListener('turbo:click', function() {
-            const mainContent = document.getElementById('main-content');
-            if (mainContent) {
-                mainContent.classList.add('turbo-loading');
+        // Skeleton Screen Generation on Navigation
+        function getSkeletonHTML(path) {
+            let title = 'Завантаження';
+            if (path.includes('/categories')) title = 'Категорії';
+            else if (path.includes('/category/')) title = 'Категорія';
+            else if (path.includes('/authors')) title = 'Автори';
+            else if (path.includes('/author/')) title = 'Автор';
+            else if (path.includes('/notifications')) title = 'Сповіщення';
+            else if (path.includes('/post/')) title = 'Допис';
+            else title = 'Стрічка';
+
+            let bodyContent = '';
+
+            if (path.includes('/categories')) {
+                // Categories grid skeleton
+                bodyContent = `
+                    <div class="page-header-flex">
+                        <h1 class="page-title">${title}</h1>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+                        ${Array(6).fill().map(() => `
+                            <div class="skeleton-card skeleton-shimmer" style="height: 100px; display: flex; align-items: flex-end; justify-content: center; padding: 12px; margin: 0;">
+                                <div class="skeleton-text" style="width: 70%; height: 14px; margin: 0; border: none; background: rgba(0,0,0,0.1);"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (path.includes('/authors') && !path.includes('/author/')) {
+                // Authors list skeleton
+                bodyContent = `
+                    <div class="page-header-flex">
+                        <h1 class="page-title">${title}</h1>
+                    </div>
+                    ${Array(4).fill().map(() => `
+                        <div class="card" style="display: flex; align-items: center; padding: 16px; margin-bottom: 16px;">
+                            <div class="skeleton-avatar skeleton-shimmer" style="margin-right: 16px;"></div>
+                            <div style="flex-grow: 1;">
+                                <div class="skeleton-text skeleton-shimmer title" style="width: 50%; height: 16px; margin-bottom: 8px;"></div>
+                                <div class="skeleton-text skeleton-shimmer meta" style="width: 30%; height: 10px; margin: 0;"></div>
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+            } else if (path.includes('/post/')) {
+                // Detailed post skeleton
+                bodyContent = `
+                    <div class="card" style="margin-bottom: 0; border-bottom: none; box-shadow: none;">
+                        <div class="card-header" style="margin-bottom: 16px;">
+                            <div class="skeleton-avatar skeleton-shimmer"></div>
+                            <div style="margin-left: 12px; flex-grow: 1;">
+                                <div class="skeleton-text skeleton-shimmer" style="width: 40%; height: 16px; margin-bottom: 4px;"></div>
+                                <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px;"></div>
+                            </div>
+                        </div>
+                        <div class="skeleton-text skeleton-shimmer title" style="width: 90%; height: 26px; margin-bottom: 16px;"></div>
+                        <div class="skeleton-media skeleton-shimmer"></div>
+                        <div style="margin-top: 20px;">
+                            <div class="skeleton-text skeleton-shimmer body-line"></div>
+                            <div class="skeleton-text skeleton-shimmer body-line"></div>
+                            <div class="skeleton-text skeleton-shimmer body-line-short"></div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Standard feed or category/author items list skeleton
+                bodyContent = `
+                    <div class="page-header-flex">
+                        <h1 class="page-title">${title}</h1>
+                    </div>
+                    ${Array(2).fill().map(() => `
+                        <div class="skeleton-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                                <div class="skeleton-avatar skeleton-shimmer"></div>
+                                <div style="margin-left: 12px; flex-grow: 1;">
+                                    <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
+                                    <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px;"></div>
+                                </div>
+                            </div>
+                            <div class="skeleton-text skeleton-shimmer title"></div>
+                            <div class="skeleton-text skeleton-shimmer body-line"></div>
+                            <div class="skeleton-text skeleton-shimmer body-line-short"></div>
+                            <div class="skeleton-media skeleton-shimmer"></div>
+                        </div>
+                    `).join('')}
+                `;
+            }
+
+            return `<div class="container">${bodyContent}</div>`;
+        }
+
+        document.addEventListener('turbo:click', function(event) {
+            const link = event.target.closest('a');
+            if (link && link.href && link.href.startsWith(window.location.origin)) {
+                const mainContent = document.getElementById('main-content');
+                if (mainContent) {
+                    const url = new URL(link.href);
+                    // Temporarily replace content with matching skeleton while fetch runs
+                    mainContent.innerHTML = getSkeletonHTML(url.pathname);
+                }
             }
         });
 
-        document.addEventListener('turbo:before-render', function(event) {
-            event.preventDefault(); // Pause rendering
-            const mainContent = document.getElementById('main-content');
-            if (mainContent) {
-                mainContent.classList.add('turbo-loading');
-            }
-            setTimeout(function() {
-                event.detail.resume(); // Resume rendering after fade-out completes
-            }, 150);
-        });
-
-        document.addEventListener('turbo:render', function() {
-            const mainContent = document.getElementById('main-content');
-            if (mainContent) {
-                // Keep it hidden initially for a split second, then fade in
-                mainContent.classList.add('turbo-loading');
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        mainContent.classList.remove('turbo-loading');
-                    });
-                });
-            }
-        });
 
 
         // Robust Architecture: Inject auth header into every Turbo navigation request natively.
