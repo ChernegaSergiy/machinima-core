@@ -51,7 +51,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    {% block body %}{% endblock %}
+    <main id="main-content" class="turbo-transition">
+        {% block body %}{% endblock %}
+    </main>
 
     {% block tabbar %}
     {% set current_route = app.request.attributes.get('_route') %}
@@ -102,8 +104,6 @@
                 }
             }
             if (typeof lucide !== 'undefined') lucide.createIcons();
-            
-            // The a.href hacking was removed in favor of native Turbo header injection below.
         }
         document.addEventListener('turbo:load', initApp);
         if (document.readyState === 'loading') {
@@ -111,6 +111,39 @@
         } else {
             initApp();
         }
+
+        // Smooth Page Transitions using Turbo
+        document.addEventListener('turbo:click', function() {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.classList.add('turbo-loading');
+            }
+        });
+
+        document.addEventListener('turbo:before-render', function(event) {
+            event.preventDefault(); // Pause rendering
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                mainContent.classList.add('turbo-loading');
+            }
+            setTimeout(function() {
+                event.detail.resume(); // Resume rendering after fade-out completes
+            }, 150);
+        });
+
+        document.addEventListener('turbo:render', function() {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent) {
+                // Keep it hidden initially for a split second, then fade in
+                mainContent.classList.add('turbo-loading');
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        mainContent.classList.remove('turbo-loading');
+                    });
+                });
+            }
+        });
+
 
         // Robust Architecture: Inject auth header into every Turbo navigation request natively.
         // This guarantees authentication without relying on cookies or URL parameters.
