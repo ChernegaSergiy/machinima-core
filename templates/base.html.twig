@@ -423,9 +423,7 @@
             // Listen for real-time updates via Mercure to update notifications badge
             if (!window.mercureListenerAttached) {
                 try {
-                    const mercureUrl = new URL('/.well-known/mercure', window.location.origin);
-                    mercureUrl.searchParams.append('topic', 'machinima/updates');
-                    const eventSource = new EventSource(mercureUrl.href);
+                    const eventSource = new EventSource("{{ mercure('machinima/updates')|escape('js') }}");
                     eventSource.onmessage = async event => {
                         const data = JSON.parse(event.data);
                         // If there's a new comment or interaction, re-fetch unread count
