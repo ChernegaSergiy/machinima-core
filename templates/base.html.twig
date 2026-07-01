@@ -202,15 +202,15 @@
             return `<div class="container">${bodyContent}</div>`;
         }
 
-        document.addEventListener('turbo:click', function(event) {
-            const link = event.target.closest('a');
-            if (link && link.href && link.href.startsWith(window.location.origin)) {
-                const mainContent = document.getElementById('main-content');
-                if (mainContent) {
-                    const url = new URL(link.href);
-                    // Temporarily replace content with matching skeleton while fetch runs
-                    mainContent.innerHTML = getSkeletonHTML(url.pathname);
-                }
+        document.addEventListener('turbo:visit', function(event) {
+            const mainContent = document.getElementById('main-content');
+            if (mainContent && event.detail.url) {
+                try {
+                    const url = new URL(event.detail.url);
+                    if (url.origin === window.location.origin) {
+                        mainContent.innerHTML = getSkeletonHTML(url.pathname);
+                    }
+                } catch (e) {}
             }
         });
 
