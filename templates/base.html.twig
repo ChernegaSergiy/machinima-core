@@ -128,7 +128,7 @@
             else if (type === 'authors') title = 'Автори';
             else if (type === 'author') title = 'Автор';
             else if (type === 'notifications') title = 'Сповіщення';
-            else if (type === 'post') title = 'Допис';
+            else if (type === 'post' || type === 'comment') title = 'Допис';
             else title = 'Стрічка';
 
             let bodyContent = '';
@@ -166,7 +166,7 @@
                         </div>
                     `).join('')}
                 `;
-            } else if (type === 'post') {
+            } else if (type === 'post' || type === 'comment') {
                 // Detailed post skeleton
                 bodyContent = `
                     <div class="card">
