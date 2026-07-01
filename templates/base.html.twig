@@ -127,15 +127,19 @@
             let bodyContent = '';
 
             if (path.includes('/categories')) {
-                // Categories grid skeleton
+                // Categories list skeleton
                 bodyContent = `
                     <div class="page-header-flex">
                         <h1 class="page-title">${title}</h1>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-                        ${Array(6).fill().map(() => `
-                            <div class="skeleton-card skeleton-shimmer" style="height: 100px; display: flex; align-items: flex-end; justify-content: center; padding: 12px; margin: 0;">
-                                <div class="skeleton-text" style="width: 70%; height: 14px; margin: 0; border: none; background: rgba(0,0,0,0.1);"></div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        ${Array(5).fill().map(() => `
+                            <div class="list-item" style="display: flex; align-items: center; padding: 12px; margin-bottom: 0;">
+                                <div class="skeleton-avatar skeleton-shimmer" style="width: 32px; height: 32px; margin-right: 12px; border: 2px solid var(--border);"></div>
+                                <div style="flex-grow: 1;">
+                                    <div class="skeleton-text skeleton-shimmer" style="width: 45%; height: 16px; margin: 0; border: 1px solid var(--border);"></div>
+                                </div>
+                                <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; background: var(--background); border: 1px solid var(--border);"></div>
                             </div>
                         `).join('')}
                     </div>
