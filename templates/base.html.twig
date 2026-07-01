@@ -66,19 +66,19 @@
     {% block tabbar %}
     {% set current_route = app.request.attributes.get('_route') %}
     <nav class="bottom-tabbar">
-        <a href="{{ path('app_index') }}" class="tab-item {% if current_route == 'app_index' %}active{% endif %}">
+        <a href="{{ path('app_index') }}" data-skeleton="feed" class="tab-item {% if current_route == 'app_index' %}active{% endif %}">
             <i data-lucide="play-square"></i>
             <span>Стрічка</span>
         </a>
-        <a href="{{ path('app_categories') }}" class="tab-item {% if current_route == 'app_categories' %}active{% endif %}">
+        <a href="{{ path('app_categories') }}" data-skeleton="categories" class="tab-item {% if current_route == 'app_categories' %}active{% endif %}">
             <i data-lucide="layout-grid"></i>
             <span>Категорії</span>
         </a>
-        <a href="{{ path('app_authors') }}" class="tab-item {% if current_route == 'app_authors' %}active{% endif %}">
+        <a href="{{ path('app_authors') }}" data-skeleton="authors" class="tab-item {% if current_route == 'app_authors' %}active{% endif %}">
             <i data-lucide="users"></i>
             <span>Автори</span>
         </a>
-        <a href="{{ path('app_notifications') }}" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}">
+        <a href="{{ path('app_notifications') }}" data-skeleton="notifications" class="tab-item {% if current_route == 'app_notifications' %}active{% endif %}">
             <div style="position: relative;">
                 <i data-lucide="bell"></i>
                 <span id="unread-count-badge" style="display: none; position: absolute; top: -6px; right: -8px; background: #FF3B30; color: #FFFFFF; font-family: 'Unbounded', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 4px; border-radius: 4px; border: 1px solid var(--surface); line-height: 1;">0</span>
@@ -121,19 +121,19 @@
         }
 
         // Skeleton Screen Generation on Navigation
-        function getSkeletonHTML(path) {
+        function getSkeletonHTML(type) {
             let title = 'Завантаження';
-            if (path.includes('/categories')) title = 'Категорії';
-            else if (path.includes('/category/')) title = 'Категорія';
-            else if (path.includes('/authors')) title = 'Автори';
-            else if (path.includes('/author/')) title = 'Автор';
-            else if (path.includes('/notifications')) title = 'Сповіщення';
-            else if (path.includes('/post/')) title = 'Допис';
+            if (type === 'categories') title = 'Категорії';
+            else if (type === 'category') title = 'Категорія';
+            else if (type === 'authors') title = 'Автори';
+            else if (type === 'author') title = 'Автор';
+            else if (type === 'notifications') title = 'Сповіщення';
+            else if (type === 'post') title = 'Допис';
             else title = 'Стрічка';
 
             let bodyContent = '';
 
-            if (path.includes('/categories')) {
+            if (type === 'categories') {
                 // Categories list skeleton
                 bodyContent = `
                     <div class="page-header-flex">
@@ -149,7 +149,7 @@
                         </div>
                     `).join('')}
                 `;
-            } else if (path.includes('/authors') && !path.includes('/author/')) {
+            } else if (type === 'authors') {
                 // Authors list skeleton
                 bodyContent = `
                     <div class="page-header-flex">
@@ -166,7 +166,7 @@
                         </div>
                     `).join('')}
                 `;
-            } else if (path.includes('/post/')) {
+            } else if (type === 'post') {
                 // Detailed post skeleton
                 bodyContent = `
                     <div class="card">
@@ -212,7 +212,7 @@
                         `).join('')}
                     </div>
                 `;
-            } else if (path.includes('/notifications')) {
+            } else if (type === 'notifications') {
                 // Notifications list skeleton
                 bodyContent = `
                     <div class="page-header-flex">
@@ -261,15 +261,16 @@
             return `<div class="container">${bodyContent}</div>`;
         }
 
-        document.addEventListener('turbo:visit', function(event) {
-            const mainContent = document.getElementById('main-content');
-            if (mainContent && event.detail.url) {
-                try {
-                    const url = new URL(event.detail.url);
-                    if (url.origin === window.location.origin) {
-                        mainContent.innerHTML = getSkeletonHTML(url.pathname);
-                    }
-                } catch (e) {}
+        document.addEventListener('turbo:click', function(event) {
+            const link = event.target.closest('a');
+            if (!link) return;
+            
+            const skeletonType = link.getAttribute('data-skeleton');
+            if (skeletonType) {
+                const mainContent = document.getElementById('main-content');
+                if (mainContent) {
+                    mainContent.innerHTML = getSkeletonHTML(skeletonType);
+                }
             }
         });
 

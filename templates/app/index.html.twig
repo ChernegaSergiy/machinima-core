@@ -19,7 +19,7 @@
             </div>
         </div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}">
+        <a href="{{ path('app_post', {id: project.id}) }}" data-skeleton="post">
             <h3 class="post-title">{{ project.title }}</h3>
         </a>
         
@@ -27,7 +27,7 @@
             {{ project.description }}
         </div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
+        <a href="{{ path('app_post', {id: project.id}) }}" data-skeleton="post" class="post-media">
             {% if project.coverFileId %}
                 {% if project.coverFileId starts with 'http' %}
                     <img src="{{ project.coverFileId }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />

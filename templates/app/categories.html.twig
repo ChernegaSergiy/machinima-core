@@ -9,7 +9,7 @@
     </div>
     
     {% for category in categories %}
-        <a href="{{ path('app_category', {id: category.id}) }}" class="list-item">
+        <a href="{{ path('app_category', {id: category.id}) }}" data-skeleton="category" class="list-item">
             <div class="list-icon"><i data-lucide="layout-grid"></i></div>
             <div class="list-content">
                 <div class="list-title">{{ category.name }}</div>

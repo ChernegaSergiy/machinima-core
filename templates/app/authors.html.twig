@@ -9,7 +9,7 @@
     </div>
     
     {% for author in authors %}
-        <a href="{{ path('app_author', {id: author.id}) }}" class="list-item">
+        <a href="{{ path('app_author', {id: author.id}) }}" data-skeleton="author" class="list-item">
             <div class="list-icon"><i data-lucide="user"></i></div>
             <div class="list-content">
                 <div class="list-title">{{ author.name }}</div>
