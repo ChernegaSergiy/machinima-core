@@ -82,9 +82,10 @@ class CommentController extends AbstractController
         $em->persist($comment);
         $em->flush();
 
-        if ($comment->getParent() && $comment->getParent()->getUser() !== $user) {
+        $parentUser = $comment->getParent() ? $comment->getParent()->getUser() : null;
+        if ($parentUser && $parentUser->getId() !== $user->getId()) {
             $notification = new \App\Entity\Notification();
-            $notification->setUser($comment->getParent()->getUser());
+            $notification->setUser($parentUser);
             $notification->setType('comment_reply');
             $notification->setTargetId($comment->getId());
             $notification->setTargetType('comment');
