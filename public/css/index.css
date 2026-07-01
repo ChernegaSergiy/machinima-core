@@ -157,3 +157,16 @@ body.is-tma .top-nav { display: none !important; }
 .action-item.active svg {
     fill: var(--text);
 }
+
+/* Turbo page transition effects */
+.turbo-transition {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.15s ease-out, transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.turbo-loading {
+    opacity: 0 !important;
+    transform: translateY(12px) !important;
+}
+
