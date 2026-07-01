@@ -132,17 +132,15 @@
                     <div class="page-header-flex">
                         <h1 class="page-title">${title}</h1>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        ${Array(5).fill().map(() => `
-                            <div class="list-item" style="display: flex; align-items: center; padding: 12px; margin-bottom: 0;">
-                                <div class="skeleton-avatar skeleton-shimmer" style="width: 32px; height: 32px; margin-right: 12px; border: 2px solid var(--border);"></div>
-                                <div style="flex-grow: 1;">
-                                    <div class="skeleton-text skeleton-shimmer" style="width: 45%; height: 16px; margin: 0; border: 1px solid var(--border);"></div>
-                                </div>
-                                <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; background: var(--background); border: 1px solid var(--border);"></div>
+                    ${Array(5).fill().map(() => `
+                        <div class="list-item">
+                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-content">
+                                <div class="skeleton-text skeleton-shimmer" style="width: 50%; height: 16px; margin: 0;"></div>
                             </div>
-                        `).join('')}
-                    </div>
+                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); background: var(--background);"></div>
+                        </div>
+                    `).join('')}
                 `;
             } else if (path.includes('/authors') && !path.includes('/author/')) {
                 // Authors list skeleton
@@ -150,13 +148,14 @@
                     <div class="page-header-flex">
                         <h1 class="page-title">${title}</h1>
                     </div>
-                    ${Array(4).fill().map(() => `
-                        <div class="card" style="display: flex; align-items: center; padding: 16px; margin-bottom: 16px;">
-                            <div class="skeleton-avatar skeleton-shimmer" style="margin-right: 16px;"></div>
-                            <div style="flex-grow: 1;">
-                                <div class="skeleton-text skeleton-shimmer title" style="width: 50%; height: 16px; margin-bottom: 8px;"></div>
-                                <div class="skeleton-text skeleton-shimmer meta" style="width: 30%; height: 10px; margin: 0;"></div>
+                    ${Array(5).fill().map(() => `
+                        <div class="list-item">
+                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-content">
+                                <div class="skeleton-text skeleton-shimmer" style="width: 45%; height: 16px; margin-bottom: 6px;"></div>
+                                <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px; margin: 0;"></div>
                             </div>
+                            <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); background: var(--background);"></div>
                         </div>
                     `).join('')}
                 `;
@@ -165,10 +164,10 @@
                 bodyContent = `
                     <div class="card" style="margin-bottom: 0; border-bottom: none; box-shadow: none;">
                         <div class="card-header" style="margin-bottom: 16px;">
-                            <div class="skeleton-avatar skeleton-shimmer"></div>
-                            <div style="margin-left: 12px; flex-grow: 1;">
+                            <div class="avatar skeleton-shimmer"></div>
+                            <div class="author-info" style="flex-grow: 1;">
                                 <div class="skeleton-text skeleton-shimmer" style="width: 40%; height: 16px; margin-bottom: 4px;"></div>
-                                <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px;"></div>
+                                <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px; margin: 0;"></div>
                             </div>
                         </div>
                         <div class="skeleton-text skeleton-shimmer title" style="width: 90%; height: 26px; margin-bottom: 16px;"></div>
@@ -187,10 +186,10 @@
                         <h1 class="page-title">${title}</h1>
                     </div>
                     ${Array(4).fill().map(() => `
-                        <div class="card" style="display: flex; align-items: center; padding: 16px; margin-bottom: 16px;">
-                            <div class="skeleton-avatar skeleton-shimmer" style="margin-right: 16px;"></div>
-                            <div style="flex-grow: 1;">
-                                <div class="skeleton-text skeleton-shimmer" style="width: 30%; height: 14px; margin-bottom: 8px;"></div>
+                        <div class="list-item">
+                            <div class="list-icon skeleton-shimmer" style="border: 2px solid var(--border); box-shadow: 2px 2px 0px var(--border);"></div>
+                            <div class="list-content">
+                                <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 16px; margin-bottom: 6px;"></div>
                                 <div class="skeleton-text skeleton-shimmer" style="width: 85%; height: 12px; margin-bottom: 6px;"></div>
                                 <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
                             </div>
