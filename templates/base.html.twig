@@ -402,7 +402,14 @@
 
             try {
                 const tgData = window.Telegram?.WebApp?.initData;
-                const unreadRes = await fetch('/api/notifications/unread-count' + (tgData ? '?initData=' + encodeURIComponent(tgData) : ''));
+                const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
+                if (tgData && typeof tgData === 'string') {
+                    headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+                }
+                const unreadRes = await fetch('/api/notifications/unread-count', {
+                    headers: headers,
+                    cache: 'no-store'
+                });
                 const unreadData = await unreadRes.json();
                 const badge = document.getElementById('unread-count-badge');
                 if (badge && unreadData.count > 0) {
@@ -425,7 +432,14 @@
                         if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
                             try {
                                 const tgData = window.Telegram?.WebApp?.initData;
-                                const unreadRes = await fetch('/api/notifications/unread-count' + (tgData ? '?initData=' + encodeURIComponent(tgData) : ''));
+                                const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
+                                if (tgData && typeof tgData === 'string') {
+                                    headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+                                }
+                                const unreadRes = await fetch('/api/notifications/unread-count', {
+                                    headers: headers,
+                                    cache: 'no-store'
+                                });
                                 const unreadData = await unreadRes.json();
                                 const badge = document.getElementById('unread-count-badge');
                                 if (badge && unreadData.count > 0) {
