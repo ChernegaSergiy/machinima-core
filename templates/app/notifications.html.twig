@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="container">
-    <div class="page-header-flex" style="margin-top: 16px;">
+    <div class="page-header-flex">
         <h1 class="page-title">Сповіщення</h1>
         {% set unread_count = notifications|filter(n => not n.isRead)|length %}
         {% if unread_count > 0 %}
