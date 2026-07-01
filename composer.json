@@ -84,13 +84,14 @@
         "friendsofphp/php-cs-fixer": "^3.95",
         "symfony/maker-bundle": "^1.67"
     },
-    "repositories": [{
-        "name": "bundle",
-        "type": "path",
-        "url": "../telegram-bot-bundle"
-    },{
-        "name": "bot",
-        "type": "path",
-        "url": "../machinima-bot"
-    }]
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../telegram-bot-bundle"
+        },
+        {
+            "type": "path",
+            "url": "../machinima-bot"
+        }
+    ]
 }
