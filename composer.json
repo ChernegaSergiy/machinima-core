@@ -93,10 +93,6 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../telegram-bot-bundle"
-        },
-        {
-            "type": "path",
             "url": "../machinima-bot"
         }
     ],

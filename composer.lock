@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4189a7d038765f4b79cc51a3e206a202",
+    "content-hash": "c0f7f3d15a0c74bbe7e88060fcbffe26",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -1264,7 +1264,7 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-bot",
-                "reference": "39505d998a0b0f99d971f3629e8b4c84076775ba"
+                "reference": "b39a1934703ac171ba57bb2eea747b37b76dccfe"
             },
             "require": {
                 "morfeditorial/telegram-bot-bundle": "*@dev",
@@ -1289,10 +1289,16 @@
         {
             "name": "morfeditorial/telegram-bot-bundle",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ChernegaSergiy/telegram-bot-bundle.git",
+                "reference": "d3ffb829450f7871c8d0e86f38040edc7af7f61a"
+            },
             "dist": {
-                "type": "path",
-                "url": "../telegram-bot-bundle",
-                "reference": "5b2f02adac611e32d86128eb538f221e4d13f513"
+                "type": "zip",
+                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/d3ffb829450f7871c8d0e86f38040edc7af7f61a",
+                "reference": "d3ffb829450f7871c8d0e86f38040edc7af7f61a",
+                "shasum": ""
             },
             "require": {
                 "php": ">=8.2",
@@ -1301,24 +1307,39 @@
                 "symfony/http-client": "^7.0|^8.0",
                 "symfony/http-kernel": "^7.0|^8.0"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "1.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Morfeditorial\\TelegramBotBundle\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "MIT"
+                "LicenseRef-CSSM-Unlimited-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Serhii Cherneha",
+                    "email": "chernegasergiy3@gmail.com"
+                }
             ],
             "description": "A universal Symfony Bundle for building Telegram bots with screens and commands routing.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/ChernegaSergiy/telegram-bot-bundle/issues",
+                "source": "https://github.com/ChernegaSergiy/telegram-bot-bundle/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/cssm",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://www.patreon.com/ChernegaSergiy",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-07-01T23:33:08+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
