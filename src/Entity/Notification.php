@@ -24,6 +24,9 @@ class Notification
     #[ORM\Column(name: 'target_id', type: 'integer', nullable: true)]
     private ?int $targetId = null;
 
+    #[ORM\Column(name: 'target_type', type: 'string', length: 50, nullable: true)]
+    private ?string $targetType = null;
+
     #[ORM\Column(type: 'text')]
     private ?string $message = null;
 
