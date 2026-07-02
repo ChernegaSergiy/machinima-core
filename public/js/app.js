@@ -55,46 +55,29 @@ if (document.readyState === 'loading') {
     initApp();
 }
 
-// Save scroll position at the exact moment a navigation starts
-document.addEventListener('turbo:before-visit', function(event) {
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
-    sessionStorage.setItem('scroll_' + window.location.pathname, scrollY);
-});
-
 document.addEventListener('turbo:load', function(event) {
     initApp();
-    
-    if (event.detail.action === 'restore') {
-        const savedPos = sessionStorage.getItem('scroll_' + window.location.pathname);
-        if (savedPos !== null) {
-            const targetY = parseInt(savedPos, 10);
-            window.scrollTo(0, targetY);
-            // Slight delay fallback for when DOM needs a tick to calculate height
-            setTimeout(() => window.scrollTo(0, targetY), 50);
-        }
-    }
 });
 
 // Skeleton Screen Generation on Navigation
-document.addEventListener('turbo:click', function(event) {
-    
-    const link = event.target.closest('a');
-    if (!link) return;
-    
-    const skeletonType = link.getAttribute('data-skeleton');
-    if (skeletonType) {
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            let template = document.getElementById(`skeleton-${skeletonType}`);
-            // Fallback to default if specific skeleton doesn't exist
-            if (!template && skeletonType !== 'none') {
-                template = document.getElementById('skeleton-default');
-            }
-            if (template) {
-                // VERY IMPORTANT: Save the original DOM so Turbo can cache it properly for the Back button!
-                window.originalMainContentHTML = mainContent.innerHTML;
-                mainContent.innerHTML = template.innerHTML;
-            }
+// We use turbo:visit instead of turbo:click so that Turbo has time to save the true scroll position 
+// in turbo:before-visit before we mutate the DOM.
+document.addEventListener('turbo:visit', function(event) {
+    // In turbo:visit, we don't have event.target as the link, but we can check if it's a known URL or 
+    // just inject a default skeleton for all visits, or read the data-skeleton from the URL if we wanted.
+    // However, to keep it simple, we can just apply a default skeleton on visits if main-content exists.
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        // VERY IMPORTANT: Save the original DOM so Turbo can cache it properly for the Back button!
+        window.originalMainContentHTML = mainContent.innerHTML;
+        
+        // Use a generic skeleton or determine from URL
+        const isPost = event.detail.url.includes('/post/');
+        const skeletonId = isPost ? 'skeleton-post' : 'skeleton-default';
+        let template = document.getElementById(skeletonId) || document.getElementById('skeleton-default');
+        
+        if (template) {
+            mainContent.innerHTML = template.innerHTML;
         }
     }
 });
