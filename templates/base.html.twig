@@ -37,6 +37,7 @@
             });
         } else {
             const tg = window.Telegram.WebApp;
+            window.currentUserId = tg.initDataUnsafe?.user?.id;
             const updateTheme = () => {
                 document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
             };
