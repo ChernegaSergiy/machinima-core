@@ -36,9 +36,13 @@ class User implements UserInterface
     #[ORM\InverseJoinColumn(name: 'role_id', referencedColumnName: 'id')]
     private Collection $roles;
 
+    #[ORM\Column(name: 'created_at', type: 'text', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?string $createdAt = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+        $this->createdAt = date('Y-m-d H:i:s');
     }
 
     public function getId(): ?int
@@ -170,6 +174,18 @@ class User implements UserInterface
                 $this->addRoleAndChildren($childRole, $roles);
             }
         }
+    }
+
+    public function getCreatedAt(): ?string
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?string $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
