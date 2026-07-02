@@ -19,7 +19,7 @@ class FreshPostsGenerator implements CandidateGeneratorInterface
     {
         // Generates candidates purely based on recency
         return $this->em->getRepository(Content::class)->findBy(
-            ['isPublished' => true],
+            ['status' => 'published'],
             ['createdAt' => 'DESC'],
             $limit
         );

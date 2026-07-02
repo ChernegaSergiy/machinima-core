@@ -34,9 +34,9 @@ class FollowedAuthorsGenerator implements CandidateGeneratorInterface
         $qb = $this->em->getRepository(Content::class)->createQueryBuilder('c')
             ->join('c.staff', 'cs')
             ->where('cs.author IN (:authors)')
-            ->andWhere('c.isPublished = :published')
+            ->andWhere('c.status = :published')
             ->setParameter('authors', $followedAuthorIds)
-            ->setParameter('published', true)
+            ->setParameter('published', 'published')
             ->orderBy('c.createdAt', 'DESC')
             ->setMaxResults($limit);
 

@@ -19,7 +19,7 @@ class TrendingPostsGenerator implements CandidateGeneratorInterface
     {
         // For now, proxy to highest trending score
         return $this->em->getRepository(Content::class)->findBy(
-            ['isPublished' => true],
+            ['status' => 'published'],
             ['trendingScore' => 'DESC'],
             $limit
         );
