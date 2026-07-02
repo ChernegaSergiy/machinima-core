@@ -166,6 +166,7 @@ a { text-decoration: none; color: inherit; }
 .pt-6 { padding-top: 24px; }
 .pb-2 { padding-bottom: 8px; }
 .pb-3 { padding-bottom: 12px; }
+.pb-20 { padding-bottom: 80px; }
 .pb-30 { padding-bottom: 120px; }
 .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
 
