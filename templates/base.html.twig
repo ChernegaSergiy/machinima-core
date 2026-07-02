@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-    <title>Завантаження...</title>
-    <style id="fouc-style">body { visibility: hidden !important; }</style>
-    <script>
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
-            const fouc = document.getElementById('fouc-style');
-            if (fouc) fouc.remove();
-        }
-    </script>
+    <title>{% block title %}Morf TMA{% endblock %}</title>
     <meta name="turbo-cache-control" content="no-cache" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         // STRICT ACCESS CONTROL
         if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
-            document.title = "Тільки через Telegram";
+            document.documentElement.style.visibility = 'hidden';
+            
             document.addEventListener('DOMContentLoaded', function() {
-                document.body.style.visibility = 'visible';
+                document.title = "Тільки через Telegram";
+                document.documentElement.style.visibility = '';
                 document.body.innerHTML = `
                 <div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 0;">
                     <div class="profile-header" style="width: 100%;">
