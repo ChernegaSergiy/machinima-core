@@ -55,8 +55,30 @@ if (document.readyState === 'loading') {
     initApp();
 }
 
+// Robust Scroll Restoration (Aggressive Override)
+document.addEventListener('turbo:before-visit', function() {
+    sessionStorage.setItem('scroll_' + window.location.pathname, window.scrollY);
+});
+
 document.addEventListener('turbo:load', function(event) {
     initApp();
+    
+    if (event.detail.action === 'restore') {
+        const savedPos = sessionStorage.getItem('scroll_' + window.location.pathname);
+        if (savedPos !== null) {
+            const targetY = parseInt(savedPos, 10);
+            let attempts = 0;
+            // Aggressively try to scroll to the target position for 500ms
+            // This handles cases where images are loading or Turbo is overriding us
+            const interval = setInterval(() => {
+                window.scrollTo(0, targetY);
+                attempts++;
+                if (Math.abs(window.scrollY - targetY) < 10 || attempts > 20) {
+                    clearInterval(interval);
+                }
+            }, 25);
+        }
+    }
 });
 
 // Skeleton Screen Generation on Navigation
