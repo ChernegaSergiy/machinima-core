@@ -97,10 +97,67 @@ class AppController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        $isFollowing = false;
+        if ($this->getUser()) {
+            $follower = $em->getRepository(\App\Entity\Follower::class)->findOneBy([
+                'user' => $this->getUser(),
+                'author' => $author
+            ]);
+            $isFollowing = $follower !== null;
+        }
+
         return $this->render('app/author.html.twig', [
             'author' => $author,
             'projects' => $projects,
+            'isFollowing' => $isFollowing,
         ]);
+    }
+
+    #[Route('/author/{id}/follow', name: 'app_author_follow', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function followAuthor(int $id, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $author = $em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            return $this->json(['error' => 'Author not found'], 404);
+        }
+
+        $existing = $em->getRepository(\App\Entity\Follower::class)->findOneBy(['user' => $user, 'author' => $author]);
+        if (!$existing) {
+            $follower = new \App\Entity\Follower();
+            $follower->setUser($user);
+            $follower->setAuthor($author);
+            $em->persist($follower);
+            $em->flush();
+        }
+
+        return $this->json(['status' => 'followed']);
+    }
+
+    #[Route('/author/{id}/unfollow', name: 'app_author_unfollow', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function unfollowAuthor(int $id, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $author = $em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            return $this->json(['error' => 'Author not found'], 404);
+        }
+
+        $existing = $em->getRepository(\App\Entity\Follower::class)->findOneBy(['user' => $user, 'author' => $author]);
+        if ($existing) {
+            $em->remove($existing);
+            $em->flush();
+        }
+
+        return $this->json(['status' => 'unfollowed']);
     }
 
     #[Route('/post/{id}', name: 'app_post', requirements: ['id' => '\d+'])]
