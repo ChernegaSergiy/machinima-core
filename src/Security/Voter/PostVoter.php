@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Security\Voter;
+
+use App\Entity\Content;
+use App\Entity\User;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Bundle\SecurityBundle\Security;
+
+class PostVoter extends Voter
+{
+    public const VIEW = 'POST_VIEW';
+
+    public function __construct(
+        private Security $security,
+    ) {}
+
+    protected function supports(string $attribute, mixed $subject): bool
+    {
+        return $attribute === self::VIEW && $subject instanceof Content;
+    }
+
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+    {
+        /** @var Content $subject */
+
+        if ($subject->getStatus() === 'published') {
+            return true;
+        }
+
+        if ($this->security->isGranted('ROLE_MODERATOR')) {
+            return true;
+        }
+
+        $user = $token->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        foreach ($subject->getStaff() as $staffItem) {
+            $author = $staffItem->getAuthor();
+            if ($author && (int)$author->getTelegramUserId() === (int)$user->getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
