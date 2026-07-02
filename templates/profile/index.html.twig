@@ -1,20 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container" style="padding-top: 16px;">
+<div class="container">
     <div class="page-header-flex">
         <h1 class="page-title">Профіль</h1>
     </div>
 
     <!-- Personal Info Card -->
-    <div class="card" style="margin-top: 16px; padding: 24px; text-align: center; border-radius: 16px;">
-        <div style="margin-bottom: 16px;">
-            <img id="profile-avatar" src="" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; background: var(--surface); display: inline-block;">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img id="profile-avatar-img" src="" alt="Avatar" style="width: 100%; height: 100%; border-radius: inherit; object-fit: cover; display: none;">
+            <i id="profile-avatar-placeholder" data-lucide="user" style="width: 40px; height: 40px; stroke-width: 1.5px;"></i>
         </div>
-        <h2 id="profile-name" style="font-size: 24px; font-weight: 700; font-family: 'Unbounded', sans-serif; margin: 0 0 4px 0;">Завантаження...</h2>
-        <p id="profile-username" style="color: var(--text-secondary); margin: 0; font-size: 14px;">@username</p>
+        <h2 id="profile-name" class="profile-name">Завантаження...</h2>
+        <div id="profile-username" class="profile-bio">@username</div>
         
-        <div style="margin-top: 16px; display: inline-block; background: var(--surface); padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; color: var(--primary);">
+        <span class="badge">
             {% if is_granted('ROLE_ADMIN') %}
                 Адміністратор
             {% elseif is_granted('ROLE_MODERATOR') %}
@@ -24,43 +25,42 @@
             {% else %}
                 Користувач
             {% endif %}
-        </div>
+        </span>
     </div>
 
-    <!-- Stats Grid -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
-        <div class="card" style="padding: 16px; text-align: center; border-radius: 12px;">
-            <div style="font-size: 24px; font-weight: 700; font-family: 'Unbounded', sans-serif; color: var(--text);">0</div>
-            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Підписок</div>
+    <!-- Stats -->
+    <h2 class="section-title">Статистика</h2>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+        <div class="card" style="margin-bottom: 0; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+            <div class="list-title" style="justify-content: center; font-size: 24px; margin-bottom: 4px;">0</div>
+            <div class="list-meta">Підписок</div>
         </div>
-        <div class="card" style="padding: 16px; text-align: center; border-radius: 12px;">
-            <div style="font-size: 24px; font-weight: 700; font-family: 'Unbounded', sans-serif; color: var(--text);">0</div>
-            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Вподобань</div>
+        <div class="card" style="margin-bottom: 0; padding: 16px; text-align: center; display: flex; flex-direction: column; justify-content: center;">
+            <div class="list-title" style="justify-content: center; font-size: 24px; margin-bottom: 4px;">0</div>
+            <div class="list-meta">Вподобань</div>
         </div>
     </div>
 
     <!-- Actions -->
-    <div style="margin-top: 24px;">
-        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px;">Налаштування</h3>
-        <div class="card" style="border-radius: 12px;">
-            <div class="list-item" style="border-bottom: 1px solid var(--border);">
-                <div class="list-icon" style="background: rgba(10, 132, 255, 0.1); color: var(--primary);">
-                    <i data-lucide="shield-check"></i>
-                </div>
-                <div class="list-content">
-                    <h4 style="margin: 0; font-size: 15px; font-weight: 500;">Акаунт створено</h4>
-                    <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary);">Невідомо</p>
-                </div>
-            </div>
-            <div class="list-item">
-                <div class="list-icon" style="background: rgba(255, 149, 0, 0.1); color: #FF9500;">
-                    <i data-lucide="edit-3"></i>
-                </div>
-                <div class="list-content">
-                    <h4 style="margin: 0; font-size: 15px; font-weight: 500;">Публічна сторінка</h4>
-                    <p style="margin: 4px 0 0 0; font-size: 13px; color: var(--text-secondary);">Немає прив'язаної сторінки</p>
-                </div>
-            </div>
+    <h2 class="section-title">Налаштування</h2>
+    
+    <div class="list-item">
+        <div class="list-icon">
+            <i data-lucide="shield-check"></i>
+        </div>
+        <div class="list-content">
+            <div class="list-title">Акаунт створено</div>
+            <div class="list-desc">Невідомо</div>
+        </div>
+    </div>
+
+    <div class="list-item">
+        <div class="list-icon">
+            <i data-lucide="edit-3"></i>
+        </div>
+        <div class="list-content">
+            <div class="list-title">Публічна сторінка</div>
+            <div class="list-desc">Немає прив'язаної сторінки</div>
         </div>
     </div>
 
@@ -72,7 +72,8 @@
         const user = window.Telegram.WebApp.initDataUnsafe.user;
         const nameEl = document.getElementById('profile-name');
         const usernameEl = document.getElementById('profile-username');
-        const avatarEl = document.getElementById('profile-avatar');
+        const avatarImgEl = document.getElementById('profile-avatar-img');
+        const avatarPlaceholderEl = document.getElementById('profile-avatar-placeholder');
 
         if (nameEl) nameEl.textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
         if (usernameEl) {
@@ -82,12 +83,10 @@
                 usernameEl.style.display = 'none';
             }
         }
-        if (avatarEl) {
-            if (user.photo_url) {
-                avatarEl.src = user.photo_url;
-            } else {
-                avatarEl.style.display = 'none';
-            }
+        if (avatarImgEl && user.photo_url) {
+            avatarImgEl.src = user.photo_url;
+            avatarImgEl.style.display = 'block';
+            if (avatarPlaceholderEl) avatarPlaceholderEl.style.display = 'none';
         }
     }
 })();
