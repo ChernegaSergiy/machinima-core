@@ -99,7 +99,7 @@
         {% else %}
             {% macro render_comment_tree(tree) %}
                 {% for item in tree %}
-                    <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
+                    <div class="mb-4 comment-item" id="comment-item-{{ item.entity.id }}">
                         <div class="flex items-center mb-3">
                             <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></div>
                             <div>
@@ -116,7 +116,7 @@
                             </div>
                         </div>
                         
-                        <div class="comment-reply-wrapper {% if item.children|length == 0 %}hidden{% endif %} ml-3 border-l-2 border-border pl-3 mt-4" id="replies-{{ item.entity.id }}">
+                        <div class="comment-reply-wrapper {% if item.children|length == 0 %}hidden{% endif %} ml-5 border-l-2 border-border pl-4 mt-4" id="replies-{{ item.entity.id }}">
                             {% if item.children|length > 0 %}
                                 {{ _self.render_comment_tree(item.children) }}
                             {% endif %}
@@ -305,7 +305,7 @@
 
     function appendCommentToDOM(c) {
         const html = `
-            <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-${c.id}">
+            <div class="mb-4 comment-item" id="comment-item-${c.id}">
                 <div class="flex items-center mb-3">
                     <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></div>
                     <div>
@@ -321,7 +321,7 @@
                         <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
                     </div>
                 </div>
-                <div class="comment-reply-wrapper hidden ml-3 border-l-2 border-border pl-3 mt-4" id="replies-${c.id}"></div>
+                <div class="comment-reply-wrapper hidden ml-5 border-l-2 border-border pl-4 mt-4" id="replies-${c.id}"></div>
             </div>
         `;
         

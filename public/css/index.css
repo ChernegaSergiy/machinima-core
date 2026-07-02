@@ -144,6 +144,10 @@ a { text-decoration: none; color: inherit; }
 .mr-4 { margin-right: 16px; }
 .ml-2 { margin-left: 8px; }
 .ml-3 { margin-left: 12px; }
+.ml-4 { margin-left: 16px; }
+.ml-5 { margin-left: 20px; }
+.pl-3 { padding-left: 12px; }
+.pl-4 { padding-left: 16px; }
 .-mt-0-5 { margin-top: -2px; }
 
 .p-0 { padding: 0; }
