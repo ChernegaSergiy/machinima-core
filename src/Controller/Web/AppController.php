@@ -249,4 +249,74 @@ class AppController extends AbstractController
             'notifications' => $notifications,
         ]);
     }
+
+    #[Route('/post/{id}/like', name: 'app_post_like', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function likePost(int $id, EntityManagerInterface $em): Response
+    {
+        return $this->handleInteraction($id, 'like', $em);
+    }
+
+    #[Route('/post/{id}/dislike', name: 'app_post_dislike', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function dislikePost(int $id, EntityManagerInterface $em): Response
+    {
+        return $this->handleInteraction($id, 'dislike', $em);
+    }
+
+    private function handleInteraction(int $id, string $type, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $post = $em->getRepository(Content::class)->find($id);
+        if (!$post) {
+            return $this->json(['error' => 'Post not found'], 404);
+        }
+
+        $existing = $em->getRepository(\App\Entity\ContentLike::class)->findOneBy(['user' => $user, 'content' => $post]);
+
+        if ($existing) {
+            if ($existing->getType() === $type) {
+                // Remove interaction (toggle off)
+                $em->remove($existing);
+                if ($type === 'like') {
+                    $post->setLikesCount(max(0, $post->getLikesCount() - 1));
+                } else {
+                    $post->setDislikesCount(max(0, $post->getDislikesCount() - 1));
+                }
+            } else {
+                // Switch interaction type
+                if ($existing->getType() === 'like') {
+                    $post->setLikesCount(max(0, $post->getLikesCount() - 1));
+                    $post->setDislikesCount($post->getDislikesCount() + 1);
+                } else {
+                    $post->setDislikesCount(max(0, $post->getDislikesCount() - 1));
+                    $post->setLikesCount($post->getLikesCount() + 1);
+                }
+                $existing->setType($type);
+            }
+        } else {
+            // New interaction
+            $interaction = new \App\Entity\ContentLike();
+            $interaction->setUser($user);
+            $interaction->setContent($post);
+            $interaction->setType($type);
+            $em->persist($interaction);
+
+            if ($type === 'like') {
+                $post->setLikesCount($post->getLikesCount() + 1);
+            } else {
+                $post->setDislikesCount($post->getDislikesCount() + 1);
+            }
+        }
+
+        $em->flush();
+
+        return $this->json([
+            'status' => 'success',
+            'likes' => $post->getLikesCount(),
+            'dislikes' => $post->getDislikesCount()
+        ]);
+    }
 }
