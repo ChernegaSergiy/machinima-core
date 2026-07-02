@@ -3,15 +3,18 @@
 namespace App\Service\Recommendation\Generator;
 
 use App\Entity\User;
-use App\Repository\PostRepository;
+use App\Repository\FollowerRepository;
+use App\Repository\ContentRepository;
 
 class FollowedAuthorsGenerator implements CandidateGeneratorInterface
 {
-    private PostRepository $postRepository;
+    private ContentRepository $contentRepository;
+    private FollowerRepository $followerRepository;
 
-    public function __construct(PostRepository $postRepository)
+    public function __construct(ContentRepository $contentRepository, FollowerRepository $followerRepository)
     {
-        $this->postRepository = $postRepository;
+        $this->contentRepository = $contentRepository;
+        $this->followerRepository = $followerRepository;
     }
 
     public function generate(?User $user, int $limit = 50): array
@@ -20,12 +23,22 @@ class FollowedAuthorsGenerator implements CandidateGeneratorInterface
             return [];
         }
 
-        // TODO: Implement actual followed authors logic once the Follower entity is created.
-        // For now, returning an empty array.
-        // Example future implementation:
-        // $followedAuthorIds = $this->followerRepository->getFollowedAuthorIds($user);
-        // return $this->postRepository->findBy(['author' => $followedAuthorIds, 'isPublished' => true], ['createdAt' => 'DESC'], $limit);
+        $followedAuthorIds = $this->followerRepository->getFollowedAuthorIds($user);
         
-        return [];
+        if (empty($followedAuthorIds)) {
+            return [];
+        }
+
+        // Fetch posts from followed authors
+        $qb = $this->contentRepository->createQueryBuilder('c')
+            ->join('c.staff', 'cs')
+            ->where('cs.author IN (:authors)')
+            ->andWhere('c.isPublished = :published')
+            ->setParameter('authors', $followedAuthorIds)
+            ->setParameter('published', true)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
     }
 }
