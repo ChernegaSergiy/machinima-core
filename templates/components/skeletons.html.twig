@@ -135,10 +135,66 @@
     </div>
 </template>
 
+<template id="skeleton-feed">
+    <div class="container">
+        <div class="page-header-flex">
+            <h1 class="page-title">Стрічка</h1>
+        </div>
+        {% for i in 1..2 %}
+            <div class="card">
+                <div class="card-header">
+                    <div class="avatar skeleton-shimmer"></div>
+                    <div class="author-info" style="flex-grow: 1;">
+                        <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
+                        <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-text skeleton-shimmer title"></div>
+                <div class="skeleton-text skeleton-shimmer body-line"></div>
+                <div class="skeleton-text skeleton-shimmer body-line-short"></div>
+                <div class="skeleton-media skeleton-shimmer"></div>
+                <div class="post-actions" style="border-top: none; padding-top: 0; margin-top: 24px;">
+                    <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
+                    <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
+                    <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</template>
+
+<template id="skeleton-category">
+    <div class="container">
+        <div class="page-header-flex">
+            <h1 class="page-title">Категорія</h1>
+        </div>
+        {% for i in 1..2 %}
+            <div class="card">
+                <div class="card-header">
+                    <div class="avatar skeleton-shimmer"></div>
+                    <div class="author-info" style="flex-grow: 1;">
+                        <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
+                        <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
+                    </div>
+                </div>
+                <div class="skeleton-text skeleton-shimmer title"></div>
+                <div class="skeleton-text skeleton-shimmer body-line"></div>
+                <div class="skeleton-text skeleton-shimmer body-line-short"></div>
+                <div class="skeleton-media skeleton-shimmer"></div>
+                <div class="post-actions" style="border-top: none; padding-top: 0; margin-top: 24px;">
+                    <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
+                    <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
+                    <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</template>
+
 <template id="skeleton-default">
     <div class="container">
         <div class="page-header-flex">
-            <h1 class="page-title skeleton-shimmer" style="width: 150px; height: 24px; border-radius: 4px; margin: 0; color: transparent;">&nbsp;</h1>
+            <h1 class="page-title">Завантаження</h1>
         </div>
         {% for i in 1..2 %}
             <div class="card">
