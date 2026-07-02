@@ -6,16 +6,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class NotificationController extends AbstractController
 {
     #[Route('/api/notifications/read', name: 'api_notifications_read', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function markAllAsRead(EntityManagerInterface $em): JsonResponse
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
 
         $em->createQuery('UPDATE App\Entity\Notification n SET n.isRead = true WHERE n.user = :user AND n.isRead = false')
            ->setParameter('user', $user)
@@ -37,12 +37,11 @@ class NotificationController extends AbstractController
     }
 
     #[Route('/notifications/{id}/redirect', name: 'app_notification_redirect', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function readAndRedirect(int $id, EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if (!$user) {
-            return $this->redirectToRoute('app_index');
-        }
 
         $notification = $em->getRepository(\App\Entity\Notification::class)->find($id);
         if ($notification && $notification->getUser() === $user) {
