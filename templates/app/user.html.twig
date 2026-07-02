@@ -16,7 +16,15 @@
         <h2 class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">{{ name }}</h2>
         
         <span class="bg-border text-surface py-0-5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
-            Користувач
+            {% if 'ROLE_ADMIN' in targetUser.roles %}
+                Адміністратор
+            {% elseif 'ROLE_MODERATOR' in targetUser.roles %}
+                Модератор
+            {% elseif 'ROLE_CREATOR' in targetUser.roles %}
+                Творець
+            {% else %}
+                Користувач
+            {% endif %}
         </span>
     </div>
 
