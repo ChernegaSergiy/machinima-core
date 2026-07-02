@@ -42,6 +42,23 @@
         </div>
     </div>
 
+    {% if post.staff|length > 0 %}
+    <h2 class="section-title">Команда проєкту</h2>
+    <div style="margin-bottom: 24px;">
+        {% for staffItem in post.staff %}
+            <div class="list-item" style="padding: 12px 0;">
+                <div class="list-icon" style="background-color: var(--tg-theme-secondary-bg-color, #2c2c2e);">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="list-content">
+                    <h3 class="list-title">{{ staffItem.author.name }}</h3>
+                    <div class="list-desc">{{ staffItem.role }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <script>
         (function() {
             var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
