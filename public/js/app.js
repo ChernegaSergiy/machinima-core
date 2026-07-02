@@ -25,18 +25,26 @@ function initApp() {
     const scrollTargetId = urlParams.get('scrollTo') || (window.location.hash ? window.location.hash.substring(1) : null);
     
     if (scrollTargetId) {
-        let attempts = 0;
-        const tryScroll = setInterval(() => {
-            const target = document.getElementById(scrollTargetId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                target.style.transition = 'background-color 0.5s';
-                target.style.backgroundColor = 'var(--tg-theme-secondary-bg-color, #2c2c2e)';
-                setTimeout(() => target.style.backgroundColor = 'transparent', 2000);
-                clearInterval(tryScroll);
-            }
-            if (++attempts > 15) clearInterval(tryScroll); // Give up after 1.5 seconds
-        }, 100);
+        // Clean up the URL to avoid scrolling again on manual refresh
+        if (urlParams.has('scrollTo')) {
+            urlParams.delete('scrollTo');
+            const qs = urlParams.toString();
+            const newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        // Double requestAnimationFrame ensures the DOM is fully laid out and painted
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                const target = document.getElementById(scrollTargetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    target.style.transition = 'background-color 0.8s ease-out';
+                    target.style.backgroundColor = 'var(--tg-theme-secondary-bg-color, #2c2c2e)';
+                    setTimeout(() => target.style.backgroundColor = 'transparent', 2000);
+                }
+            });
+        });
     }
 }
 
