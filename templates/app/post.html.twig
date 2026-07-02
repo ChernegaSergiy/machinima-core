@@ -99,7 +99,7 @@
         {% else %}
             {% macro render_comment_tree(tree) %}
                 {% for item in tree %}
-                    <div class="mb-4 comment-item" id="comment-item-{{ item.entity.id }}">
+                    <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
                         <div class="flex items-center mb-3">
                             <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></div>
                             <div>
@@ -305,7 +305,7 @@
 
     function appendCommentToDOM(c) {
         const html = `
-            <div class="mb-4 comment-item" id="comment-item-${c.id}">
+            <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-${c.id}">
                 <div class="flex items-center mb-3">
                     <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></div>
                     <div>
