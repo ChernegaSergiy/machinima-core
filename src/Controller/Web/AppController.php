@@ -180,7 +180,8 @@ class AppController extends AbstractController
     public function post(int $id, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $post = $em->getRepository(Content::class)->find($id);
-        if (!$post) {
+        
+        if (!$post || !$this->isGranted(\App\Security\Voter\PostVoter::VIEW, $post)) {
             throw $this->createNotFoundException();
         }
 
