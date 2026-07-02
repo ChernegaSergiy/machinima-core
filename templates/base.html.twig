@@ -9,7 +9,9 @@
     <script>
         // STRICT ACCESS CONTROL
         if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
+            document.title = "Тільки через Telegram";
             document.addEventListener('DOMContentLoaded', function() {
+                document.title = "Тільки через Telegram";
                 document.body.innerHTML = `
                 <div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 0;">
                     <div class="profile-header" style="width: 100%;">
