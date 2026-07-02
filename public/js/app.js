@@ -79,7 +79,7 @@ document.addEventListener('turbo:click', function(event) {
         if (template) {
             const overlay = document.createElement('div');
             overlay.id = 'skeleton-overlay-active';
-            overlay.style.cssText = 'position: fixed; inset: 0; z-index: 9999; background: var(--background); overflow-y: auto;';
+            overlay.style.cssText = 'position: fixed; inset: 0; z-index: 90; background: var(--background); overflow-y: auto;';
             overlay.innerHTML = template.innerHTML;
             document.body.appendChild(overlay);
         }
