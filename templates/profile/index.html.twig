@@ -1,21 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="container">
-    <div class="page-header-flex">
-        <h1 class="page-title">Профіль</h1>
+<div class="w-full max-w-600 mx-auto p-4 pb-30">
+    <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
+        <h1 class="text-3xl font-bold m-0 font-unbounded tracking-tight uppercase">Профіль</h1>
     </div>
 
     <!-- Personal Info Card -->
-    <div class="profile-header">
-        <div class="profile-avatar">
-            <img id="profile-avatar-img" src="" alt="Avatar">
-            <i id="profile-avatar-placeholder" data-lucide="user"></i>
+    <div class="text-center py-8 px-4 mb-8 bg-surface rounded border-2 border-border shadow-brutal">
+        <div class="w-[88px] h-[88px] mx-auto mb-5 rounded bg-surface flex items-center justify-center text-primary border-2 border-border shadow-brutal overflow-hidden">
+            <img id="profile-avatar-img" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+            <i id="profile-avatar-placeholder" data-lucide="user" class="w-10 h-10 stroke-1-5"></i>
         </div>
-        <h2 id="profile-name" class="profile-name">Завантаження...</h2>
-        <div id="profile-username" class="profile-bio">@username</div>
+        <h2 id="profile-name" class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">Завантаження...</h2>
+        <div id="profile-username" class="text-base text-primary mb-6 leading-relaxed font-semibold">@username</div>
         
-        <span class="badge">
+        <span class="bg-border text-surface py-0-5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
             {% if is_granted('ROLE_ADMIN') %}
                 Адміністратор
             {% elseif is_granted('ROLE_MODERATOR') %}
@@ -29,38 +29,38 @@
     </div>
 
     <!-- Stats -->
-    <h2 class="section-title">Статистика</h2>
-    <div class="stats-grid">
-        <div class="card stat-card">
-            <div class="list-title stat-title">0</div>
-            <div class="list-meta">Підписок</div>
+    <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Статистика</h2>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-surface border-2 border-border rounded p-4 text-center flex flex-col justify-center mb-0 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none">
+            <div class="flex justify-center items-center text-2xl font-bold mb-1 font-unbounded tracking-tight uppercase">0</div>
+            <div class="text-[12px] text-muted font-bold uppercase">Підписок</div>
         </div>
-        <div class="card stat-card">
-            <div class="list-title stat-title">0</div>
-            <div class="list-meta">Вподобань</div>
+        <div class="bg-surface border-2 border-border rounded p-4 text-center flex flex-col justify-center mb-0 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none">
+            <div class="flex justify-center items-center text-2xl font-bold mb-1 font-unbounded tracking-tight uppercase">0</div>
+            <div class="text-[12px] text-muted font-bold uppercase">Вподобань</div>
         </div>
     </div>
 
     <!-- Actions -->
-    <h2 class="section-title">Налаштування</h2>
+    <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Налаштування</h2>
     
-    <div class="list-item">
-        <div class="list-icon">
-            <i data-lucide="shield-check"></i>
+    <div class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none">
+        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm">
+            <i data-lucide="shield-check" class="w-6 h-6 stroke-2"></i>
         </div>
-        <div class="list-content">
-            <div class="list-title">Акаунт створено</div>
-            <div class="list-desc">Невідомо</div>
+        <div class="flex-1">
+            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase">Акаунт створено</div>
+            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">Невідомо</div>
         </div>
     </div>
 
-    <div class="list-item">
-        <div class="list-icon">
-            <i data-lucide="edit-3"></i>
+    <div class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none">
+        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm">
+            <i data-lucide="edit-3" class="w-6 h-6 stroke-2"></i>
         </div>
-        <div class="list-content">
-            <div class="list-title">Публічна сторінка</div>
-            <div class="list-desc">Немає прив'язаної сторінки</div>
+        <div class="flex-1">
+            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase">Публічна сторінка</div>
+            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">Немає прив'язаної сторінки</div>
         </div>
     </div>
 
