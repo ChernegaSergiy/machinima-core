@@ -48,15 +48,36 @@ function initApp() {
     }
 }
 
-document.addEventListener('turbo:load', initApp);
+// Check initial load
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
     initApp();
 }
 
+document.addEventListener('turbo:load', function(event) {
+    initApp();
+    initApp();
+    
+    // Only restore scroll on back/forward navigation
+    if (event.detail.action === 'restore') {
+        const savedPos = sessionStorage.getItem('scroll_' + window.location.pathname);
+        if (savedPos !== null) {
+            // Use requestAnimationFrame to ensure DOM is fully rendered (especially if restoring from cache)
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    window.scrollTo(0, parseInt(savedPos, 10));
+                });
+            });
+        }
+    }
+});
+
 // Skeleton Screen Generation on Navigation
 document.addEventListener('turbo:click', function(event) {
+    // Save scroll position explicitly before we mutate the DOM (which ruins Turbo's automatic scroll saving)
+    sessionStorage.setItem('scroll_' + window.location.pathname, window.scrollY);
+    
     const link = event.target.closest('a');
     if (!link) return;
     
