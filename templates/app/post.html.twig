@@ -3,27 +3,27 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-<div class="top-nav">
-    <a href="{{ path('app_index') }}" class="back-btn"><i data-lucide="arrow-left"></i> Назад</a>
+<div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90">
+    <a href="{{ path('app_index') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</a>
 </div>
 
-<div class="container pb-20">
-    <div class="card">
-        <div class="card-header">
-            <div class="avatar"><i data-lucide="user"></i></div>
-            <div class="author-info">
-                <div class="author-name">{% if post.staff|length > 0 %}{{ post.staff|first.author.name }}{% else %}Автор невідомий{% endif %}</div>
-                <div class="author-meta">{{ post.type }} • <time class="local-time" datetime="{{ post.createdAt|date('c') }}" data-format="datetime">{{ post.createdAt|date('d.m.Y H:i') }}</time></div>
+<div class="w-full max-w-600 mx-auto p-4 pb-20">
+    <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal">
+        <div class="flex items-center mb-4">
+            <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
+            <div>
+                <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase">{% if post.staff|length > 0 %}{{ post.staff|first.author.name }}{% else %}Автор невідомий{% endif %}</div>
+                <div class="text-sm text-muted font-semibold uppercase">{{ post.type }} • <time class="local-time" datetime="{{ post.createdAt|date('c') }}" data-format="datetime">{{ post.createdAt|date('d.m.Y H:i') }}</time></div>
             </div>
         </div>
         
-        <h1 class="post-full-title">{{ post.title }}</h1>
+        <h1 class="text-[26px] font-bold mb-5 leading-snug text-primary font-unbounded tracking-tight uppercase">{{ post.title }}</h1>
         
-        <div class="post-full-desc">
+        <div class="text-lg text-primary mb-6 leading-relaxed font-semibold">
             {{ post.description|nl2br }}
         </div>
         
-        <div class="post-media">
+        <div class="w-full aspect-video bg-surface border-2 border-border rounded flex items-center justify-center text-primary overflow-hidden relative mb-6">
             {% if post.coverFileId %}
                 {% if post.coverFileId starts with 'http' %}
                     <img src="{{ post.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" />
@@ -31,28 +31,28 @@
                     <img src="{{ path('app_media', {fileId: post.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" class="w-12 h-12"></i>
+                <i data-lucide="image" class="w-12 h-12 stroke-1-5"></i>
             {% endif %}
         </div>
         
-        <div class="post-actions" data-post-id="{{ post.id }}">
-            <div class="action-item btn-like cursor-pointer" onclick="interact('like', this)"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
-            <div class="action-item btn-dislike cursor-pointer" onclick="interact('dislike', this)"><i data-lucide="thumbs-down"></i></div>
-            <div class="action-item ml-auto"><i data-lucide="eye"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
+        <div class="flex items-center gap-3 mt-4 pt-4 border-t-2 border-border" data-post-id="{{ post.id }}">
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-like" onclick="interact('like', this)"><i data-lucide="heart" class="w-[18px] h-[18px] stroke-2-5"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-dislike" onclick="interact('dislike', this)"><i data-lucide="thumbs-down" class="w-[18px] h-[18px] stroke-2-5"></i></div>
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto"><i data-lucide="eye" class="w-[18px] h-[18px] stroke-2-5"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
         </div>
     </div>
 
     {% if post.staff|length > 0 %}
-    <h2 class="section-title">Команда проєкту</h2>
+    <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Команда проєкту</h2>
     <div class="mb-6">
         {% for staffItem in post.staff %}
-            <div class="list-item">
-                <div class="list-icon">
-                    <i data-lucide="user"></i>
+            <div class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 shadow-brutal pointer-events-none">
+                <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm">
+                    <i data-lucide="user" class="w-6 h-6 stroke-2"></i>
                 </div>
-                <div class="list-content">
-                    <h3 class="list-title">{{ staffItem.author.name }}</h3>
-                    <div class="list-desc">{{ staffItem.role }}</div>
+                <div class="flex-1">
+                    <h3 class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary m-0">{{ staffItem.author.name }}</h3>
+                    <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">{{ staffItem.role }}</div>
                 </div>
             </div>
         {% endfor %}
@@ -88,35 +88,35 @@
             document.head.appendChild(style);
         })();
     </script>
-    <h2 class="comment-section-title">Коментарі (<span id="comment-count-number">{{ commentsCount }}</span>)</h2>
+    <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Коментарі (<span id="comment-count-number">{{ commentsCount }}</span>)</h2>
     
     <div id="comments-list">
         {% if commentsCount == 0 %}
-            <div class="empty-state">
-                <i data-lucide="message-square"></i>
-                <div class="empty-state-text">Немає коментарів</div>
+            <div class="text-center py-16 px-4 text-primary border-2 border-dashed border-border rounded my-8 bg-black-2 empty-state">
+                <i data-lucide="message-square" class="w-12 h-12 stroke-1-5 opacity-80 mb-4 mx-auto block"></i>
+                <div class="font-unbounded font-bold tracking-tight uppercase">Немає коментарів</div>
             </div>
         {% else %}
             {% macro render_comment_tree(tree) %}
                 {% for item in tree %}
-                    <div class="comment-item" id="comment-item-{{ item.entity.id }}">
-                        <div class="comment-header">
-                            <div class="comment-avatar"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" /></div>
+                    <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></div>
                             <div>
-                                <div class="comment-author">{{ item.entity.authorName }}</div>
-                                <div class="comment-date"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
+                                <div class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase">{{ item.entity.authorName }}</div>
+                                <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
-                        <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
-                        <div class="comment-actions flex gap-2 mt-3 items-center flex-wrap">
-                            <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                            <div class="owner-actions hidden gap-2 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                                <button class="reply-btn edit-btn text-primary" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
-                                <button class="reply-btn delete-btn text-danger" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
+                        <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
+                        <div class="flex gap-4 mt-3 items-center flex-wrap">
+                            <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                            <div class="owner-actions hidden gap-4 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
+                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase edit-btn" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
+                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase delete-btn" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
                             </div>
                         </div>
                         
-                        <div class="comment-reply-wrapper {% if item.children|length == 0 %}hidden{% endif %} ml-3 border-l-2 pl-3 mt-4" id="replies-{{ item.entity.id }}">
+                        <div class="comment-reply-wrapper {% if item.children|length == 0 %}hidden{% endif %} ml-3 border-l-2 border-border pl-3 mt-4" id="replies-{{ item.entity.id }}">
                             {% if item.children|length > 0 %}
                                 {{ _self.render_comment_tree(item.children) }}
                             {% endif %}
@@ -130,10 +130,10 @@
     </div>
 </div>
 
-<div class="comment-bar">
-    <form id="comment-form" onsubmit="submitComment(event)" class="comment-form">
-        <input id="comment-input" type="text" placeholder="Написати коментар..." class="comment-input" required />
-        <button type="submit" class="comment-submit"><i data-lucide="send"></i></button>
+<div class="fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-border p-3 z-90 pb-[max(12px,env(safe-area-inset-bottom))]">
+    <form id="comment-form" onsubmit="submitComment(event)" class="flex items-center gap-3 w-full max-w-600 mx-auto">
+        <input id="comment-input" type="text" placeholder="Написати коментар..." class="flex-1 py-3 px-4 bg-surface border-2 border-border rounded font-bold text-primary text-base outline-none shadow-brutal-sm transition-all focus:border-primary placeholder:text-muted placeholder:font-semibold" required />
+        <button type="submit" class="w-12 h-12 bg-border text-surface border-2 border-border rounded flex items-center justify-center cursor-pointer shadow-brutal-sm transition-all active:translate-brutal-sm active:shadow-xs"><i data-lucide="send" class="w-5 h-5 stroke-2-5 relative -ml-1"></i></button>
     </form>
 </div>
 
@@ -291,23 +291,23 @@
 
     function appendCommentToDOM(c) {
         const html = `
-            <div class="comment-item" id="comment-item-${c.id}">
-                <div class="comment-header">
-                    <div class="comment-avatar"><img src="/avatar/${c.user_id}" loading="lazy" /></div>
+            <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-${c.id}">
+                <div class="flex items-center mb-3">
+                    <div class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></div>
                     <div>
-                        <div class="comment-author">${c.author_name}</div>
-                        <div class="comment-date">Зараз</div>
+                        <div class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase">${c.author_name}</div>
+                        <div class="text-[12px] text-muted font-bold uppercase">Зараз</div>
                     </div>
                 </div>
-                <div class="comment-text" id="comment-text-${c.id}">${c.text}</div>
-                <div class="comment-actions flex gap-2 mt-3 items-center flex-wrap">
-                    <button class="reply-btn" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                    <div class="owner-actions flex gap-2 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
-                        <button class="reply-btn edit-btn text-primary" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
-                        <button class="reply-btn delete-btn text-danger" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
+                <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-${c.id}">${c.text}</div>
+                <div class="flex gap-4 mt-3 items-center flex-wrap">
+                    <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                    <div class="owner-actions flex gap-4 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
+                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase edit-btn" onclick="startEditComment(${c.id})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
+                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
                     </div>
                 </div>
-                <div class="comment-reply-wrapper hidden ml-3 border-l-2 pl-3 mt-4" id="replies-${c.id}"></div>
+                <div class="comment-reply-wrapper hidden ml-3 border-l-2 border-border pl-3 mt-4" id="replies-${c.id}"></div>
             </div>
         `;
         
