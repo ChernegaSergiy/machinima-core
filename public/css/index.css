@@ -287,3 +287,9 @@ a { text-decoration: none; color: inherit; }
 /* Global TMA specific */
 body.is-tma .hide-on-tma { display: none !important; }
 body.is-tma .tma-pt-6 { padding-top: 24px; }
+
+/* Active reaction state — fill icon */
+.btn-like.active svg,
+.btn-dislike.active svg {
+    fill: currentColor;
+}
