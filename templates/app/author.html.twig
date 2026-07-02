@@ -26,7 +26,7 @@
             {% endif %}
             
             {% if app.user %}
-                <button id="follow-btn" class="action-button {{ isFollowing ?  m-0 min-w-120'secondary-btn' : 'primary-btn' }}" onclick="toggleFollow()">
+                <button id="follow-btn" class="action-button m-0 min-w-120 {{ isFollowing ? 'secondary-btn' : 'primary-btn' }}" onclick="toggleFollow()">
                     {{ isFollowing ? 'Відписатися' : 'Підписатися' }}
                 </button>
                 <script>
