@@ -64,16 +64,16 @@ a { text-decoration: none; color: inherit; }
 .font-bold { font-weight: 700; }
 .font-extrabold { font-weight: 800; }
 
-.text-[10px] { font-size: 10px; }
+.text-\[10px\] { font-size: 10px; }
 .text-xs { font-size: 11px; }
-.text-[12px] { font-size: 12px; }
+.text-\[12px\] { font-size: 12px; }
 .text-sm { font-size: 13px; }
-.text-[14px] { font-size: 14px; }
+.text-\[14px\] { font-size: 14px; }
 .text-base { font-size: 15px; }
 .text-lg { font-size: 16px; }
 .text-xl { font-size: 20px; }
 .text-2xl { font-size: 24px; }
-.text-[26px] { font-size: 26px; }
+.text-\[26px\] { font-size: 26px; }
 .text-3xl { font-size: 28px; }
 
 .uppercase { text-transform: uppercase; }
@@ -114,11 +114,11 @@ a { text-decoration: none; color: inherit; }
 .fixed { position: fixed; }
 .sticky { position: sticky; }
 .top-0 { top: 0; }
-.top-[-6px] { top: -6px; }
+.top-\[-6px\] { top: -6px; }
 .bottom-0 { bottom: 0; }
 .left-0 { left: 0; }
 .right-0 { right: 0; }
-.right-[-8px] { right: -8px; }
+.right-\[-8px\] { right: -8px; }
 
 /* Spacing */
 .gap-1 { gap: 4px; }
@@ -192,10 +192,10 @@ a { text-decoration: none; color: inherit; }
 /* Sizing */
 .w-full { width: 100%; }
 .h-full { height: 100%; }
-.w-[14px] { width: 14px; }
-.h-[14px] { height: 14px; }
-.w-[18px] { width: 18px; }
-.h-[18px] { height: 18px; }
+.w-\[14px\] { width: 14px; }
+.h-\[14px\] { height: 14px; }
+.w-\[18px\] { width: 18px; }
+.h-\[18px\] { height: 18px; }
 .w-4 { width: 16px; }
 .h-4 { height: 16px; }
 .w-5 { width: 20px; }
