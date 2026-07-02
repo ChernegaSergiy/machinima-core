@@ -44,10 +44,6 @@ a { text-decoration: none; color: inherit; }
 .text-surface { color: var(--surface); }
 .text-white { color: #FFFFFF; }
 
-/* Border Colors */
-.border-border { border-color: var(--border); }
-.border-accent { border-color: var(--accent); }
-
 /* Typography */
 .font-inter { font-family: 'Inter', sans-serif; }
 .font-unbounded { font-family: 'Unbounded', sans-serif; }
@@ -217,6 +213,10 @@ a { text-decoration: none; color: inherit; }
 .rounded { border-radius: var(--radius); }
 .rounded-none { border-radius: 0; }
 .rounded-full { border-radius: 9999px; }
+
+/* Border Colors */
+.border-border { border-color: var(--border); }
+.border-accent { border-color: var(--accent); }
 
 .shadow-brutal { box-shadow: 4px 4px 0px var(--border); }
 .shadow-brutal-sm { box-shadow: 2px 2px 0px var(--border); }
