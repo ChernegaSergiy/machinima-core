@@ -132,12 +132,12 @@ class AppController extends AbstractController
             $follower->setUser($user);
             $follower->setAuthor($author);
             $em->persist($follower);
-            
+
             // Create internal notification for the author
             if ($author->getTelegramUserId()) {
                 $authorUser = $em->getRepository(\App\Entity\User::class)->find($author->getTelegramUserId());
                 if ($authorUser && $authorUser->getId() !== $user->getId()) {
-                    $notification = new \App\Entity\Notification();
+                    $notification = new Notification();
                     $notification->setUser($authorUser);
                     $notification->setType('new_follower');
                     $notification->setTargetId($user->getId());
@@ -146,7 +146,7 @@ class AppController extends AbstractController
                     $em->persist($notification);
                 }
             }
-            
+
             $em->flush();
         }
 
@@ -277,6 +277,34 @@ class AppController extends AbstractController
 
         return $this->render('app/notifications.html.twig', [
             'notifications' => $notifications,
+        ]);
+    }
+
+    #[Route('/user/{id}', name: 'app_user', requirements: ['id' => '\d+'])]
+    public function userProfile(int $id, EntityManagerInterface $em): Response
+    {
+        $targetUser = $em->getRepository(\App\Entity\User::class)->find($id);
+        if (!$targetUser) {
+            throw $this->createNotFoundException('User not found');
+        }
+
+        $author = $em->getRepository(Author::class)->findOneBy(['telegramUserId' => $id]);
+
+        if ($author) {
+            return $this->redirectToRoute('app_author', ['id' => $author->getId()]);
+        }
+
+        $followingCount = $em->getRepository(\App\Entity\Follower::class)->count(['user' => $targetUser]);
+        $likesCount = $em->getRepository(\App\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
+
+        $lastComment = $em->getRepository(Comment::class)->findOneBy(['user' => $targetUser], ['createdAt' => 'DESC']);
+        $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$targetUser->getId();
+
+        return $this->render('app/user.html.twig', [
+            'targetUser' => $targetUser,
+            'followingCount' => $followingCount,
+            'likesCount' => $likesCount,
+            'name' => $name,
         ]);
     }
 }
