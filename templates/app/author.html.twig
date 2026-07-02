@@ -18,11 +18,39 @@
             <p class="profile-bio">{{ author.biography }}</p>
         {% endif %}
         
-        {% if author.channelLink %}
-            <a href="{{ author.channelLink }}" target="_blank" class="action-button primary-btn">
-                Канал
-            </a>
-        {% endif %}
+        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 24px;">
+            {% if author.channelLink %}
+                <a href="{{ author.channelLink }}" target="_blank" class="action-button primary-btn" style="margin: 0; min-width: 120px;">
+                    Канал
+                </a>
+            {% endif %}
+            
+            {% if app.user %}
+                <button id="follow-btn" class="action-button {{ isFollowing ? 'secondary-btn' : 'primary-btn' }}" style="margin: 0; min-width: 120px;" onclick="toggleFollow()">
+                    {{ isFollowing ? 'Відписатися' : 'Підписатися' }}
+                </button>
+                <script>
+                    let isFollowing = {{ isFollowing ? 'true' : 'false' }};
+                    function toggleFollow() {
+                        const btn = document.getElementById('follow-btn');
+                        btn.disabled = true;
+                        
+                        const endpoint = isFollowing ? '{{ path('app_author_unfollow', {id: author.id}) }}' : '{{ path('app_author_follow', {id: author.id}) }}';
+                        
+                        fetch(endpoint, { method: 'POST' })
+                            .then(res => res.json())
+                            .then(data => {
+                                isFollowing = !isFollowing;
+                                btn.textContent = isFollowing ? 'Відписатися' : 'Підписатися';
+                                btn.className = 'action-button ' + (isFollowing ? 'secondary-btn' : 'primary-btn');
+                            })
+                            .finally(() => {
+                                btn.disabled = false;
+                            });
+                    }
+                </script>
+            {% endif %}
+        </div>
     </div>
     
     <h2 class="section-title">Проєкти автора ({{ projects|length }})</h2>
