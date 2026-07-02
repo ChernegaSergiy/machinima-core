@@ -3,30 +3,34 @@
 {% block title %}{{ author.name }}{% endblock %}
 
 {% block body %}
-<div class="top-nav">
-    <a href="{{ path('app_authors') }}" class="back-btn"><i data-lucide="arrow-left"></i> Назад</a>
+<div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90">
+    <a href="{{ path('app_authors') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</a>
 </div>
 
-<div class="container">
-    <div class="profile-header">
-        <div class="profile-avatar">
-            <i data-lucide="user" class="w-10 h-10"></i>
+<div class="w-full max-w-600 mx-auto p-4 pb-30">
+    <div class="text-center py-8 px-4 mb-8 bg-surface rounded border-2 border-border shadow-brutal">
+        <div class="w-[88px] h-[88px] mx-auto mb-5 rounded bg-surface flex items-center justify-center text-primary border-2 border-border shadow-brutal overflow-hidden">
+            <i data-lucide="user" class="w-10 h-10 stroke-1-5"></i>
         </div>
-        <h1 class="profile-name">{{ author.name }}</h1>
+        <h1 class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">{{ author.name }}</h1>
         
         {% if author.biography %}
-            <p class="profile-bio">{{ author.biography }}</p>
+            <p class="text-base text-primary mb-6 leading-relaxed font-semibold">{{ author.biography }}</p>
         {% endif %}
         
         <div class="flex gap-2 justify-center items-center mb-6">
             {% if author.channelLink %}
-                <a href="{{ author.channelLink }}" target="_blank" class="action-button primary-btn m-0 min-w-120">
+                <a href="{{ author.channelLink }}" target="_blank" class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120 no-underline">
                     Канал
                 </a>
             {% endif %}
             
             {% if app.user %}
-                <button id="follow-btn" class="action-button m-0 min-w-120 {{ isFollowing ? 'secondary-btn' : 'primary-btn' }}" onclick="toggleFollow()">
+                {% set btn_base = 'py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120' %}
+                {% set btn_primary = 'bg-border text-surface' %}
+                {% set btn_secondary = 'bg-surface text-primary' %}
+                
+                <button id="follow-btn" class="{{ btn_base }} {{ isFollowing ? btn_secondary : btn_primary }}" onclick="toggleFollow()">
                     {{ isFollowing ? 'Відписатися' : 'Підписатися' }}
                 </button>
                 <script>
@@ -42,7 +46,7 @@
                             .then(data => {
                                 isFollowing = !isFollowing;
                                 btn.textContent = isFollowing ? 'Відписатися' : 'Підписатися';
-                                btn.className = 'action-button ' + (isFollowing ? 'secondary-btn' : 'primary-btn');
+                                btn.className = '{{ btn_base }} ' + (isFollowing ? '{{ btn_secondary }}' : '{{ btn_primary }}');
                             })
                             .finally(() => {
                                 btn.disabled = false;
@@ -53,27 +57,27 @@
         </div>
     </div>
     
-    <h2 class="section-title">Проєкти автора ({{ projects|length }})</h2>
+    <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Проєкти автора ({{ projects|length }})</h2>
     
     {% for project in projects %}
-    <div class="card">
-        <div class="card-header">
-            <div class="avatar"><i data-lucide="user"></i></div>
-            <div class="author-info">
-                <div class="author-name">{{ author.name }}</div>
-                <div class="author-meta">{{ project.type }} • <time class="local-time" datetime="{{ project.createdAt|date('c') }}" data-format="date">{{ project.createdAt|date('d.m.Y') }}</time></div>
+    <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal">
+        <div class="flex items-center mb-4">
+            <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
+            <div>
+                <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase">{{ author.name }}</div>
+                <div class="text-sm text-muted font-semibold uppercase">{{ project.type }} • <time class="local-time" datetime="{{ project.createdAt|date('c') }}" data-format="date">{{ project.createdAt|date('d.m.Y') }}</time></div>
             </div>
         </div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}">
-            <h3 class="post-title">{{ project.title }}</h3>
+        <a href="{{ path('app_post', {id: project.id}) }}" class="block no-underline">
+            <h3 class="text-xl font-bold m-0 mb-3 leading-snug text-primary font-unbounded tracking-tight uppercase">{{ project.title }}</h3>
         </a>
         
-        <div class="post-desc">
+        <div class="text-base text-primary leading-relaxed mb-4 font-semibold line-clamp-3">
             {{ project.description }}
         </div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
+        <a href="{{ path('app_post', {id: project.id}) }}" class="w-full aspect-video bg-surface border-2 border-border rounded flex items-center justify-center text-primary overflow-hidden relative">
             {% if project.coverFileId %}
                 {% if project.coverFileId starts with 'http' %}
                     <img src="{{ project.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
@@ -81,20 +85,20 @@
                     <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" class="w-8 h-8"></i>
+                <i data-lucide="image" class="w-8 h-8 stroke-1-5"></i>
             {% endif %}
         </a>
         
-        <div class="post-actions">
-            <div class="action-item"><i data-lucide="heart"></i> {{ project.likesCount }}</div>
-            <div class="action-item"><i data-lucide="thumbs-down"></i> {{ project.dislikesCount }}</div>
-            <div class="action-item ml-auto"><i data-lucide="eye"></i> {{ project.viewsCount }}</div>
+        <div class="flex items-center gap-3 mt-4 pt-4 border-t-2 border-border pointer-events-none">
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10"><i data-lucide="heart" class="w-[18px] h-[18px] stroke-2-5"></i> {{ project.likesCount }}</div>
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10"><i data-lucide="thumbs-down" class="w-[18px] h-[18px] stroke-2-5"></i> {{ project.dislikesCount }}</div>
+            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto"><i data-lucide="eye" class="w-[18px] h-[18px] stroke-2-5"></i> {{ project.viewsCount }}</div>
         </div>
     </div>
     {% else %}
-    <div class="empty-state">
-        <i data-lucide="inbox"></i>
-        <div class="empty-state-text">Цей автор ще не має проєктів</div>
+    <div class="text-center py-16 px-4 text-primary border-2 border-dashed border-border rounded my-8 bg-black-2">
+        <i data-lucide="inbox" class="w-12 h-12 stroke-1-5 opacity-80 mb-4 mx-auto block"></i>
+        <div class="font-unbounded font-bold tracking-tight uppercase">Цей автор ще не має проєктів</div>
     </div>
     {% endfor %}
 </div>
