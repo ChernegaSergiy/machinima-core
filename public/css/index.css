@@ -97,7 +97,7 @@ a { text-decoration: none; color: inherit; }
 .hidden { display: none; }
 
 /* Global Layouts */
-#main-content { padding-bottom: var(--bottom-overlay-height, 0px); }
+#main-content, #skeleton-overlay-active { padding-bottom: var(--bottom-overlay-height, 0px); }
 .app-container { min-height: 100vh; display: flex; flex-direction: column; }
 .main-content { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
 
