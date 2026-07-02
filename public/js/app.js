@@ -91,9 +91,22 @@ document.addEventListener('turbo:click', function(event) {
                 template = document.getElementById('skeleton-default');
             }
             if (template) {
+                // VERY IMPORTANT: Save the original DOM so Turbo can cache it properly for the Back button!
+                window.originalMainContentHTML = mainContent.innerHTML;
                 mainContent.innerHTML = template.innerHTML;
             }
         }
+    }
+});
+
+// Restore original DOM before Turbo saves it to cache
+document.addEventListener('turbo:before-cache', function() {
+    if (window.originalMainContentHTML) {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.innerHTML = window.originalMainContentHTML;
+        }
+        window.originalMainContentHTML = null;
     }
 });
 
