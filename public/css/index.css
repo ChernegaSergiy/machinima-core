@@ -86,6 +86,11 @@ a { text-decoration: none; color: inherit; }
 .grid { display: grid; }
 .hidden { display: none; }
 
+/* Global Layouts */
+#main-content { padding-bottom: var(--bottom-overlay-height, 0px); }
+.app-container { min-height: 100vh; display: flex; flex-direction: column; }
+.main-content { flex: 1; overflow-y: auto; overflow-x: hidden; position: relative; }
+
 .flex-col { flex-direction: column; }
 .flex-wrap { flex-wrap: wrap; }
 .items-center { align-items: center; }
@@ -288,4 +293,3 @@ a { text-decoration: none; color: inherit; }
 /* Global TMA specific */
 body.is-tma .hide-on-tma { display: none !important; }
 body.is-tma .tma-pt-6 { padding-top: 24px; }
-

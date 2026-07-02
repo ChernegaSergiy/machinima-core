@@ -110,33 +110,33 @@
             mercureUrl: '{{ mercure("machinima/updates")|escape("js") }}'
         };
 
+        let adjustPaddingFrame;
         function adjustBottomPadding() {
-            const mainContent = document.getElementById('main-content');
-            if (!mainContent) return;
+            if (adjustPaddingFrame) cancelAnimationFrame(adjustPaddingFrame);
             
-            const bottomFixedElements = document.querySelectorAll('.fixed.bottom-0');
-            let maxPadding = 0;
-            
-            bottomFixedElements.forEach(el => {
-                if (window.getComputedStyle(el).display !== 'none') {
-                    const height = el.offsetHeight;
-                    if (height > maxPadding) maxPadding = height;
-                }
+            adjustPaddingFrame = requestAnimationFrame(() => {
+                const bottomFixedElements = document.querySelectorAll('.fixed.bottom-0');
+                let maxPadding = 0;
+                
+                bottomFixedElements.forEach(el => {
+                    if (window.getComputedStyle(el).display !== 'none') {
+                        const height = el.offsetHeight;
+                        if (height > maxPadding) maxPadding = height;
+                    }
+                });
+                
+                // Set CSS variable instead of directly manipulating styles
+                document.documentElement.style.setProperty('--bottom-overlay-height', maxPadding + 'px');
             });
-            
-            if (maxPadding > 0) {
-                mainContent.style.paddingBottom = maxPadding + 'px';
-            } else {
-                mainContent.style.paddingBottom = '0px';
-            }
         }
         
-        // Run on load, resize and DOM mutations (for Turbo)
+        // Trigger recalculation on key events
         document.addEventListener('DOMContentLoaded', adjustBottomPadding);
         window.addEventListener('resize', adjustBottomPadding);
         document.addEventListener('turbo:load', adjustBottomPadding);
         document.addEventListener('turbo:render', adjustBottomPadding);
         
+        // Optimized MutationObserver for DOM changes
         const observer = new MutationObserver(adjustBottomPadding);
         observer.observe(document.body, { childList: true, subtree: true });
     </script>
