@@ -15,8 +15,12 @@
         <p id="profile-username" style="color: var(--text-secondary); margin: 0; font-size: 14px;">@username</p>
         
         <div style="margin-top: 16px; display: inline-block; background: var(--surface); padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 600; color: var(--primary);">
-            {% if is_granted('ROLE_CREATOR') %}
-                Кріейтор
+            {% if is_granted('ROLE_ADMIN') %}
+                Адміністратор
+            {% elseif is_granted('ROLE_MODERATOR') %}
+                Модератор
+            {% elseif is_granted('ROLE_CREATOR') %}
+                Творець
             {% else %}
                 Користувач
             {% endif %}
