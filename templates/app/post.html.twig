@@ -144,9 +144,18 @@
     window.replyToId = null;
     window.editModeId = null;
 
-    function toggleSvgFill(el, active) {
+    function setActive(el, active) {
         const svg = el && el.querySelector('svg');
-        if (svg) svg.setAttribute('fill', active ? 'currentColor' : 'none');
+        if (!svg) return;
+        const i = document.createElement('i');
+        i.setAttribute('data-lucide', el.classList.contains('btn-like') ? 'heart' : 'thumbs-down');
+        if (active) i.setAttribute('fill', 'currentColor');
+        const cls = svg.getAttribute('class');
+        if (cls) i.setAttribute('class', cls);
+        svg.replaceWith(i);
+        if (window.lucide) window.lucide.createIcons();
+        if (active) el.classList.add('active');
+        else el.classList.remove('active');
     }
 
     window.interact = async function(type, btnElement) {
@@ -199,20 +208,18 @@
                     if (btnElement) {
                         if (type === 'like') {
                             if (data.likes > oldLikes) {
-                                btnElement.classList.add('active');
-                                toggleSvgFill(btnElement, true);
+                                setActive(btnElement, true);
                                 const dislikeBtn = document.querySelector('.btn-dislike');
-                                if (dislikeBtn) { dislikeBtn.classList.remove('active'); toggleSvgFill(dislikeBtn, false); }
+                                if (dislikeBtn) setActive(dislikeBtn, false);
                             } else if (data.likes < oldLikes) {
-                                btnElement.classList.remove('active');
-                                toggleSvgFill(btnElement, false);
+                                setActive(btnElement, false);
                             }
                         } else if (type === 'dislike') {
-                            btnElement.classList.toggle('active');
-                            toggleSvgFill(btnElement, btnElement.classList.contains('active'));
-                            if (btnElement.classList.contains('active')) {
+                            const wasActive = btnElement.classList.contains('active');
+                            setActive(btnElement, !wasActive);
+                            if (!wasActive) {
                                 const likeBtn = document.querySelector('.btn-like');
-                                if (likeBtn) { likeBtn.classList.remove('active'); toggleSvgFill(likeBtn, false); }
+                                if (likeBtn) setActive(likeBtn, false);
                             }
                         }
                     }

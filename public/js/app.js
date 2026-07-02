@@ -108,9 +108,18 @@ document.addEventListener('turbo:before-fetch-request', function (event) {
     }
 });
 
-function toggleSvgFill(el, active) {
+function setActive(el, active) {
     const svg = el && el.querySelector('svg');
-    if (svg) svg.setAttribute('fill', active ? 'currentColor' : 'none');
+    if (!svg) return;
+    const i = document.createElement('i');
+    i.setAttribute('data-lucide', el.classList.contains('btn-like') ? 'heart' : 'thumbs-down');
+    if (active) i.setAttribute('fill', 'currentColor');
+    const cls = svg.getAttribute('class');
+    if (cls) i.setAttribute('class', cls);
+    svg.replaceWith(i);
+    if (window.lucide) window.lucide.createIcons();
+    if (active) el.classList.add('active');
+    else el.classList.remove('active');
 }
 
 // Global interaction logic for feed items
@@ -152,23 +161,21 @@ window.interactFeed = async function(contentId, type, btnElement) {
                         likesEl.innerText = data.likes;
                         if (type === 'like') {
                             if (data.likes > oldLikes) {
-                                btnElement.classList.add('active');
-                                toggleSvgFill(btnElement, true);
+                                setActive(btnElement, true);
                                 const dislikeBtn = postActions.querySelector('.btn-dislike');
-                                if (dislikeBtn) { dislikeBtn.classList.remove('active'); toggleSvgFill(dislikeBtn, false); }
+                                if (dislikeBtn) setActive(dislikeBtn, false);
                             } else if (data.likes < oldLikes) {
-                                btnElement.classList.remove('active');
-                                toggleSvgFill(btnElement, false);
+                                setActive(btnElement, false);
                             }
                         }
                     }
                     
                     if (type === 'dislike') {
-                        btnElement.classList.toggle('active');
-                        toggleSvgFill(btnElement, btnElement.classList.contains('active'));
-                        if (btnElement.classList.contains('active')) {
+                        const wasActive = btnElement.classList.contains('active');
+                        setActive(btnElement, !wasActive);
+                        if (!wasActive) {
                             const likeBtn = postActions.querySelector('.btn-like');
-                            if (likeBtn) { likeBtn.classList.remove('active'); toggleSvgFill(likeBtn, false); }
+                            if (likeBtn) setActive(likeBtn, false);
                         }
                     }
                 }
@@ -199,10 +206,10 @@ document.addEventListener('turbo:load', async function() {
                 const postId = parseInt(actions.getAttribute('data-post-id'));
                 if (likedIds.includes(postId)) {
                     const likeBtn = actions.querySelector('.btn-like');
-                    if (likeBtn) { likeBtn.classList.add('active'); toggleSvgFill(likeBtn, true); }
+                    if (likeBtn) setActive(likeBtn, true);
                 } else if (dislikedIds.includes(postId)) {
                     const dislikeBtn = actions.querySelector('.btn-dislike');
-                    if (dislikeBtn) { dislikeBtn.classList.add('active'); toggleSvgFill(dislikeBtn, true); }
+                    if (dislikeBtn) setActive(dislikeBtn, true);
                 }
             });
         }
