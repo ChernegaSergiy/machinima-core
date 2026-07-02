@@ -160,6 +160,12 @@
             }
 
             step = 'fetch_call';
+            if (btnElement && type !== 'view') {
+                btnElement.style.pointerEvents = 'none';
+                btnElement.style.opacity = '0.5';
+                btnElement.style.transition = 'opacity 0.2s';
+            }
+            
             const targetUrl = window.location.origin + '/api/interact';
             const res = await fetch(targetUrl, {
                 method: 'POST',
@@ -175,6 +181,11 @@
             const data = await res.json();
             
             step = 'success_check';
+            if (btnElement && type !== 'view') {
+                btnElement.style.pointerEvents = 'auto';
+                btnElement.style.opacity = '1';
+            }
+
             if (data.success && type !== 'view') {
                 const likesEl = document.getElementById('likes-count');
                 if (likesEl && data.likes !== undefined) {
@@ -203,6 +214,10 @@
             }
         } catch (e) {
             console.error('Interaction error at step ' + step + ':', e);
+            if (btnElement && type !== 'view') {
+                btnElement.style.pointerEvents = 'auto';
+                btnElement.style.opacity = '1';
+            }
             if (type !== 'view') {
                 alert(`Мережева помилка (крок: ${step}): ` + e.name + ' - ' + e.message);
             }

@@ -86,6 +86,11 @@ document.addEventListener('turbo:before-fetch-request', function (event) {
 
 // Global interaction logic for feed items
 window.interactFeed = async function(contentId, type, btnElement) {
+    if (btnElement && type !== 'view') {
+        btnElement.style.pointerEvents = 'none';
+        btnElement.style.opacity = '0.5';
+        btnElement.style.transition = 'opacity 0.2s';
+    }
     try {
         const tgData = window.Telegram?.WebApp?.initData;
         const headers = { 'Content-Type': 'application/json' };
@@ -102,6 +107,12 @@ window.interactFeed = async function(contentId, type, btnElement) {
             })
         });
         const data = await res.json();
+        
+        if (btnElement && type !== 'view') {
+            btnElement.style.pointerEvents = 'auto';
+            btnElement.style.opacity = '1';
+        }
+        
         if (data.success) {
             if (btnElement && type !== 'view') {
                 const postActions = btnElement.closest('.post-actions');
@@ -135,6 +146,10 @@ window.interactFeed = async function(contentId, type, btnElement) {
         }
     } catch(e) {
         console.error(e);
+        if (btnElement && type !== 'view') {
+            btnElement.style.pointerEvents = 'auto';
+            btnElement.style.opacity = '1';
+        }
     }
 };
 
