@@ -177,13 +177,23 @@ class AppController extends AbstractController
         if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 86400) {
             $post->setViewsCount($post->getViewsCount() + 1);
 
-            if ($this->getUser()) {
-                $interaction = new \App\Entity\ContentInteraction();
-                $interaction->setUser($this->getUser());
-                $interaction->setContent($post);
-                $interaction->setInteractionType('view');
-                $interaction->setCreatedAt(date('Y-m-d H:i:s'));
-                $em->persist($interaction);
+            if ($user = $this->getUser()) {
+                $interaction = $em->getRepository(\App\Entity\ContentInteraction::class)->findOneBy([
+                    'user' => $user,
+                    'content' => $post,
+                    'interactionType' => 'view'
+                ]);
+                
+                if ($interaction) {
+                    $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+                } else {
+                    $interaction = new \App\Entity\ContentInteraction();
+                    $interaction->setUser($user);
+                    $interaction->setContent($post);
+                    $interaction->setInteractionType('view');
+                    $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+                    $em->persist($interaction);
+                }
             }
 
             $em->flush();
