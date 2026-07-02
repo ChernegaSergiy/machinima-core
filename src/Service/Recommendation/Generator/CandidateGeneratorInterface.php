@@ -3,7 +3,9 @@
 namespace App\Service\Recommendation\Generator;
 
 use App\Entity\User;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('app.candidate_generator')]
 interface CandidateGeneratorInterface
 {
     /**
