@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'content_interactions')]
-#[ORM\UniqueConstraint(name: 'unique_user_content_interaction', columns: ['user_id', 'content_id'])]
+#[ORM\UniqueConstraint(name: 'unique_user_content_interaction', columns: ['user_id', 'content_id', 'interaction_type'])]
 class ContentInteraction
 {
     #[ORM\Id]
