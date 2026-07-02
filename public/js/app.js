@@ -219,17 +219,131 @@ document.addEventListener('turbo:load', async function() {
             badge.style.display = 'none';
         }
     } catch(e) {}
+
+    async function addNewNotificationToDOM() {
+        const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+        if (!tgUserId) return;
+        try {
+            const tgData = window.Telegram?.WebApp?.initData;
+            const headers = {};
+            if (tgData && typeof tgData === 'string') {
+                headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+            }
+            const res = await fetch('/api/user/' + tgUserId + '/notifications', { headers });
+            const json = await res.json();
+            if (!json.success) return;
+            const notifications = json.data.notifications;
+            if (!notifications || notifications.length === 0) return;
+
+            const existingIds = new Set();
+            document.querySelectorAll('.list-item').forEach(el => {
+                const href = el.getAttribute('href');
+                if (href) {
+                    const m = href.match(/\/notifications\/(\d+)\/redirect/);
+                    if (m) existingIds.add(parseInt(m[1]));
+                }
+            });
+
+            const newNotifs = notifications.filter(n => !existingIds.has(n.id));
+            if (newNotifs.length === 0) return;
+
+            const container = document.querySelector('.container');
+            if (!container) return;
+
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            const header = container.querySelector('.page-header-flex');
+
+            newNotifs.forEach(notif => {
+                const el = createNotificationElement(notif);
+                if (header) {
+                    header.after(el);
+                } else {
+                    container.prepend(el);
+                }
+            });
+
+            if (window.lucide) window.lucide.createIcons();
+
+            const badge = document.getElementById('unread-count-badge');
+            if (badge && json.data.unread_count > 0) {
+                badge.innerText = json.data.unread_count > 99 ? '99+' : json.data.unread_count;
+                badge.style.display = 'block';
+            } else if (badge) {
+                badge.style.display = 'none';
+            }
+        } catch(e) {
+            console.error('addNewNotificationToDOM failed', e);
+        }
+    }
+
+    function createNotificationElement(notif) {
+        const isUnread = !notif.is_read;
+        const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
+
+        const wrapper = document.createElement(hasTarget ? 'a' : 'div');
+        wrapper.className = 'list-item block no-underline' + (isUnread ? ' unread' : '');
+        wrapper.style.cssText = 'color:inherit;text-decoration:none;display:flex;';
+
+        if (hasTarget) {
+            wrapper.href = '/notifications/' + notif.id + '/redirect';
+            wrapper.setAttribute('data-skeleton', notif.target_type || '');
+        }
+
+        const iconDiv = document.createElement('div');
+        iconDiv.className = 'list-icon';
+        const icon = document.createElement('i');
+        icon.setAttribute('data-lucide', 'bell');
+        iconDiv.appendChild(icon);
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'list-content';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'list-title';
+        titleDiv.appendChild(document.createTextNode('Сповіщення '));
+        if (isUnread) {
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'badge';
+            badgeSpan.textContent = 'Нове';
+            titleDiv.appendChild(badgeSpan);
+        }
+
+        const descDiv = document.createElement('div');
+        descDiv.className = 'list-desc';
+        descDiv.textContent = notif.message;
+
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'list-meta';
+        const timeEl = document.createElement('time');
+        timeEl.className = 'local-time';
+        timeEl.setAttribute('datetime', notif.created_at);
+        timeEl.setAttribute('data-format', 'datetime');
+        const d = new Date(notif.created_at.replace(' ', 'T'));
+        const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+        timeEl.textContent = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
+        timeEl.setAttribute('data-formatted', 'true');
+        metaDiv.appendChild(timeEl);
+
+        contentDiv.appendChild(titleDiv);
+        contentDiv.appendChild(descDiv);
+        contentDiv.appendChild(metaDiv);
+
+        wrapper.appendChild(iconDiv);
+        wrapper.appendChild(contentDiv);
+
+        return wrapper;
+    }
     
     if (!window.mercureListenerAttached && window.APP_CONFIG && window.APP_CONFIG.mercureUrl) {
         try {
             const eventSource = new EventSource(window.APP_CONFIG.mercureUrl);
             eventSource.onmessage = async event => {
                 const data = JSON.parse(event.data);
-                if (data.type === 'NEW_COMMENT') {
-                    if (window.location.pathname === '/notifications') {
-                        location.reload();
-                        return;
-                    }
+                if (data.type === 'NEW_COMMENT' && window.location.pathname === '/notifications') {
+                    await addNewNotificationToDOM();
+                    return;
                 }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
                     try {
