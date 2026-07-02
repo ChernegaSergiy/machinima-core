@@ -235,98 +235,7 @@ document.addEventListener('turbo:load', async function() {
         }
     } catch(e) {}
 
-    async function prependNotification() {
-        const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-        if (!tgUserId) return;
-        try {
-            const tgData = window.Telegram?.WebApp?.initData;
-            const headers = {};
-            if (tgData && typeof tgData === 'string') {
-                headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
-            }
-            const res = await fetch('/api/user/' + tgUserId + '/notifications', { headers });
-            const json = await res.json();
-            if (!json.success) return;
-            const notifications = json.data.notifications;
-            if (!notifications || notifications.length === 0) return;
 
-            const existingIds = new Set();
-            document.querySelectorAll('.notification-item').forEach(el => {
-                const href = el.getAttribute('href');
-                if (href) {
-                    const m = href.match(/\/notifications\/(\d+)\/redirect/);
-                    if (m) existingIds.add(parseInt(m[1]));
-                }
-            });
-
-            const newNotifs = notifications.filter(n => !existingIds.has(n.id));
-            if (newNotifs.length === 0) return;
-
-            const container = document.querySelector('.container');
-            if (!container) return;
-
-            const emptyState = container.querySelector('.empty-state');
-            if (emptyState) emptyState.remove();
-
-            const header = container.querySelector('.border-b-2.border-border');
-
-            newNotifs.forEach(notif => {
-                const isUnread = !notif.is_read;
-                const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
-                
-                const d = new Date(notif.created_at.replace(' ', 'T'));
-                const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-                const timeText = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
-                const timeIso = notif.created_at;
-
-                const borderClass = isUnread ? 'border-accent bg-black-2' : 'border-border';
-                const badgeHtml = isUnread ? '<span class="bg-accent text-white py-0-5 px-2 rounded text-[10px] font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>' : '';
-                
-                let html = '';
-                if (hasTarget) {
-                    const targetUrl = `/notifications/${notif.id}/redirect`;
-                    const skeletonAttr = notif.target_type ? `data-skeleton="${notif.target_type}"` : '';
-                    html = `
-                    <a href="${targetUrl}" ${skeletonAttr} class="flex items-center p-4 bg-surface rounded border-2 mb-4 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none no-underline text-inherit ${borderClass} notification-item" data-id="${notif.id}">
-                        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
-                        <div class="flex-1">
-                            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення ${badgeHtml}</div>
-                            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">${notif.message}</div>
-                            <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="${timeIso}" data-format="datetime" data-formatted="true">${timeText}</time></div>
-                        </div>
-                    </a>`;
-                } else {
-                    html = `
-                    <div class="flex items-center p-4 bg-surface rounded border-2 mb-4 transition-all shadow-brutal text-inherit no-underline ${borderClass} notification-item" data-id="${notif.id}">
-                        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
-                        <div class="flex-1">
-                            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення ${badgeHtml}</div>
-                            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">${notif.message}</div>
-                            <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="${timeIso}" data-format="datetime" data-formatted="true">${timeText}</time></div>
-                        </div>
-                    </div>`;
-                }
-
-                if (header) {
-                    header.insertAdjacentHTML('afterend', html);
-                } else {
-                    container.insertAdjacentHTML('afterbegin', html);
-                }
-            });
-
-            if (window.lucide) window.lucide.createIcons();
-
-            const badge = document.getElementById('unread-count-badge');
-            if (badge && json.data.unread_count > 0) {
-                badge.innerText = json.data.unread_count > 99 ? '99+' : json.data.unread_count;
-                badge.style.display = 'block';
-            } else if (badge) {
-                badge.style.display = 'none';
-            }
-        } catch(e) {
-            console.error('prependNotification failed', e);
-        }
-    }
     
     if (!window.mercureListenerAttached && window.APP_CONFIG && window.APP_CONFIG.mercureUrl) {
         try {
@@ -334,7 +243,11 @@ document.addEventListener('turbo:load', async function() {
             eventSource.onmessage = async event => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'NEW_COMMENT' && window.location.pathname === '/notifications') {
-                    await prependNotification();
+                    if (typeof Turbo !== 'undefined') {
+                        Turbo.visit(window.location.href, { action: "replace" });
+                    } else {
+                        window.location.reload();
+                    }
                     return;
                 }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
