@@ -220,7 +220,7 @@ document.addEventListener('turbo:load', async function() {
         }
     } catch(e) {}
 
-    async function addNewNotificationToDOM() {
+    async function prependNotification() {
         const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
         if (!tgUserId) return;
         try {
@@ -256,7 +256,7 @@ document.addEventListener('turbo:load', async function() {
             const header = container.querySelector('.page-header-flex');
 
             newNotifs.forEach(notif => {
-                const el = createNotificationElement(notif);
+                const el = buildNotificationEl(notif);
                 if (header) {
                     header.after(el);
                 } else {
@@ -274,11 +274,11 @@ document.addEventListener('turbo:load', async function() {
                 badge.style.display = 'none';
             }
         } catch(e) {
-            console.error('addNewNotificationToDOM failed', e);
+            console.error('prependNotification failed', e);
         }
     }
 
-    function createNotificationElement(notif) {
+    function buildNotificationEl(notif) {
         const isUnread = !notif.is_read;
         const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
 
@@ -342,7 +342,7 @@ document.addEventListener('turbo:load', async function() {
             eventSource.onmessage = async event => {
                 const data = JSON.parse(event.data);
                 if (data.type === 'NEW_COMMENT' && window.location.pathname === '/notifications') {
-                    await addNewNotificationToDOM();
+                    await prependNotification();
                     return;
                 }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
