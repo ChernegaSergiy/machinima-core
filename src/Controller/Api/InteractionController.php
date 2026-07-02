@@ -51,10 +51,16 @@ class InteractionController extends AbstractController
             return $this->json(['success' => false, 'error' => 'Invalid interaction type'], 400);
         }
 
-        $interaction = $em->getRepository(ContentInteraction::class)->findOneBy([
-            'user' => $user,
-            'content' => $content,
-        ]);
+        $interaction = $em->getRepository(ContentInteraction::class)->createQueryBuilder('ci')
+            ->where('ci.user = :user')
+            ->andWhere('ci.content = :content')
+            ->andWhere('ci.interactionType IN (:types)')
+            ->setParameter('user', $user)
+            ->setParameter('content', $content)
+            ->setParameter('types', ['like', 'dislike'])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         if ($interaction) {
             if ($interaction->getInteractionType() === $type) {
