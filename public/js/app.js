@@ -59,25 +59,45 @@ document.addEventListener('turbo:load', function(event) {
     initApp();
 });
 
-// Skeleton Screen Generation on Navigation
+// Save scroll position before navigating away
 document.addEventListener('turbo:click', function(event) {
     const link = event.target.closest('a');
     if (!link) return;
-    
+
+    sessionStorage.setItem('scroll:' + window.location.pathname, window.scrollY);
+
     const skeletonType = link.getAttribute('data-skeleton');
     if (skeletonType) {
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            let template = document.getElementById(`skeleton-${skeletonType}`);
-            // Fallback to default if specific skeleton doesn't exist
-            if (!template && skeletonType !== 'none') {
-                template = document.getElementById('skeleton-default');
-            }
-            if (template) {
-                mainContent.innerHTML = template.innerHTML;
-            }
+        // Remove any leftover skeleton overlay first
+        const old = document.getElementById('skeleton-overlay-active');
+        if (old) old.remove();
+
+        let template = document.getElementById(`skeleton-${skeletonType}`);
+        if (!template && skeletonType !== 'none') {
+            template = document.getElementById('skeleton-default');
+        }
+        if (template) {
+            const overlay = document.createElement('div');
+            overlay.id = 'skeleton-overlay-active';
+            overlay.style.cssText = 'position: fixed; inset: 0; z-index: 9999; background: var(--background); overflow-y: auto;';
+            overlay.innerHTML = template.innerHTML;
+            document.body.appendChild(overlay);
         }
     }
+});
+
+// Restore scroll position after page loads
+document.addEventListener('turbo:load', function(event) {
+    const y = sessionStorage.getItem('scroll:' + window.location.pathname);
+    if (y) {
+        sessionStorage.removeItem('scroll:' + window.location.pathname);
+        requestAnimationFrame(() => {
+            window.scrollTo(0, parseInt(y));
+        });
+    }
+
+    const overlay = document.getElementById('skeleton-overlay-active');
+    if (overlay) overlay.remove();
 });
 
 // Robust Architecture: Inject auth header into every Turbo navigation request natively.
