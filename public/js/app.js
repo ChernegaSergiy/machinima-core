@@ -55,13 +55,10 @@ if (document.readyState === 'loading') {
     initApp();
 }
 
-// Save scroll position at the exact moment of click (most reliable)
-document.addEventListener('click', function(event) {
-    const link = event.target.closest('a');
-    if (link && link.href) {
-        const scrollY = window.scrollY || document.documentElement.scrollTop;
-        sessionStorage.setItem('scroll_' + window.location.pathname, scrollY);
-    }
+// Save scroll position at the exact moment a navigation starts
+document.addEventListener('turbo:before-visit', function(event) {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    sessionStorage.setItem('scroll_' + window.location.pathname, scrollY);
 });
 
 document.addEventListener('turbo:load', function(event) {
