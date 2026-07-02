@@ -251,7 +251,7 @@ document.addEventListener('turbo:load', async function() {
             if (!notifications || notifications.length === 0) return;
 
             const existingIds = new Set();
-            document.querySelectorAll('.list-item').forEach(el => {
+            document.querySelectorAll('.notification-item').forEach(el => {
                 const href = el.getAttribute('href');
                 if (href) {
                     const m = href.match(/\/notifications\/(\d+)\/redirect/);
@@ -268,66 +268,49 @@ document.addEventListener('turbo:load', async function() {
             const emptyState = container.querySelector('.empty-state');
             if (emptyState) emptyState.remove();
 
-            const header = container.querySelector('.page-header-flex');
+            const header = container.querySelector('.border-b-2.border-border');
 
             newNotifs.forEach(notif => {
                 const isUnread = !notif.is_read;
                 const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
-
-                const wrapper = document.createElement(hasTarget ? 'a' : 'div');
-                wrapper.className = 'list-item text-inherit no-underline' + (isUnread ? ' unread' : '');
-
-                if (hasTarget) {
-                    wrapper.href = '/notifications/' + notif.id + '/redirect';
-                    wrapper.setAttribute('data-skeleton', notif.target_type || '');
-                }
-
-                const iconDiv = document.createElement('div');
-                iconDiv.className = 'list-icon';
-                const icon = document.createElement('i');
-                icon.setAttribute('data-lucide', 'bell');
-                iconDiv.appendChild(icon);
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'list-content';
-
-                const titleDiv = document.createElement('div');
-                titleDiv.className = 'list-title';
-                titleDiv.appendChild(document.createTextNode('Сповіщення '));
-                if (isUnread) {
-                    const badgeSpan = document.createElement('span');
-                    badgeSpan.className = 'badge';
-                    badgeSpan.textContent = 'Нове';
-                    titleDiv.appendChild(badgeSpan);
-                }
-
-                const descDiv = document.createElement('div');
-                descDiv.className = 'list-desc';
-                descDiv.textContent = notif.message;
-
-                const metaDiv = document.createElement('div');
-                metaDiv.className = 'list-meta';
-                const timeEl = document.createElement('time');
-                timeEl.className = 'local-time';
-                timeEl.setAttribute('datetime', notif.created_at);
-                timeEl.setAttribute('data-format', 'datetime');
+                
                 const d = new Date(notif.created_at.replace(' ', 'T'));
                 const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-                timeEl.textContent = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
-                timeEl.setAttribute('data-formatted', 'true');
-                metaDiv.appendChild(timeEl);
+                const timeText = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
+                const timeIso = notif.created_at;
 
-                contentDiv.appendChild(titleDiv);
-                contentDiv.appendChild(descDiv);
-                contentDiv.appendChild(metaDiv);
-
-                wrapper.appendChild(iconDiv);
-                wrapper.appendChild(contentDiv);
+                const borderClass = isUnread ? 'border-accent bg-black-2' : 'border-border';
+                const badgeHtml = isUnread ? '<span class="bg-accent text-white py-0-5 px-2 rounded text-[10px] font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>' : '';
+                
+                let html = '';
+                if (hasTarget) {
+                    const targetUrl = `/notifications/${notif.id}/redirect`;
+                    const skeletonAttr = notif.target_type ? `data-skeleton="${notif.target_type}"` : '';
+                    html = `
+                    <a href="${targetUrl}" ${skeletonAttr} class="flex items-center p-4 bg-surface rounded border-2 mb-4 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none no-underline text-inherit ${borderClass} notification-item" data-id="${notif.id}">
+                        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
+                        <div class="flex-1">
+                            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення ${badgeHtml}</div>
+                            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">${notif.message}</div>
+                            <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="${timeIso}" data-format="datetime" data-formatted="true">${timeText}</time></div>
+                        </div>
+                    </a>`;
+                } else {
+                    html = `
+                    <div class="flex items-center p-4 bg-surface rounded border-2 mb-4 transition-all shadow-brutal text-inherit no-underline ${borderClass} notification-item" data-id="${notif.id}">
+                        <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
+                        <div class="flex-1">
+                            <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення ${badgeHtml}</div>
+                            <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">${notif.message}</div>
+                            <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="${timeIso}" data-format="datetime" data-formatted="true">${timeText}</time></div>
+                        </div>
+                    </div>`;
+                }
 
                 if (header) {
-                    header.after(wrapper);
+                    header.insertAdjacentHTML('afterend', html);
                 } else {
-                    container.prepend(wrapper);
+                    container.insertAdjacentHTML('afterbegin', html);
                 }
             });
 
