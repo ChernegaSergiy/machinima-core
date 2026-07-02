@@ -111,9 +111,9 @@
                 {% for item in tree %}
                     <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
                         <div class="flex items-center mb-3">
-                            <a href="tg://user?id={{ item.entity.user.id }}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
+                            <a href="/user/{{ item.entity.user.id }}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
                             <div>
-                                <a href="tg://user?id={{ item.entity.user.id }}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
+                                <a href="/user/{{ item.entity.user.id }}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
                                 <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
@@ -317,9 +317,9 @@
         const html = `
             <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-${c.id}">
                 <div class="flex items-center mb-3">
-                    <a href="tg://user?id=${c.user_id}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></a>
+                    <a href="/user/${c.user_id}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></a>
                     <div>
-                        <a href="tg://user?id=${c.user_id}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
+                        <a href="/user/${c.user_id}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
                         <div class="text-[12px] text-muted font-bold uppercase">Зараз</div>
                     </div>
                 </div>
