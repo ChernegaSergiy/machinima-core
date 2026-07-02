@@ -3,16 +3,16 @@
 namespace App\Service\Recommendation\Scorer;
 
 use App\Entity\User;
-use App\Repository\ContentLikeRepository;
+use App\Repository\ContentInteractionRepository;
 use App\Service\Recommendation\DTO\CandidatePost;
 
 class AuthorAffinityScorer implements PostScorerInterface
 {
-    private ContentLikeRepository $likeRepository;
+    private ContentInteractionRepository $interactionRepository;
 
-    public function __construct(ContentLikeRepository $likeRepository)
+    public function __construct(ContentInteractionRepository $interactionRepository)
     {
-        $this->likeRepository = $likeRepository;
+        $this->interactionRepository = $interactionRepository;
     }
 
     public function score(CandidatePost $candidate, ?User $user): void
@@ -21,7 +21,7 @@ class AuthorAffinityScorer implements PostScorerInterface
             return;
         }
 
-        $likedAuthorIds = $this->likeRepository->getLikedAuthorIdsByFrequency($user, 10);
+        $likedAuthorIds = $this->interactionRepository->getLikedAuthorIdsByFrequency($user, 10);
         $post = $candidate->getPost();
         
         foreach ($post->getStaff() as $staff) {
