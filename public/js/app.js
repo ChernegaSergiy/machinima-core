@@ -108,6 +108,11 @@ document.addEventListener('turbo:before-fetch-request', function (event) {
     }
 });
 
+function toggleSvgFill(el, active) {
+    const svg = el && el.querySelector('svg');
+    if (svg) svg.setAttribute('fill', active ? 'currentColor' : 'none');
+}
+
 // Global interaction logic for feed items
 window.interactFeed = async function(contentId, type, btnElement) {
     if (btnElement && type !== 'view') {
@@ -148,19 +153,22 @@ window.interactFeed = async function(contentId, type, btnElement) {
                         if (type === 'like') {
                             if (data.likes > oldLikes) {
                                 btnElement.classList.add('active');
+                                toggleSvgFill(btnElement, true);
                                 const dislikeBtn = postActions.querySelector('.btn-dislike');
-                                if (dislikeBtn) dislikeBtn.classList.remove('active');
+                                if (dislikeBtn) { dislikeBtn.classList.remove('active'); toggleSvgFill(dislikeBtn, false); }
                             } else if (data.likes < oldLikes) {
                                 btnElement.classList.remove('active');
+                                toggleSvgFill(btnElement, false);
                             }
                         }
                     }
                     
                     if (type === 'dislike') {
                         btnElement.classList.toggle('active');
+                        toggleSvgFill(btnElement, btnElement.classList.contains('active'));
                         if (btnElement.classList.contains('active')) {
                             const likeBtn = postActions.querySelector('.btn-like');
-                            if (likeBtn) likeBtn.classList.remove('active');
+                            if (likeBtn) { likeBtn.classList.remove('active'); toggleSvgFill(likeBtn, false); }
                         }
                     }
                 }
@@ -191,10 +199,10 @@ document.addEventListener('turbo:load', async function() {
                 const postId = parseInt(actions.getAttribute('data-post-id'));
                 if (likedIds.includes(postId)) {
                     const likeBtn = actions.querySelector('.btn-like');
-                    if (likeBtn) likeBtn.classList.add('active');
+                    if (likeBtn) { likeBtn.classList.add('active'); toggleSvgFill(likeBtn, true); }
                 } else if (dislikedIds.includes(postId)) {
                     const dislikeBtn = actions.querySelector('.btn-dislike');
-                    if (dislikeBtn) dislikeBtn.classList.add('active');
+                    if (dislikeBtn) { dislikeBtn.classList.add('active'); toggleSvgFill(dislikeBtn, true); }
                 }
             });
         }
