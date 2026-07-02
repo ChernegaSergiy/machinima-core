@@ -109,10 +109,10 @@
                         </div>
                         <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
                         <div class="flex gap-4 mt-3 items-center flex-wrap">
-                            <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                            <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
                             <div class="owner-actions hidden gap-4 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase edit-btn" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
-                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase delete-btn" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
+                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
+                                <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
                             </div>
                         </div>
                         
@@ -315,10 +315,10 @@
                 </div>
                 <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-${c.id}">${c.text}</div>
                 <div class="flex gap-4 mt-3 items-center flex-wrap">
-                    <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                    <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
                     <div class="owner-actions flex gap-4 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
-                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase edit-btn" onclick="startEditComment(${c.id})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
-                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
+                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment(${c.id})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
+                        <button class="bg-transparent border-none p-0 text-[13px] font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
                     </div>
                 </div>
                 <div class="comment-reply-wrapper hidden ml-5 border-l-2 border-border pl-4 mt-4" id="replies-${c.id}"></div>
