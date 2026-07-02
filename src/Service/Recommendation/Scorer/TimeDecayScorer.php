@@ -9,14 +9,14 @@ class TimeDecayScorer implements PostScorerInterface
 {
     public function score(CandidatePost $candidate, ?User $user): void
     {
-        $post = $candidate->getPost();
-        $createdAt = $post->getCreatedAt();
+        $createdAt = $candidate->getPost()->getCreatedAt();
         
         if (!$createdAt) {
             return;
         }
 
-        $hoursOld = (time() - $createdAt->getTimestamp()) / 3600;
+        $timestamp = is_string($createdAt) ? strtotime($createdAt) : $createdAt->getTimestamp();
+        $hoursOld = (time() - $timestamp) / 3600;
 
         // Exponential decay formula: Score penalty increases as the post gets older
         // Example: -0.5 points for every hour old, capping at -50 points
