@@ -15,21 +15,9 @@ use Symfony\Component\Routing\Attribute\Route;
 class AppController extends AbstractController
 {
     #[Route('/', name: 'app_index')]
-    public function index(EntityManagerInterface $em): Response
+    public function index(\App\Service\Recommendation\RecommendationPipeline $recommendationPipeline): Response
     {
-        $qb = $em->getRepository(Content::class)->createQueryBuilder('c');
-
-        if (!$this->isGranted('ROLE_MODERATOR')) {
-            $qb->leftJoin('c.staff', 'cs')
-               ->leftJoin('cs.author', 'a')
-               ->andWhere('a.state != :privateState OR a.state IS NULL')
-               ->setParameter('privateState', 'private');
-        }
-
-        $feed = $qb->orderBy('c.trendingScore', 'DESC')
-                   ->setMaxResults(20)
-                   ->getQuery()
-                   ->getResult();
+        $feed = $recommendationPipeline->getRecommendations($this->getUser(), 20);
 
         return $this->render('app/index.html.twig', [
             'feed' => $feed,
