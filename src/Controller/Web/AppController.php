@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AppController extends AbstractController
 {
@@ -256,13 +257,11 @@ class AppController extends AbstractController
     }
 
     #[Route('/notifications', name: 'app_notifications')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function notifications(EntityManagerInterface $em): Response
     {
         /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
-        if (!$user) {
-            return new Response('Unauthorized. Будь ласка, відкрийте додаток через Telegram.', 403);
-        }
 
         $notifications = $em->getRepository(Notification::class)->findBy(
             ['user' => $user],
