@@ -2,20 +2,20 @@
 
 namespace App\Service\Recommendation\DTO;
 
-use App\Entity\Post;
+use App\Entity\Content;
 
 class CandidatePost
 {
-    private Post $post;
+    private Content $post;
     private float $score;
 
-    public function __construct(Post $post, float $initialScore = 0.0)
+    public function __construct(Content $post, float $initialScore = 0.0)
     {
         $this->post = $post;
         $this->score = $initialScore;
     }
 
-    public function getPost(): Post
+    public function getPost(): Content
     {
         return $this->post;
     }
