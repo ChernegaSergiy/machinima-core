@@ -3,7 +3,7 @@
 namespace App\Controller\Web;
 
 use App\Entity\User;
-use App\Entity\UserFollower;
+use App\Entity\Follower;
 use App\Entity\ContentInteraction;
 use App\Entity\Author;
 use Doctrine\ORM\EntityManagerInterface;
@@ -26,7 +26,7 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         $userId = $user->getId();
 
-        $followingCount = $this->entityManager->getRepository(UserFollower::class)->count(['user' => $user]);
+        $followingCount = $this->entityManager->getRepository(Follower::class)->count(['user' => $user]);
         $likesCount = $this->entityManager->getRepository(ContentInteraction::class)->count(['user' => $user, 'interactionType' => 'like']);
         
         $author = $this->entityManager->getRepository(Author::class)->findOneBy(['telegramUserId' => $userId]);
