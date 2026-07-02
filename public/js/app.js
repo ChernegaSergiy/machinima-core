@@ -59,6 +59,34 @@ document.addEventListener('turbo:load', function(event) {
     initApp();
 });
 
+// Skeleton Screen Generation on Navigation
+document.addEventListener('turbo:visit', function(event) {
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        // Save the original DOM so Turbo can cache it properly for the Back button
+        window.originalMainContentHTML = mainContent.innerHTML;
+        
+        const isPost = event.detail.url.includes('/post/');
+        const skeletonId = isPost ? 'skeleton-post' : 'skeleton-default';
+        let template = document.getElementById(skeletonId) || document.getElementById('skeleton-default');
+        
+        if (template) {
+            mainContent.innerHTML = template.innerHTML;
+        }
+    }
+});
+
+// Restore original DOM before Turbo saves it to cache
+document.addEventListener('turbo:before-cache', function() {
+    if (window.originalMainContentHTML) {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.innerHTML = window.originalMainContentHTML;
+        }
+        window.originalMainContentHTML = null;
+    }
+});
+
 // Robust Architecture: Inject auth header into every Turbo navigation request natively.
 document.addEventListener('turbo:before-fetch-request', function (event) {
     const tgData = window.Telegram?.WebApp?.initData;
