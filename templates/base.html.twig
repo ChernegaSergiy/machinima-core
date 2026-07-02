@@ -6,6 +6,7 @@
     <script>
         if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
             document.write('<title>Тільки через Telegram</title>');
+            document.write('<style>body { visibility: hidden !important; }</style>');
         } else {
             document.write('<title>{% block title %}Morf TMA{% endblock %}</title>');
         }
@@ -16,6 +17,7 @@
         // STRICT ACCESS CONTROL
         if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
             document.addEventListener('DOMContentLoaded', function() {
+                document.body.style.visibility = 'visible';
                 document.body.innerHTML = `
                 <div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 0;">
                     <div class="profile-header" style="width: 100%;">
@@ -64,13 +66,7 @@
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body style="visibility: hidden;">
-    <script>
-        // Make body visible only after strict access check
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.style.visibility = 'visible';
-        });
-    </script>
+<body>
     <main id="main-content" class="turbo-transition">
         {% block body %}{% endblock %}
     </main>
