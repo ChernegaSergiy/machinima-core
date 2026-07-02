@@ -55,44 +55,8 @@ if (document.readyState === 'loading') {
     initApp();
 }
 
-// Save scroll constantly
-let scrollTimeout;
-window.addEventListener('scroll', function() {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(() => {
-        const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-        sessionStorage.setItem('scroll_' + window.location.pathname, y);
-    }, 100);
-}, { passive: true });
-
-document.addEventListener('click', function(event) {
-    const link = event.target.closest('a');
-    if (link) {
-        const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
-        sessionStorage.setItem('scroll_' + window.location.pathname, y);
-    }
-});
-
-function forceRestoreScroll() {
-    const saved = sessionStorage.getItem('scroll_' + window.location.pathname);
-    if (saved) {
-        const targetY = parseInt(saved, 10);
-        window.scrollTo(0, targetY);
-        if (document.documentElement) document.documentElement.scrollTop = targetY;
-        if (document.body) document.body.scrollTop = targetY;
-    }
-}
-
 document.addEventListener('turbo:load', function(event) {
     initApp();
-    if (event.detail.action === 'restore') {
-        let attempts = 0;
-        const interval = setInterval(() => {
-            forceRestoreScroll();
-            attempts++;
-            if (attempts > 20) clearInterval(interval);
-        }, 25);
-    }
 });
 
 // Robust Architecture: Inject auth header into every Turbo navigation request natively.
