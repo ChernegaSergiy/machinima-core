@@ -256,11 +256,64 @@ document.addEventListener('turbo:load', async function() {
             const header = container.querySelector('.page-header-flex');
 
             newNotifs.forEach(notif => {
-                const el = buildNotificationEl(notif);
+                const isUnread = !notif.is_read;
+                const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
+
+                const wrapper = document.createElement(hasTarget ? 'a' : 'div');
+                wrapper.className = 'list-item block no-underline' + (isUnread ? ' unread' : '');
+                wrapper.style.cssText = 'color:inherit;text-decoration:none;display:flex;';
+
+                if (hasTarget) {
+                    wrapper.href = '/notifications/' + notif.id + '/redirect';
+                    wrapper.setAttribute('data-skeleton', notif.target_type || '');
+                }
+
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'list-icon';
+                const icon = document.createElement('i');
+                icon.setAttribute('data-lucide', 'bell');
+                iconDiv.appendChild(icon);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'list-content';
+
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'list-title';
+                titleDiv.appendChild(document.createTextNode('Сповіщення '));
+                if (isUnread) {
+                    const badgeSpan = document.createElement('span');
+                    badgeSpan.className = 'badge';
+                    badgeSpan.textContent = 'Нове';
+                    titleDiv.appendChild(badgeSpan);
+                }
+
+                const descDiv = document.createElement('div');
+                descDiv.className = 'list-desc';
+                descDiv.textContent = notif.message;
+
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'list-meta';
+                const timeEl = document.createElement('time');
+                timeEl.className = 'local-time';
+                timeEl.setAttribute('datetime', notif.created_at);
+                timeEl.setAttribute('data-format', 'datetime');
+                const d = new Date(notif.created_at.replace(' ', 'T'));
+                const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+                timeEl.textContent = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
+                timeEl.setAttribute('data-formatted', 'true');
+                metaDiv.appendChild(timeEl);
+
+                contentDiv.appendChild(titleDiv);
+                contentDiv.appendChild(descDiv);
+                contentDiv.appendChild(metaDiv);
+
+                wrapper.appendChild(iconDiv);
+                wrapper.appendChild(contentDiv);
+
                 if (header) {
-                    header.after(el);
+                    header.after(wrapper);
                 } else {
-                    container.prepend(el);
+                    container.prepend(wrapper);
                 }
             });
 
@@ -276,64 +329,6 @@ document.addEventListener('turbo:load', async function() {
         } catch(e) {
             console.error('prependNotification failed', e);
         }
-    }
-
-    function buildNotificationEl(notif) {
-        const isUnread = !notif.is_read;
-        const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
-
-        const wrapper = document.createElement(hasTarget ? 'a' : 'div');
-        wrapper.className = 'list-item block no-underline' + (isUnread ? ' unread' : '');
-        wrapper.style.cssText = 'color:inherit;text-decoration:none;display:flex;';
-
-        if (hasTarget) {
-            wrapper.href = '/notifications/' + notif.id + '/redirect';
-            wrapper.setAttribute('data-skeleton', notif.target_type || '');
-        }
-
-        const iconDiv = document.createElement('div');
-        iconDiv.className = 'list-icon';
-        const icon = document.createElement('i');
-        icon.setAttribute('data-lucide', 'bell');
-        iconDiv.appendChild(icon);
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'list-content';
-
-        const titleDiv = document.createElement('div');
-        titleDiv.className = 'list-title';
-        titleDiv.appendChild(document.createTextNode('Сповіщення '));
-        if (isUnread) {
-            const badgeSpan = document.createElement('span');
-            badgeSpan.className = 'badge';
-            badgeSpan.textContent = 'Нове';
-            titleDiv.appendChild(badgeSpan);
-        }
-
-        const descDiv = document.createElement('div');
-        descDiv.className = 'list-desc';
-        descDiv.textContent = notif.message;
-
-        const metaDiv = document.createElement('div');
-        metaDiv.className = 'list-meta';
-        const timeEl = document.createElement('time');
-        timeEl.className = 'local-time';
-        timeEl.setAttribute('datetime', notif.created_at);
-        timeEl.setAttribute('data-format', 'datetime');
-        const d = new Date(notif.created_at.replace(' ', 'T'));
-        const opts = { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-        timeEl.textContent = isNaN(d.getTime()) ? notif.created_at : new Intl.DateTimeFormat('uk-UA', opts).format(d).replace(',', '');
-        timeEl.setAttribute('data-formatted', 'true');
-        metaDiv.appendChild(timeEl);
-
-        contentDiv.appendChild(titleDiv);
-        contentDiv.appendChild(descDiv);
-        contentDiv.appendChild(metaDiv);
-
-        wrapper.appendChild(iconDiv);
-        wrapper.appendChild(contentDiv);
-
-        return wrapper;
     }
     
     if (!window.mercureListenerAttached && window.APP_CONFIG && window.APP_CONFIG.mercureUrl) {
