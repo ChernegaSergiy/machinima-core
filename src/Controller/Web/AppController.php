@@ -135,7 +135,7 @@ class AppController extends AbstractController
             
             // Create internal notification for the author
             if ($author->getTelegramUserId()) {
-                $authorUser = $em->getRepository(User::class)->find($author->getTelegramUserId());
+                $authorUser = $em->getRepository(\App\Entity\User::class)->find($author->getTelegramUserId());
                 if ($authorUser && $authorUser->getId() !== $user->getId()) {
                     $notification = new \App\Entity\Notification();
                     $notification->setUser($authorUser);
