@@ -38,4 +38,48 @@ class ProfileController extends AbstractController
             'myAuthorPage' => $author,
         ]);
     }
+
+    #[Route('/profile/following', name: 'app_profile_following')]
+    #[IsGranted('ROLE_USER')]
+    public function following(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $followers = $this->entityManager->getRepository(Follower::class)->findBy(['user' => $user]);
+        $authors = [];
+        foreach ($followers as $f) {
+            if ($f->getAuthor() && $this->isGranted('AUTHOR_VIEW', $f->getAuthor())) {
+                $authors[] = $f->getAuthor();
+            }
+        }
+
+        return $this->render('app/user_following.html.twig', [
+            'authors' => $authors,
+        ]);
+    }
+
+    #[Route('/profile/likes', name: 'app_profile_likes')]
+    #[IsGranted('ROLE_USER')]
+    public function likes(): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $interactions = $this->entityManager->getRepository(ContentInteraction::class)->findBy(
+            ['user' => $user, 'interactionType' => 'like'],
+            ['createdAt' => 'DESC']
+        );
+        $feed = [];
+        foreach ($interactions as $i) {
+            $post = $i->getContent();
+            if ($post && $this->isGranted('POST_VIEW', $post)) {
+                $feed[] = $post;
+            }
+        }
+
+        return $this->render('app/user_likes.html.twig', [
+            'feed' => $feed,
+        ]);
+    }
 }
