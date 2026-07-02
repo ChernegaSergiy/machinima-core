@@ -10,22 +10,18 @@ class DiversityFilter implements PostFilterInterface
     public function filter(array $candidates, ?User $user): array
     {
         $filtered = [];
+        $deferred = [];
         $recentAuthors = [];
         
         foreach ($candidates as $candidate) {
             $staff = $candidate->getPost()->getStaff()->first();
             $authorId = $staff && $staff->getAuthor() ? $staff->getAuthor()->getId() : 0;
             
-            // If this author has appeared in the last 2 posts, we might want to defer this post
-            // For simplicity in this example, we just enforce a simple rule:
-            // No author can appear more than twice in any block of 5 posts.
-            
-            // This is a basic implementation of a sliding window heuristic.
             $window = array_slice($recentAuthors, -5);
             $authorCountInWindow = count(array_filter($window, fn($id) => $id === $authorId));
             
             if ($authorCountInWindow >= 2) {
-                // Skip or defer. For this basic example, we drop it to encourage diversity.
+                $deferred[] = $candidate;
                 continue;
             }
             
@@ -33,6 +29,7 @@ class DiversityFilter implements PostFilterInterface
             $recentAuthors[] = $authorId;
         }
         
-        return $filtered;
+        // Append deferred posts at the end so we don't return an empty feed
+        return array_merge($filtered, $deferred);
     }
 }

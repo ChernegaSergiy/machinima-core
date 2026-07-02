@@ -22,8 +22,15 @@ class ViewedPostsFilter implements PostFilterInterface
     public function filter(array $candidates, ?User $user): array
     {
         // Always check session first (for both guests and local caching)
-        $session = $this->requestStack->getSession();
-        $viewedPosts = $session->get('viewed_posts_cooldown', []);
+        $viewedPosts = [];
+        try {
+            if ($this->requestStack->getMainRequest()) {
+                $session = $this->requestStack->getSession();
+                $viewedPosts = $session->get('viewed_posts_cooldown', []);
+            }
+        } catch (\Exception $e) {
+            // Ignore session errors in CLI or test environment
+        }
         
         $viewedIdsInDb = [];
         if ($user) {
