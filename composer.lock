@@ -1264,7 +1264,7 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-bot",
-                "reference": "b39a1934703ac171ba57bb2eea747b37b76dccfe"
+                "reference": "a07e67b7adea7ae5be9d3b0a5fea53441e39f2e3"
             },
             "require": {
                 "morfeditorial/telegram-bot-bundle": "*@dev",
@@ -1292,12 +1292,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChernegaSergiy/telegram-bot-bundle.git",
-                "reference": "d3ffb829450f7871c8d0e86f38040edc7af7f61a"
+                "reference": "e1d6b9752619eeda9c5e3047380271ac54cdd20b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/d3ffb829450f7871c8d0e86f38040edc7af7f61a",
-                "reference": "d3ffb829450f7871c8d0e86f38040edc7af7f61a",
+                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/e1d6b9752619eeda9c5e3047380271ac54cdd20b",
+                "reference": "e1d6b9752619eeda9c5e3047380271ac54cdd20b",
                 "shasum": ""
             },
             "require": {
@@ -1306,6 +1306,9 @@
                 "symfony/dependency-injection": "^7.0|^8.0",
                 "symfony/http-client": "^7.0|^8.0",
                 "symfony/http-kernel": "^7.0|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.95"
             },
             "default-branch": true,
             "type": "symfony-bundle",
@@ -1339,7 +1342,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-01T23:33:08+00:00"
+            "time": "2026-07-02T00:06:59+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
