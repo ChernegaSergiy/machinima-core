@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-    <title>Morf TMA</title>
+    <title>Тільки через Telegram</title>
     <meta name="turbo-cache-control" content="no-cache" />
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
+        if (window.Telegram?.WebApp?.initData) {
+            document.title = "Morf TMA";
+        }
+        
         // STRICT ACCESS CONTROL
         if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
             document.documentElement.style.visibility = 'hidden';
             
             document.addEventListener('DOMContentLoaded', function() {
-                document.title = "Тільки через Telegram";
                 document.documentElement.style.visibility = '';
                 document.body.innerHTML = `
                 <div class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 0;">
