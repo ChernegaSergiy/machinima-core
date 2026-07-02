@@ -2,7 +2,7 @@
 
 namespace App\Controller\Web;
 
-use App\Entity\UserData;
+use App\Entity\User;
 use App\Entity\UserFollower;
 use App\Entity\ContentInteraction;
 use App\Entity\Author;
@@ -22,9 +22,9 @@ class ProfileController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(): Response
     {
-        /** @var UserData $user */
+        /** @var User $user */
         $user = $this->getUser();
-        $userId = $user->getUserId();
+        $userId = $user->getId();
 
         $followingCount = $this->entityManager->getRepository(UserFollower::class)->count(['user' => $user]);
         $likesCount = $this->entityManager->getRepository(ContentInteraction::class)->count(['user' => $user, 'interactionType' => 'like']);
