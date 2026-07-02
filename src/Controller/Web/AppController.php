@@ -288,12 +288,6 @@ class AppController extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
-        $author = $em->getRepository(Author::class)->findOneBy(['telegramUserId' => $id]);
-
-        if ($author) {
-            return $this->redirectToRoute('app_author', ['id' => $author->getId()]);
-        }
-
         $followingCount = $em->getRepository(\App\Entity\Follower::class)->count(['user' => $targetUser]);
         $likesCount = $em->getRepository(\App\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
 
