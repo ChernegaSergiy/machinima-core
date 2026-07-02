@@ -13,7 +13,8 @@ class DiversityFilter implements PostFilterInterface
         $recentAuthors = [];
         
         foreach ($candidates as $candidate) {
-            $authorId = $candidate->getPost()->getAuthor()->getId();
+            $staff = $candidate->getPost()->getStaff()->first();
+            $authorId = $staff && $staff->getAuthor() ? $staff->getAuthor()->getId() : 0;
             
             // If this author has appeared in the last 2 posts, we might want to defer this post
             // For simplicity in this example, we just enforce a simple rule:
