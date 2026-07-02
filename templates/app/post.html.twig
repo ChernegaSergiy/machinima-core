@@ -224,13 +224,6 @@
         }
     };
 
-    // Register unique view automatically on page load
-    setTimeout(() => {
-        if(typeof window.interact === 'function') {
-            window.interact('view');
-        }
-    }, 100);
-
     function setReply(id, name) {
         replyToId = id;
         editModeId = null;

@@ -116,11 +116,22 @@ class AppController extends AbstractController
     }
 
     #[Route('/post/{id}', name: 'app_post', requirements: ['id' => '\d+'])]
-    public function post(int $id, EntityManagerInterface $em): Response
+    public function post(int $id, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $post = $em->getRepository(Content::class)->find($id);
         if (!$post) {
             throw $this->createNotFoundException();
+        }
+
+        $session = $request->getSession();
+        $viewedPosts = $session->get('viewed_posts', []);
+
+        if (!in_array($id, $viewedPosts)) {
+            $post->setViewsCount($post->getViewsCount() + 1);
+            $em->flush();
+
+            $viewedPosts[] = $id;
+            $session->set('viewed_posts', $viewedPosts);
         }
 
         if (!$this->isGranted('ROLE_MODERATOR')) {

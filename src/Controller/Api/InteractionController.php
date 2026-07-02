@@ -4,7 +4,6 @@ namespace App\Controller\Api;
 
 use App\Entity\Content;
 use App\Entity\ContentInteraction;
-use App\Entity\ContentView;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,88 +35,64 @@ class InteractionController extends AbstractController
         }
 
         if ('view' === $type) {
-            // Register view
-            $user = $userId ? $em->getRepository(User::class)->find($userId) : null;
+            return $this->json(['success' => false, 'error' => 'View tracking is now handled server-side'], 400);
+        }
+        // Like or Dislike
+        if (!$userId) {
+            return $this->json(['success' => false, 'error' => 'User ID is required for liking/disliking'], 400);
+        }
 
-            // Avoid duplicate views from same user
-            if ($user) {
-                $existingView = $em->getRepository(ContentView::class)->findOneBy([
-                    'user' => $user,
-                    'content' => $content,
-                ]);
+        $user = $em->getRepository(User::class)->find($userId);
+        if (!$user) {
+            return $this->json(['success' => false, 'error' => 'User not found'], 404);
+        }
 
-                if (!$existingView) {
-                    $view = new ContentView();
-                    $view->setUser($user);
-                    $view->setContent($content);
-                    $view->setCreatedAt(date('Y-m-d H:i:s'));
-                    $em->persist($view);
+        if (!in_array($type, ['like', 'dislike'])) {
+            return $this->json(['success' => false, 'error' => 'Invalid interaction type'], 400);
+        }
 
-                    $content->setViewsCount($content->getViewsCount() + 1);
-                    $em->flush();
-                }
-            } else {
-                $content->setViewsCount($content->getViewsCount() + 1);
-                $em->flush();
-            }
-        } else {
-            // Like or Dislike
-            if (!$userId) {
-                return $this->json(['success' => false, 'error' => 'User ID is required for liking/disliking'], 400);
-            }
+        $interaction = $em->getRepository(ContentInteraction::class)->findOneBy([
+            'user' => $user,
+            'content' => $content,
+        ]);
 
-            $user = $em->getRepository(User::class)->find($userId);
-            if (!$user) {
-                return $this->json(['success' => false, 'error' => 'User not found'], 404);
-            }
-
-            if (!in_array($type, ['like', 'dislike'])) {
-                return $this->json(['success' => false, 'error' => 'Invalid interaction type'], 400);
-            }
-
-            $interaction = $em->getRepository(ContentInteraction::class)->findOneBy([
-                'user' => $user,
-                'content' => $content,
-            ]);
-
-            if ($interaction) {
-                if ($interaction->getInteractionType() === $type) {
-                    // Remove interaction
-                    $em->remove($interaction);
-                    if ('like' === $type) {
-                        $content->setLikesCount(max(0, $content->getLikesCount() - 1));
-                    } else {
-                        $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
-                    }
+        if ($interaction) {
+            if ($interaction->getInteractionType() === $type) {
+                // Remove interaction
+                $em->remove($interaction);
+                if ('like' === $type) {
+                    $content->setLikesCount(max(0, $content->getLikesCount() - 1));
                 } else {
-                    // Switch interaction
-                    $interaction->setInteractionType($type);
-                    if ('like' === $type) {
-                        $content->setLikesCount($content->getLikesCount() + 1);
-                        $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
-                    } else {
-                        $content->setDislikesCount($content->getDislikesCount() + 1);
-                        $content->setLikesCount(max(0, $content->getLikesCount() - 1));
-                    }
+                    $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
                 }
             } else {
-                // New interaction
-                $interaction = new ContentInteraction();
-                $interaction->setUser($user);
-                $interaction->setContent($content);
+                // Switch interaction
                 $interaction->setInteractionType($type);
-                $interaction->setCreatedAt(date('Y-m-d H:i:s'));
-                $em->persist($interaction);
-
                 if ('like' === $type) {
                     $content->setLikesCount($content->getLikesCount() + 1);
+                    $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
                 } else {
                     $content->setDislikesCount($content->getDislikesCount() + 1);
+                    $content->setLikesCount(max(0, $content->getLikesCount() - 1));
                 }
             }
+        } else {
+            // New interaction
+            $interaction = new ContentInteraction();
+            $interaction->setUser($user);
+            $interaction->setContent($content);
+            $interaction->setInteractionType($type);
+            $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+            $em->persist($interaction);
 
-            $em->flush();
+            if ('like' === $type) {
+                $content->setLikesCount($content->getLikesCount() + 1);
+            } else {
+                $content->setDislikesCount($content->getDislikesCount() + 1);
+            }
         }
+
+        $em->flush();
 
         // Broadcast new stats via Mercure
         $update = new Update(
