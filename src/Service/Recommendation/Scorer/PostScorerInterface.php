@@ -4,7 +4,9 @@ namespace App\Service\Recommendation\Scorer;
 
 use App\Entity\User;
 use App\Service\Recommendation\DTO\CandidatePost;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
+#[AutoconfigureTag('app.post_scorer')]
 interface PostScorerInterface
 {
     /**
