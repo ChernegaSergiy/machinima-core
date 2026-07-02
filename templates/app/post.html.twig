@@ -236,6 +236,14 @@
 
     async function deleteComment(id) {
         if (!confirm('Видалити коментар?')) return;
+        
+        const item = document.getElementById('comment-item-' + id);
+        if (item) {
+            item.style.transition = 'opacity 0.2s';
+            item.style.opacity = '0.4';
+            item.style.pointerEvents = 'none';
+        }
+        
         try {
             const res = await fetch(`/api/comments/${id}`, {
                 method: 'DELETE',
@@ -247,7 +255,6 @@
             });
             const data = await res.json();
             if (data.success) {
-                const item = document.getElementById('comment-item-' + id);
                 if (item) {
                     const nestedCount = item.querySelectorAll('.comment-item').length;
                     const totalDeleted = 1 + nestedCount;
@@ -260,8 +267,18 @@
                 }
             } else {
                 alert('Помилка: ' + (data.error || 'Не вдалося видалити'));
+                if (item) {
+                    item.style.opacity = '1';
+                    item.style.pointerEvents = 'auto';
+                }
             }
-        } catch (e) { alert('Помилка мережі'); }
+        } catch (e) { 
+            alert('Помилка мережі');
+            if (item) {
+                item.style.opacity = '1';
+                item.style.pointerEvents = 'auto';
+            }
+        }
     }
 
     function appendCommentToDOM(c) {
