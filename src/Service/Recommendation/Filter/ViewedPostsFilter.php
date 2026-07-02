@@ -21,15 +21,18 @@ class ViewedPostsFilter implements PostFilterInterface
         if ($user) {
             // Fetch posts viewed by this user in the last 7 days (to not filter out old views forever)
             $dateLimit = new \DateTimeImmutable('-7 days');
+            $recentLimit = new \DateTimeImmutable('-15 minutes'); // Do not defer very recent views (preserves scroll memory on back button)
 
             $qb = $this->em->getRepository(ContentInteraction::class)->createQueryBuilder('ci');
             $results = $qb->select('IDENTITY(ci.content) as content_id')
                 ->where('ci.user = :user')
                 ->andWhere('ci.interactionType = :type')
-                ->andWhere('ci.createdAt >= :date')
+                ->andWhere('ci.createdAt >= :dateLimit')
+                ->andWhere('ci.createdAt <= :recentLimit')
                 ->setParameter('user', $user)
                 ->setParameter('type', 'view')
-                ->setParameter('date', $dateLimit->format('Y-m-d H:i:s'))
+                ->setParameter('dateLimit', $dateLimit->format('Y-m-d H:i:s'))
+                ->setParameter('recentLimit', $recentLimit->format('Y-m-d H:i:s'))
                 ->getQuery()
                 ->getScalarResult();
 
