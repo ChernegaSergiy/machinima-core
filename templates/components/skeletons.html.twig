@@ -191,6 +191,50 @@
     </div>
 </template>
 
+<template id="skeleton-profile">
+    <div class="w-full max-w-600 mx-auto p-4 pb-30">
+        <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
+            <h1 class="text-3xl font-bold m-0 font-unbounded tracking-tight uppercase">Профіль</h1>
+        </div>
+        
+        <div class="text-center py-8 px-4 mb-8 bg-surface rounded border-2 border-border shadow-brutal pointer-events-none">
+            <div class="w-22 h-22 mx-auto mb-6 rounded bg-surface border-2 border-border shadow-brutal animate-shimmer shrink-0"></div>
+            <div class="animate-shimmer" style="width: 50%; height: 24px; margin: 0 auto 12px; border-radius: 4px;"></div>
+            <div class="animate-shimmer" style="width: 30%; height: 14px; margin: 0 auto 24px; border-radius: 4px;"></div>
+            <div class="animate-shimmer" style="width: 80px; height: 16px; margin: 0 auto; border-radius: 4px;"></div>
+        </div>
+
+        <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">
+            <div class="animate-shimmer" style="width: 120px; height: 20px; margin: 0; display: inline-block; vertical-align: middle; border-radius: 4px;"></div>
+        </h2>
+        
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-surface border-2 border-border rounded p-4 text-center flex flex-col justify-center mb-0 shadow-brutal pointer-events-none">
+                <div class="animate-shimmer mx-auto" style="width: 30px; height: 24px; margin-bottom: 4px; border-radius: 4px;"></div>
+                <div class="animate-shimmer mx-auto" style="width: 60px; height: 12px; border-radius: 4px;"></div>
+            </div>
+            <div class="bg-surface border-2 border-border rounded p-4 text-center flex flex-col justify-center mb-0 shadow-brutal pointer-events-none">
+                <div class="animate-shimmer mx-auto" style="width: 30px; height: 24px; margin-bottom: 4px; border-radius: 4px;"></div>
+                <div class="animate-shimmer mx-auto" style="width: 60px; height: 12px; border-radius: 4px;"></div>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">
+            <div class="animate-shimmer" style="width: 160px; height: 20px; margin: 0; display: inline-block; vertical-align: middle; border-radius: 4px;"></div>
+        </h2>
+        
+        {% for i in 1..2 %}
+        <div class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 shadow-brutal pointer-events-none">
+            <div class="w-12 h-12 rounded bg-surface flex items-center justify-center mr-4 shrink-0 border-2 border-border shadow-brutal-sm animate-shimmer"></div>
+            <div class="flex-1">
+                <div class="animate-shimmer" style="width: 60%; height: 16px; margin-bottom: 4px; border-radius: 4px;"></div>
+                <div class="animate-shimmer" style="width: 40%; height: 12px; border-radius: 4px;"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</template>
+
 <template id="skeleton-default">
     <div class="w-full max-w-600 mx-auto p-4 pb-30">
         <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
