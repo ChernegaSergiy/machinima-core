@@ -83,10 +83,8 @@ class AppController extends AbstractController
     public function author(int $id, EntityManagerInterface $em): Response
     {
         $author = $em->getRepository(Author::class)->find($id);
-        $user = $this->getUser();
-        $isOwner = $user && $author && (int)$user->getId() === (int)$author->getTelegramUserId();
         
-        if (!$author || ('private' === $author->getState() && !$this->isGranted('ROLE_MODERATOR') && !$isOwner)) {
+        if (!$author || !$this->isGranted(\App\Security\Voter\AuthorVoter::VIEW, $author)) {
             throw $this->createNotFoundException();
         }
 
