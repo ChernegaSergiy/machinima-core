@@ -49,22 +49,29 @@ class ViewedPostsFilter implements PostFilterInterface
                 ->getScalarResult();
                 
             $viewedIdsInDb = array_column($results, 'content_id');
-            // Flip array for fast isset lookup
-            $viewedIdsInDb = array_flip($viewedIdsInDb);
         }
 
-        return array_filter($candidates, function (CandidatePost $candidate) use ($viewedPosts, $viewedIdsInDb) {
+        $filtered = [];
+        $deferred = [];
+        
+        foreach ($candidates as $candidate) {
             $postId = $candidate->getPost()->getId();
             
+            // Skip if viewed in current session
             if (isset($viewedPosts[$postId])) {
-                return false; // Viewed in current session
+                $deferred[] = $candidate;
+                continue;
             }
             
-            if (isset($viewedIdsInDb[$postId])) {
-                return false; // Viewed recently according to DB
+            // Skip if viewed in the last 7 days (from DB)
+            if (in_array($postId, $viewedIdsInDb)) {
+                $deferred[] = $candidate;
+                continue;
             }
             
-            return true;
-        });
+            $filtered[] = $candidate;
+        }
+        
+        return array_merge($filtered, $deferred);
     }
 }
