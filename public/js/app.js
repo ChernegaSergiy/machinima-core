@@ -20,6 +20,18 @@ function initApp() {
         }
     }
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    if (window.location.hash) {
+        setTimeout(() => {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.style.transition = 'background-color 0.5s';
+                target.style.backgroundColor = 'var(--tg-theme-secondary-bg-color, #2c2c2e)';
+                setTimeout(() => target.style.backgroundColor = 'transparent', 2000);
+            }
+        }, 100);
+    }
 }
 
 document.addEventListener('turbo:load', initApp);
