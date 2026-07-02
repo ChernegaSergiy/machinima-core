@@ -176,6 +176,16 @@ class AppController extends AbstractController
         // or if more than 86400 seconds (24 hours) have passed since the previous view.
         if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 86400) {
             $post->setViewsCount($post->getViewsCount() + 1);
+
+            if ($this->getUser()) {
+                $interaction = new \App\Entity\ContentInteraction();
+                $interaction->setUser($this->getUser());
+                $interaction->setContent($post);
+                $interaction->setInteractionType('view');
+                $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+                $em->persist($interaction);
+            }
+
             $em->flush();
 
             $viewedPosts[$id] = $now;
