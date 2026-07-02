@@ -3,20 +3,38 @@
 namespace App\Service\Recommendation\Scorer;
 
 use App\Entity\User;
+use App\Repository\ContentLikeRepository;
 use App\Service\Recommendation\DTO\CandidatePost;
 
 class AuthorAffinityScorer implements PostScorerInterface
 {
+    private ContentLikeRepository $likeRepository;
+
+    public function __construct(ContentLikeRepository $likeRepository)
+    {
+        $this->likeRepository = $likeRepository;
+    }
+
     public function score(CandidatePost $candidate, ?User $user): void
     {
         if (!$user) {
             return;
         }
 
-        // TODO: Query a graph database or interaction history to see if the user interacts often with this author.
-        // Example logic:
-        // if ($this->interactionRepo->hasUserLikedAuthor($user, $candidate->getPost()->getAuthor())) {
-        //     $candidate->addScore(20.0);
-        // }
+        $likedAuthorIds = $this->likeRepository->getLikedAuthorIdsByFrequency($user, 10);
+        $post = $candidate->getPost();
+        
+        foreach ($post->getStaff() as $staff) {
+            $authorId = $staff->getAuthor()?->getId();
+            
+            if ($authorId && in_array($authorId, $likedAuthorIds)) {
+                // Determine bonus based on rank in the liked authors list (higher rank = more bonus)
+                $rank = array_search($authorId, $likedAuthorIds);
+                $bonus = 20.0 - ($rank * 1.5); // e.g., #1 gets 20, #2 gets 18.5, etc.
+                
+                $candidate->addScore(max(5.0, $bonus));
+                return; // Add bonus once per post even if multiple authors matched
+            }
+        }
     }
 }
