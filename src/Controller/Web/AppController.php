@@ -215,14 +215,6 @@ class AppController extends AbstractController
             }
         }
 
-        if (!$this->isGranted('ROLE_MODERATOR')) {
-            foreach ($post->getStaff() as $staff) {
-                if ($staff->getAuthor() && 'private' === $staff->getAuthor()->getState()) {
-                    throw $this->createNotFoundException();
-                }
-            }
-        }
-
         $comments = $em->getRepository(Comment::class)->findBy(['content' => $post], ['createdAt' => 'ASC']);
 
         // Build comment tree
