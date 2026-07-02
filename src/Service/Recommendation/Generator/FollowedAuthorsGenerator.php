@@ -4,16 +4,17 @@ namespace App\Service\Recommendation\Generator;
 
 use App\Entity\User;
 use App\Repository\FollowerRepository;
-use App\Repository\ContentRepository;
+use App\Entity\Content;
+use Doctrine\ORM\EntityManagerInterface;
 
 class FollowedAuthorsGenerator implements CandidateGeneratorInterface
 {
-    private ContentRepository $contentRepository;
+    private EntityManagerInterface $em;
     private FollowerRepository $followerRepository;
 
-    public function __construct(ContentRepository $contentRepository, FollowerRepository $followerRepository)
+    public function __construct(EntityManagerInterface $em, FollowerRepository $followerRepository)
     {
-        $this->contentRepository = $contentRepository;
+        $this->em = $em;
         $this->followerRepository = $followerRepository;
     }
 
@@ -30,7 +31,7 @@ class FollowedAuthorsGenerator implements CandidateGeneratorInterface
         }
 
         // Fetch posts from followed authors
-        $qb = $this->contentRepository->createQueryBuilder('c')
+        $qb = $this->em->getRepository(Content::class)->createQueryBuilder('c')
             ->join('c.staff', 'cs')
             ->where('cs.author IN (:authors)')
             ->andWhere('c.isPublished = :published')
