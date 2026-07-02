@@ -8,7 +8,7 @@ use App\Service\Recommendation\DTO\CandidatePost;
 use App\Service\Recommendation\Filter\PostFilterInterface;
 use App\Service\Recommendation\Generator\CandidateGeneratorInterface;
 use App\Service\Recommendation\Scorer\PostScorerInterface;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 class RecommendationPipeline
 {
@@ -22,9 +22,9 @@ class RecommendationPipeline
     private iterable $filters;
 
     public function __construct(
-        #[TaggedIterator('app.candidate_generator')] iterable $generators,
-        #[TaggedIterator('app.post_scorer')] iterable $scorers,
-        #[TaggedIterator('app.post_filter')] iterable $filters
+        #[AutowireIterator('app.candidate_generator')] iterable $generators,
+        #[AutowireIterator('app.post_scorer')] iterable $scorers,
+        #[AutowireIterator('app.post_filter')] iterable $filters
     ) {
         $this->generators = $generators;
         $this->scorers = $scorers;
