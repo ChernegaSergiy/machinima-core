@@ -260,8 +260,7 @@ document.addEventListener('turbo:load', async function() {
                 const hasTarget = notif.target_id !== null && notif.target_id !== undefined;
 
                 const wrapper = document.createElement(hasTarget ? 'a' : 'div');
-                wrapper.className = 'list-item block no-underline' + (isUnread ? ' unread' : '');
-                wrapper.style.cssText = 'color:inherit;text-decoration:none;display:flex;';
+                wrapper.className = 'list-item text-inherit no-underline' + (isUnread ? ' unread' : '');
 
                 if (hasTarget) {
                     wrapper.href = '/notifications/' + notif.id + '/redirect';
