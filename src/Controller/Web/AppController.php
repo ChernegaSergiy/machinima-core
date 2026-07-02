@@ -293,12 +293,15 @@ class AppController extends AbstractController
 
         $lastComment = $em->getRepository(Comment::class)->findOneBy(['user' => $targetUser], ['createdAt' => 'DESC']);
         $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$targetUser->getId();
+        
+        $author = $em->getRepository(Author::class)->findOneBy(['telegramUserId' => $id]);
 
         return $this->render('app/user.html.twig', [
             'targetUser' => $targetUser,
             'followingCount' => $followingCount,
             'likesCount' => $likesCount,
             'name' => $name,
+            'author' => $author,
         ]);
     }
 }

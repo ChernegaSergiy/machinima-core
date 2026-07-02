@@ -42,5 +42,20 @@
             <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">{{ targetUser.createdAt ? targetUser.createdAt|date('d.m.Y') : 'Невідомо' }}</div>
         </div>
     </div>
+
+    {% if author %}
+        <a href="{{ path('app_author', {id: author.id}) }}" class="flex items-center justify-between p-4 bg-surface rounded border-2 border-border mb-4 cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all shadow-brutal no-underline">
+            <div class="flex items-center">
+                <div class="w-12 h-12 rounded bg-primary flex items-center justify-center text-surface mr-4 shrink-0 border-2 border-primary shadow-brutal-sm">
+                    <i data-lucide="pen-tool" class="w-6 h-6 stroke-2"></i>
+                </div>
+                <div class="flex-1 text-left">
+                    <div class="text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сторінка автора</div>
+                    <div class="text-[14px] text-muted mb-1 leading-normal font-semibold">Переглянути роботи та проєкти</div>
+                </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-6 h-6 text-primary shrink-0 ml-4"></i>
+        </a>
+    {% endif %}
 </div>
 {% endblock %}
