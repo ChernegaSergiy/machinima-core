@@ -2,7 +2,7 @@
 
 namespace App\Service\Recommendation;
 
-use App\Entity\Post;
+use App\Entity\Content;
 use App\Entity\User;
 use App\Service\Recommendation\DTO\CandidatePost;
 use App\Service\Recommendation\Filter\PostFilterInterface;
@@ -32,7 +32,7 @@ class RecommendationPipeline
     }
 
     /**
-     * @return array<Post>
+     * @return array<Content>
      */
     public function getRecommendations(?User $user, int $limit = 50): array
     {
@@ -52,7 +52,7 @@ class RecommendationPipeline
 
         // Convert to DTOs
         $candidates = array_map(
-            fn(Post $post) => new CandidatePost($post),
+            fn(Content $post) => new CandidatePost($post),
             array_values($uniquePosts)
         );
 
