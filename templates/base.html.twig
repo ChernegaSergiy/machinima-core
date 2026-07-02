@@ -60,7 +60,13 @@
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body style="visibility: hidden;">
+    <script>
+        // Make body visible only after strict access check
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.style.visibility = 'visible';
+        });
+    </script>
     <main id="main-content" class="turbo-transition">
         {% block body %}{% endblock %}
     </main>
