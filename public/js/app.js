@@ -225,6 +225,12 @@ document.addEventListener('turbo:load', async function() {
             const eventSource = new EventSource(window.APP_CONFIG.mercureUrl);
             eventSource.onmessage = async event => {
                 const data = JSON.parse(event.data);
+                if (data.type === 'NEW_COMMENT') {
+                    if (window.location.pathname === '/notifications') {
+                        location.reload();
+                        return;
+                    }
+                }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
                     try {
                         const tgData = window.Telegram?.WebApp?.initData;
