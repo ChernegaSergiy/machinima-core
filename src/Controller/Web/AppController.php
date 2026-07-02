@@ -128,8 +128,8 @@ class AppController extends AbstractController
         $now = time();
 
         // Count as a new view if this is the first view in the session, 
-        // or if more than 60 seconds have passed since the previous view.
-        if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 60) {
+        // or if more than 86400 seconds (24 hours) have passed since the previous view.
+        if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 86400) {
             $post->setViewsCount($post->getViewsCount() + 1);
             $em->flush();
 
