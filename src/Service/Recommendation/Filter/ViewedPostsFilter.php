@@ -6,32 +6,18 @@ use App\Entity\User;
 use App\Entity\ContentInteraction;
 use App\Service\Recommendation\DTO\CandidatePost;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 class ViewedPostsFilter implements PostFilterInterface
 {
-    private RequestStack $requestStack;
     private EntityManagerInterface $em;
 
-    public function __construct(RequestStack $requestStack, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->requestStack = $requestStack;
         $this->em = $em;
     }
 
     public function filter(array $candidates, ?User $user): array
     {
-        // Always check session first (for both guests and local caching)
-        $viewedPosts = [];
-        try {
-            if ($this->requestStack->getMainRequest()) {
-                $session = $this->requestStack->getSession();
-                $viewedPosts = $session->get('viewed_posts_cooldown', []);
-            }
-        } catch (\Exception $e) {
-            // Ignore session errors in CLI or test environment
-        }
-        
         $viewedIdsInDb = [];
         if ($user) {
             // Fetch posts viewed by this user in the last 7 days (to not filter out old views forever)
@@ -56,12 +42,6 @@ class ViewedPostsFilter implements PostFilterInterface
         
         foreach ($candidates as $candidate) {
             $postId = $candidate->getPost()->getId();
-            
-            // Skip if viewed in current session
-            if (isset($viewedPosts[$postId])) {
-                $deferred[] = $candidate;
-                continue;
-            }
             
             // Skip if viewed in the last 7 days (from DB)
             if (in_array($postId, $viewedIdsInDb)) {

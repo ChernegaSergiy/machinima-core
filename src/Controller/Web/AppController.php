@@ -168,38 +168,33 @@ class AppController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $session = $request->getSession();
-        $viewedPosts = $session->get('viewed_posts_cooldown', []);
-        $now = time();
-
-        // Count as a new view if this is the first view in the session, 
-        // or if more than 86400 seconds (24 hours) have passed since the previous view.
-        if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 86400) {
-            $post->setViewsCount($post->getViewsCount() + 1);
-
-            if ($user = $this->getUser()) {
-                $interaction = $em->getRepository(\App\Entity\ContentInteraction::class)->findOneBy([
-                    'user' => $user,
-                    'content' => $post,
-                    'interactionType' => 'view'
-                ]);
+        if ($user = $this->getUser()) {
+            $interaction = $em->getRepository(\App\Entity\ContentInteraction::class)->findOneBy([
+                'user' => $user,
+                'content' => $post,
+                'interactionType' => 'view'
+            ]);
+            
+            $now = new \DateTime();
+            $twentyFourHoursAgo = (new \DateTime('-24 hours'))->format('Y-m-d H:i:s');
+            
+            // Count as a new view if this is the first view, or if more than 24 hours have passed
+            if (!$interaction || $interaction->getCreatedAt() < $twentyFourHoursAgo) {
+                $post->setViewsCount($post->getViewsCount() + 1);
                 
                 if ($interaction) {
-                    $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+                    $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
                 } else {
                     $interaction = new \App\Entity\ContentInteraction();
                     $interaction->setUser($user);
                     $interaction->setContent($post);
                     $interaction->setInteractionType('view');
-                    $interaction->setCreatedAt(date('Y-m-d H:i:s'));
+                    $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
                     $em->persist($interaction);
                 }
+                
+                $em->flush();
             }
-
-            $em->flush();
-
-            $viewedPosts[$id] = $now;
-            $session->set('viewed_posts_cooldown', $viewedPosts);
         }
 
         if (!$this->isGranted('ROLE_MODERATOR')) {
