@@ -60,30 +60,23 @@ document.addEventListener('turbo:load', function(event) {
 });
 
 // Skeleton Screen Generation on Navigation
-document.addEventListener('turbo:visit', function(event) {
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-        // Save the original DOM so Turbo can cache it properly for the Back button
-        window.originalMainContentHTML = mainContent.innerHTML;
-        
-        const isPost = event.detail.url.includes('/post/');
-        const skeletonId = isPost ? 'skeleton-post' : 'skeleton-default';
-        let template = document.getElementById(skeletonId) || document.getElementById('skeleton-default');
-        
-        if (template) {
-            mainContent.innerHTML = template.innerHTML;
-        }
-    }
-});
-
-// Restore original DOM before Turbo saves it to cache
-document.addEventListener('turbo:before-cache', function() {
-    if (window.originalMainContentHTML) {
+document.addEventListener('turbo:click', function(event) {
+    const link = event.target.closest('a');
+    if (!link) return;
+    
+    const skeletonType = link.getAttribute('data-skeleton');
+    if (skeletonType) {
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
-            mainContent.innerHTML = window.originalMainContentHTML;
+            let template = document.getElementById(`skeleton-${skeletonType}`);
+            // Fallback to default if specific skeleton doesn't exist
+            if (!template && skeletonType !== 'none') {
+                template = document.getElementById('skeleton-default');
+            }
+            if (template) {
+                mainContent.innerHTML = template.innerHTML;
+            }
         }
-        window.originalMainContentHTML = null;
     }
 });
 
