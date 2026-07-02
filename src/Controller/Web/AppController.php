@@ -124,14 +124,17 @@ class AppController extends AbstractController
         }
 
         $session = $request->getSession();
-        $viewedPosts = $session->get('viewed_posts', []);
+        $viewedPosts = $session->get('viewed_posts_cooldown', []);
+        $now = time();
 
-        if (!in_array($id, $viewedPosts)) {
+        // Count as a new view if this is the first view in the session, 
+        // or if more than 60 seconds have passed since the previous view.
+        if (!isset($viewedPosts[$id]) || ($now - $viewedPosts[$id]) > 60) {
             $post->setViewsCount($post->getViewsCount() + 1);
             $em->flush();
 
-            $viewedPosts[] = $id;
-            $session->set('viewed_posts', $viewedPosts);
+            $viewedPosts[$id] = $now;
+            $session->set('viewed_posts_cooldown', $viewedPosts);
         }
 
         if (!$this->isGranted('ROLE_MODERATOR')) {
