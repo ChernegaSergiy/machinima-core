@@ -132,6 +132,21 @@ class AppController extends AbstractController
             $follower->setUser($user);
             $follower->setAuthor($author);
             $em->persist($follower);
+            
+            // Create internal notification for the author
+            if ($author->getTelegramUserId()) {
+                $authorUser = $em->getRepository(User::class)->find($author->getTelegramUserId());
+                if ($authorUser && $authorUser->getId() !== $user->getId()) {
+                    $notification = new \App\Entity\Notification();
+                    $notification->setUser($authorUser);
+                    $notification->setType('new_follower');
+                    $notification->setTargetId($user->getId());
+                    $notification->setTargetType('user');
+                    $notification->setMessage('На вас підписався новий користувач.');
+                    $em->persist($notification);
+                }
+            }
+            
             $em->flush();
         }
 
