@@ -18,7 +18,7 @@ class ContentInteractionRepository extends ServiceEntityRepository
     }
 
     /**
-     * Finds authors the user has interacted with by liking their content, 
+     * Finds authors the user has interacted with by liking their content,
      * ordered by interaction frequency.
      *
      * @return int[] Returns an array of author IDs

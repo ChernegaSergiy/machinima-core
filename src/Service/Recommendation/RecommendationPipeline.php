@@ -24,7 +24,7 @@ class RecommendationPipeline
     public function __construct(
         #[AutowireIterator('app.candidate_generator')] iterable $generators,
         #[AutowireIterator('app.post_scorer')] iterable $scorers,
-        #[AutowireIterator('app.post_filter')] iterable $filters
+        #[AutowireIterator('app.post_filter')] iterable $filters,
     ) {
         $this->generators = $generators;
         $this->scorers = $scorers;
@@ -52,7 +52,7 @@ class RecommendationPipeline
 
         // Convert to DTOs
         $candidates = array_map(
-            fn(Content $post) => new CandidatePost($post),
+            fn (Content $post) => new CandidatePost($post),
             array_values($uniquePosts)
         );
 
@@ -77,6 +77,6 @@ class RecommendationPipeline
         $candidates = array_slice($candidates, 0, $limit);
 
         // Extract raw posts
-        return array_map(fn(CandidatePost $dto) => $dto->getPost(), $candidates);
+        return array_map(fn (CandidatePost $dto) => $dto->getPost(), $candidates);
     }
 }

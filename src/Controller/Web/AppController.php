@@ -101,9 +101,9 @@ class AppController extends AbstractController
         if ($this->getUser()) {
             $follower = $em->getRepository(\App\Entity\Follower::class)->findOneBy([
                 'user' => $this->getUser(),
-                'author' => $author
+                'author' => $author,
             ]);
-            $isFollowing = $follower !== null;
+            $isFollowing = null !== $follower;
         }
 
         return $this->render('app/author.html.twig', [
@@ -172,16 +172,16 @@ class AppController extends AbstractController
             $interaction = $em->getRepository(\App\Entity\ContentInteraction::class)->findOneBy([
                 'user' => $user,
                 'content' => $post,
-                'interactionType' => 'view'
+                'interactionType' => 'view',
             ]);
-            
+
             $now = new \DateTime();
             $twentyFourHoursAgo = (new \DateTime('-24 hours'))->format('Y-m-d H:i:s');
-            
+
             // Count as a new view if this is the first view, or if more than 24 hours have passed
             if (!$interaction || $interaction->getCreatedAt() < $twentyFourHoursAgo) {
                 $post->setViewsCount($post->getViewsCount() + 1);
-                
+
                 if ($interaction) {
                     $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
                 } else {
@@ -192,7 +192,7 @@ class AppController extends AbstractController
                     $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
                     $em->persist($interaction);
                 }
-                
+
                 $em->flush();
             }
         }

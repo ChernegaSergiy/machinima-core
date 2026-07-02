@@ -42,6 +42,7 @@ class Follower
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -53,6 +54,7 @@ class Follower
     public function setAuthor(?Author $author): self
     {
         $this->author = $author;
+
         return $this;
     }
 

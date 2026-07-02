@@ -58,7 +58,7 @@ class NotificationController extends AbstractController
                     case 'comment':
                         $comment = $em->getRepository(\App\Entity\Comment::class)->find($notification->getTargetId());
                         if ($comment && $comment->getContent()) {
-                            return $this->redirect($this->generateUrl('app_post', ['id' => $comment->getContent()->getId()]) . '?scrollTo=comment-item-' . $comment->getId());
+                            return $this->redirect($this->generateUrl('app_post', ['id' => $comment->getContent()->getId()]).'?scrollTo=comment-item-'.$comment->getId());
                         }
                         break;
                     case 'author':

@@ -3,7 +3,6 @@
 namespace App\Service\Recommendation\Filter;
 
 use App\Entity\User;
-use App\Service\Recommendation\DTO\CandidatePost;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class PrivateContentFilter implements PostFilterInterface
@@ -30,7 +29,7 @@ class PrivateContentFilter implements PostFilterInterface
             // Check if any author of this post is private
             foreach ($post->getStaff() as $staff) {
                 $author = $staff->getAuthor();
-                if ($author && $author->getState() === 'private') {
+                if ($author && 'private' === $author->getState()) {
                     $hasPrivateAuthor = true;
                     break;
                 }

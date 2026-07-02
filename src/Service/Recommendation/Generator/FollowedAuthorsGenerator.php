@@ -2,9 +2,9 @@
 
 namespace App\Service\Recommendation\Generator;
 
+use App\Entity\Content;
 use App\Entity\User;
 use App\Repository\FollowerRepository;
-use App\Entity\Content;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FollowedAuthorsGenerator implements CandidateGeneratorInterface
@@ -25,7 +25,7 @@ class FollowedAuthorsGenerator implements CandidateGeneratorInterface
         }
 
         $followedAuthorIds = $this->followerRepository->getFollowedAuthorIds($user);
-        
+
         if (empty($followedAuthorIds)) {
             return [];
         }

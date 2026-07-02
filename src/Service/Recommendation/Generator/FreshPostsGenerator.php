@@ -2,8 +2,8 @@
 
 namespace App\Service\Recommendation\Generator;
 
-use App\Entity\User;
 use App\Entity\Content;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FreshPostsGenerator implements CandidateGeneratorInterface
