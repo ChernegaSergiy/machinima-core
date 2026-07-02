@@ -116,12 +116,11 @@ class AppController extends AbstractController
     }
 
     #[Route('/author/{id}/follow', name: 'app_author_follow', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function followAuthor(int $id, EntityManagerInterface $em): Response
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
 
         $author = $em->getRepository(Author::class)->find($id);
         if (!$author) {
@@ -156,12 +155,11 @@ class AppController extends AbstractController
     }
 
     #[Route('/author/{id}/unfollow', name: 'app_author_unfollow', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function unfollowAuthor(int $id, EntityManagerInterface $em): Response
     {
+        /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
 
         $author = $em->getRepository(Author::class)->find($id);
         if (!$author) {
