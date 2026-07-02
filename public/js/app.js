@@ -55,41 +55,43 @@ if (document.readyState === 'loading') {
     initApp();
 }
 
-document.addEventListener('turbo:load', function(event) {
-    initApp();
-});
+// Save scroll constantly
+let scrollTimeout;
+window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+        const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+        sessionStorage.setItem('scroll_' + window.location.pathname, y);
+    }, 100);
+}, { passive: true });
 
-// Skeleton Screen Generation on Navigation
-// We use turbo:visit instead of turbo:click so that Turbo has time to save the true scroll position 
-// in turbo:before-visit before we mutate the DOM.
-document.addEventListener('turbo:visit', function(event) {
-    // In turbo:visit, we don't have event.target as the link, but we can check if it's a known URL or 
-    // just inject a default skeleton for all visits, or read the data-skeleton from the URL if we wanted.
-    // However, to keep it simple, we can just apply a default skeleton on visits if main-content exists.
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-        // VERY IMPORTANT: Save the original DOM so Turbo can cache it properly for the Back button!
-        window.originalMainContentHTML = mainContent.innerHTML;
-        
-        // Use a generic skeleton or determine from URL
-        const isPost = event.detail.url.includes('/post/');
-        const skeletonId = isPost ? 'skeleton-post' : 'skeleton-default';
-        let template = document.getElementById(skeletonId) || document.getElementById('skeleton-default');
-        
-        if (template) {
-            mainContent.innerHTML = template.innerHTML;
-        }
+document.addEventListener('click', function(event) {
+    const link = event.target.closest('a');
+    if (link) {
+        const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+        sessionStorage.setItem('scroll_' + window.location.pathname, y);
     }
 });
 
-// Restore original DOM before Turbo saves it to cache
-document.addEventListener('turbo:before-cache', function() {
-    if (window.originalMainContentHTML) {
-        const mainContent = document.getElementById('main-content');
-        if (mainContent) {
-            mainContent.innerHTML = window.originalMainContentHTML;
-        }
-        window.originalMainContentHTML = null;
+function forceRestoreScroll() {
+    const saved = sessionStorage.getItem('scroll_' + window.location.pathname);
+    if (saved) {
+        const targetY = parseInt(saved, 10);
+        window.scrollTo(0, targetY);
+        if (document.documentElement) document.documentElement.scrollTop = targetY;
+        if (document.body) document.body.scrollTop = targetY;
+    }
+}
+
+document.addEventListener('turbo:load', function(event) {
+    initApp();
+    if (event.detail.action === 'restore') {
+        let attempts = 0;
+        const interval = setInterval(() => {
+            forceRestoreScroll();
+            attempts++;
+            if (attempts > 20) clearInterval(interval);
+        }, 25);
     }
 });
 
