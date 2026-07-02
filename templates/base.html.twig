@@ -92,7 +92,7 @@
             </div>
             <span style="margin-top: 4px;">Сповіщ.</span>
         </a>
-        <a href="#" data-skeleton="profile" class="tab-item {% if current_route == 'app_profile' %}active{% endif %}">
+        <a href="{{ path('app_profile') }}" data-skeleton="profile" class="tab-item {% if current_route == 'app_profile' %}active{% endif %}">
             <i data-lucide="user"></i>
             <span>Профіль</span>
         </a>
