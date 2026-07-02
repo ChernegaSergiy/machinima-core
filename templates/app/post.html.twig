@@ -114,11 +114,11 @@
                             {% set profileLink = (app.user and item.entity.user.id == app.user.id) ? path('app_profile') : path('app_user', {id: item.entity.user.id}) %}
                             <a href="{{ profileLink }}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
                             <div>
-                                <a href="{{ profileLink }}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
+                                <a href="{{ profileLink }}" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
                                 <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
-                        <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
+                        <div class="text-base text-primary leading-relaxed font-semibold break-words" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
                         <div class="flex gap-4 mt-3 items-center flex-wrap">
                             <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
                             <div class="owner-actions hidden gap-4 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
@@ -323,11 +323,11 @@
                 <div class="flex items-center mb-3">
                     <a href="${profileLink}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></a>
                     <div>
-                        <a href="${profileLink}" class="font-bold text-[15px] text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
+                        <a href="${profileLink}" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
                         <div class="text-[12px] text-muted font-bold uppercase">Зараз</div>
                     </div>
                 </div>
-                <div class="text-[15px] text-primary leading-relaxed font-semibold break-words" id="comment-text-${c.id}">${c.text}</div>
+                <div class="text-base text-primary leading-relaxed font-semibold break-words" id="comment-text-${c.id}">${c.text}</div>
                 <div class="flex gap-4 mt-3 items-center flex-wrap">
                     <button class="bg-transparent border-none p-0 text-[13px] font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
                     <div class="owner-actions flex gap-4 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
