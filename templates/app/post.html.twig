@@ -7,7 +7,7 @@
     <a href="{{ path('app_index') }}" class="back-btn"><i data-lucide="arrow-left"></i> Назад</a>
 </div>
 
-<div class="container" style="padding-bottom: 80px;">
+<div class="container pb-20">
     <div class="card">
         <div class="card-header">
             <div class="avatar"><i data-lucide="user"></i></div>
@@ -26,25 +26,25 @@
         <div class="post-media">
             {% if post.coverFileId %}
                 {% if post.coverFileId starts with 'http' %}
-                    <img src="{{ post.coverFileId }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                    <img src="{{ post.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" />
                 {% else %}
-                    <img src="{{ path('app_media', {fileId: post.coverFileId}) }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                    <img src="{{ path('app_media', {fileId: post.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" style="width:48px; height:48px;"></i>
+                <i data-lucide="image" class="w-12 h-12"></i>
             {% endif %}
         </div>
         
         <div class="post-actions" data-post-id="{{ post.id }}">
-            <div class="action-item btn-like" onclick="interact('like', this)" style="cursor:pointer;"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
-            <div class="action-item btn-dislike" onclick="interact('dislike', this)" style="cursor:pointer;"><i data-lucide="thumbs-down"></i></div>
+            <div class="action-item btn-like cursor-pointer" onclick="interact('like', this)"><i data-lucide="heart"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
+            <div class="action-item btn-dislike cursor-pointer" onclick="interact('dislike', this)"><i data-lucide="thumbs-down"></i></div>
             <div class="action-item ml-auto"><i data-lucide="eye"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
         </div>
     </div>
 
     {% if post.staff|length > 0 %}
     <h2 class="section-title">Команда проєкту</h2>
-    <div style="margin-bottom: 24px;">
+    <div class="mb-6">
         {% for staffItem in post.staff %}
             <div class="list-item">
                 <div class="list-icon">
@@ -108,15 +108,15 @@
                             </div>
                         </div>
                         <div class="comment-text" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
-                        <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                        <div class="comment-actions flex gap-2 mt-3 items-center flex-wrap">
                             <button class="reply-btn" onclick="setReply({{ item.entity.id }}, '{{ item.entity.authorName|escape('js') }}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                            <div class="owner-actions" style="display: none; gap: 8px; flex-wrap: wrap;" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                                <button class="reply-btn edit-btn" style="color: var(--text);" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
-                                <button class="reply-btn delete-btn" style="color: #d32f2f;" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
+                            <div class="owner-actions hidden gap-2 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
+                                <button class="reply-btn edit-btn text-primary" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2"></i></button>
+                                <button class="reply-btn delete-btn text-danger" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2"></i></button>
                             </div>
                         </div>
                         
-                        <div class="comment-reply-wrapper" id="replies-{{ item.entity.id }}" style="{% if item.children|length == 0 %}display:none;{% endif %} margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px;">
+                        <div class="comment-reply-wrapper {% if item.children|length == 0 %}hidden{% endif %} ml-3 border-l-2 pl-3 mt-4" id="replies-{{ item.entity.id }}">
                             {% if item.children|length > 0 %}
                                 {{ _self.render_comment_tree(item.children) }}
                             {% endif %}
@@ -300,14 +300,14 @@
                     </div>
                 </div>
                 <div class="comment-text" id="comment-text-${c.id}">${c.text}</div>
-                <div class="comment-actions" style="display: flex; gap: 8px; margin-top: 12px; align-items: center; flex-wrap: wrap;">
+                <div class="comment-actions flex gap-2 mt-3 items-center flex-wrap">
                     <button class="reply-btn" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right"></i> Відповісти</button>
-                    <div class="owner-actions" style="display: flex; gap: 8px; flex-wrap: wrap;" data-owner-id="${c.user_id}" data-cid="${c.id}">
-                        <button class="reply-btn edit-btn" style="color: var(--text);" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
-                        <button class="reply-btn delete-btn" style="color: #d32f2f;" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
+                    <div class="owner-actions flex gap-2 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
+                        <button class="reply-btn edit-btn text-primary" onclick="startEditComment(${c.id})"><i data-lucide="edit-2"></i></button>
+                        <button class="reply-btn delete-btn text-danger" onclick="deleteComment(${c.id})"><i data-lucide="trash-2"></i></button>
                     </div>
                 </div>
-                <div class="comment-reply-wrapper" id="replies-${c.id}" style="display:none; margin-left: 12px; border-left: 2px solid var(--border); padding-left: 12px; margin-top: 16px;"></div>
+                <div class="comment-reply-wrapper hidden ml-3 border-l-2 pl-3 mt-4" id="replies-${c.id}"></div>
             </div>
         `;
         

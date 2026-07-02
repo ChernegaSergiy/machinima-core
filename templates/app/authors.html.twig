@@ -14,10 +14,10 @@
             <div class="list-content">
                 <div class="list-title">{{ author.name }}</div>
                 {% if author.biography %}
-                    <div class="list-desc" style="-webkit-line-clamp:1; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden;">{{ author.biography }}</div>
+                    <div class="list-desc line-clamp-1">{{ author.biography }}</div>
                 {% endif %}
             </div>
-            <i data-lucide="chevron-right" style="color: var(--text-muted); width: 20px;"></i>
+            <i data-lucide="chevron-right" class="text-muted w-5"></i>
         </a>
     {% else %}
         <div class="empty-state">

@@ -10,7 +10,7 @@
 <div class="container">
     <div class="profile-header">
         <div class="profile-avatar">
-            <i data-lucide="user" style="width:40px; height:40px;"></i>
+            <i data-lucide="user" class="w-10 h-10"></i>
         </div>
         <h1 class="profile-name">{{ author.name }}</h1>
         
@@ -18,15 +18,15 @@
             <p class="profile-bio">{{ author.biography }}</p>
         {% endif %}
         
-        <div style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-bottom: 24px;">
+        <div class="flex gap-2 justify-center items-center mb-6">
             {% if author.channelLink %}
-                <a href="{{ author.channelLink }}" target="_blank" class="action-button primary-btn" style="margin: 0; min-width: 120px;">
+                <a href="{{ author.channelLink }}" target="_blank" class="action-button primary-btn m-0 min-w-120">
                     Канал
                 </a>
             {% endif %}
             
             {% if app.user %}
-                <button id="follow-btn" class="action-button {{ isFollowing ? 'secondary-btn' : 'primary-btn' }}" style="margin: 0; min-width: 120px;" onclick="toggleFollow()">
+                <button id="follow-btn" class="action-button {{ isFollowing ?  m-0 min-w-120'secondary-btn' : 'primary-btn' }}" onclick="toggleFollow()">
                     {{ isFollowing ? 'Відписатися' : 'Підписатися' }}
                 </button>
                 <script>
@@ -76,12 +76,12 @@
         <a href="{{ path('app_post', {id: project.id}) }}" class="post-media">
             {% if project.coverFileId %}
                 {% if project.coverFileId starts with 'http' %}
-                    <img src="{{ project.coverFileId }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                    <img src="{{ project.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% else %}
-                    <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                    <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" style="width:32px; height:32px;"></i>
+                <i data-lucide="image" class="w-8 h-8"></i>
             {% endif %}
         </a>
         

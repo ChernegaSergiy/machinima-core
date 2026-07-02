@@ -30,20 +30,20 @@
         <a href="{{ path('app_post', {id: project.id}) }}" data-skeleton="post" class="post-media">
             {% if project.coverFileId %}
                 {% if project.coverFileId starts with 'http' %}
-                    <img src="{{ project.coverFileId }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                    <img src="{{ project.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% else %}
-                    <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" style="width: 100%; height: 100%; object-fit: cover; display: block;" loading="lazy" />
+                    <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" style="width:32px; height:32px;"></i>
+                <i data-lucide="image" class="w-8 h-8"></i>
             {% endif %}
         </a>
         
         <div class="post-actions" data-post-id="{{ project.id }}">
-            <div class="action-item btn-like" onclick="interactFeed({{ project.id }}, 'like', this)" style="cursor:pointer;">
+            <div class="action-item btn-like cursor-pointer" onclick="interactFeed({{ project.id }}, 'like', this)">
                 <i data-lucide="heart"></i> <span class="likes-count">{{ project.likesCount }}</span>
             </div>
-            <div class="action-item btn-dislike" onclick="interactFeed({{ project.id }}, 'dislike', this)" style="cursor:pointer;">
+            <div class="action-item btn-dislike cursor-pointer" onclick="interactFeed({{ project.id }}, 'dislike', this)">
                 <i data-lucide="thumbs-down"></i>
             </div>
             <div class="action-item ml-auto">

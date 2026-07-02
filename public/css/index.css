@@ -221,3 +221,62 @@ body.is-tma .top-nav { display: none !important; }
 }
 
 
+/* Utility Classes (Tailwind-like) */
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.block { display: block; }
+.hidden { display: none; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: 4px; }
+.gap-2 { gap: 8px; }
+.gap-3 { gap: 12px; }
+.gap-4 { gap: 16px; }
+
+/* Dimensions */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.w-4 { width: 16px; }
+.h-4 { height: 16px; }
+.w-5 { width: 20px; }
+.h-5 { height: 20px; }
+.w-6 { width: 24px; }
+.h-6 { height: 24px; }
+.w-8 { width: 32px; }
+.h-8 { height: 32px; }
+.w-10 { width: 40px; }
+.h-10 { height: 40px; }
+.w-12 { width: 48px; }
+.h-12 { height: 48px; }
+.min-w-120 { min-width: 120px; }
+
+/* Margins & Paddings */
+.m-0 { margin: 0; }
+.mt-3 { margin-top: 12px; }
+.mt-4 { margin-top: 16px; }
+.mb-1 { margin-bottom: 4px; }
+.mb-2 { margin-bottom: 8px; }
+.mb-4 { margin-bottom: 16px; }
+.mb-6 { margin-bottom: 24px; }
+.ml-auto { margin-left: auto; }
+.mr-1-5 { margin-right: 6px; }
+.ml-3 { margin-left: 12px; }
+.pl-3 { padding-left: 12px; }
+.pb-20 { padding-bottom: 80px; }
+
+/* Colors */
+.text-inherit { color: inherit; }
+.text-muted { color: var(--text-muted); }
+.text-danger { color: #d32f2f; }
+.text-primary { color: var(--text); }
+
+/* Typography & Display */
+.no-underline { text-decoration: none; }
+.cursor-pointer { cursor: pointer; }
+.object-cover { object-fit: cover; }
+.border-l-2 { border-left: 2px solid var(--border); }
+.line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
