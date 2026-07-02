@@ -61,7 +61,7 @@
 
     <script>
         (function() {
-            var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+            var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
             var tgData = window.Telegram?.WebApp?.initData;
             
             // Apply owner-specific CSS immediately
@@ -138,7 +138,7 @@
 </div>
 
 <script>
-    window.currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 123456789;
+    window.currentUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
     window.authorName = window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Користувач';
     window.postId = {{ post.id }};
     window.replyToId = null;
