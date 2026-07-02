@@ -44,6 +44,16 @@ a { text-decoration: none; color: inherit; }
 .text-surface { color: var(--surface); }
 .text-white { color: #FFFFFF; }
 
+.hover\:text-inherit:hover { color: inherit; }
+.hover\:text-primary:hover { color: var(--text); }
+.hover\:text-muted:hover { color: var(--text-muted); }
+.hover\:text-danger:hover { color: #d32f2f; }
+
+.active\:text-inherit:active { color: inherit; }
+.active\:text-primary:active { color: var(--text); }
+.active\:text-muted:active { color: var(--text-muted); }
+.active\:text-danger:active { color: #d32f2f; }
+
 /* Typography */
 .font-inter { font-family: 'Inter', sans-serif; }
 .font-unbounded { font-family: 'Unbounded', sans-serif; }
