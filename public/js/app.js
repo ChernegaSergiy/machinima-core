@@ -30,183 +30,6 @@ if (document.readyState === 'loading') {
 }
 
 // Skeleton Screen Generation on Navigation
-function getSkeletonHTML(type) {
-    let title = 'Завантаження';
-    if (type === 'categories') title = 'Категорії';
-    else if (type === 'category') title = 'Категорія';
-    else if (type === 'authors') title = 'Автори';
-    else if (type === 'author') title = 'Автор';
-    else if (type === 'notifications') title = 'Сповіщення';
-    else if (type === 'post') title = 'Допис';
-    else if (type === 'comment') title = 'Коментар';
-    else title = 'Стрічка';
-
-    let bodyContent = '';
-
-    if (type === 'categories') {
-        // Categories list skeleton
-        bodyContent = `
-            <div class="page-header-flex">
-                <h1 class="page-title">${title}</h1>
-            </div>
-            ${Array(5).fill().map(() => `
-                <div class="list-item">
-                    <div class="list-icon skeleton-shimmer"></div>
-                    <div class="list-content">
-                        <div class="skeleton-text skeleton-shimmer" style="width: 50%; height: 16px; margin: 0;"></div>
-                    </div>
-                    <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; opacity: 0.3;"></div>
-                </div>
-            `).join('')}
-        `;
-    } else if (type === 'authors') {
-        // Authors list skeleton
-        bodyContent = `
-            <div class="page-header-flex">
-                <h1 class="page-title">${title}</h1>
-            </div>
-            ${Array(5).fill().map(() => `
-                <div class="list-item">
-                    <div class="list-icon skeleton-shimmer"></div>
-                    <div class="list-content">
-                        <div class="skeleton-text skeleton-shimmer" style="width: 45%; height: 16px; margin-bottom: 6px;"></div>
-                        <div class="skeleton-text skeleton-shimmer" style="width: 70%; height: 14px; margin: 0;"></div>
-                    </div>
-                    <div class="skeleton-shimmer" style="width: 20px; height: 20px; border-radius: 4px; opacity: 0.3;"></div>
-                </div>
-            `).join('')}
-        `;
-    } else if (type === 'post' || type === 'comment') {
-        // Detailed post skeleton
-        bodyContent = `
-            <div class="card">
-                <div class="card-header">
-                    <div class="avatar skeleton-shimmer"></div>
-                    <div class="author-info" style="flex-grow: 1;">
-                        <div class="skeleton-text skeleton-shimmer" style="width: 40%; height: 16px; margin-bottom: 4px;"></div>
-                        <div class="skeleton-text skeleton-shimmer" style="width: 25%; height: 10px; margin: 0;"></div>
-                    </div>
-                </div>
-                <div class="skeleton-text skeleton-shimmer" style="width: 85%; height: 28px; margin-bottom: 20px;"></div>
-                <div style="margin-bottom: 24px;">
-                    <div class="skeleton-text skeleton-shimmer body-line"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line-short"></div>
-                </div>
-                <div class="skeleton-media skeleton-shimmer" style="aspect-ratio: auto; min-height: 250px;"></div>
-                <div class="post-actions">
-                    <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
-                    <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
-                    <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
-                </div>
-            </div>
-            <h2 class="comment-section-title">
-                <div class="skeleton-text skeleton-shimmer" style="width: 120px; height: 20px; margin: 0; display: inline-block; vertical-align: middle;"></div>
-            </h2>
-            <div id="comments-list">
-                ${Array(2).fill().map(() => `
-                    <div class="comment-item">
-                        <div class="comment-header">
-                            <div class="comment-avatar skeleton-shimmer"></div>
-                            <div style="flex-grow: 1;">
-                                <div class="skeleton-text skeleton-shimmer" style="width: 30%; height: 14px; margin-bottom: 4px;"></div>
-                                <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
-                            </div>
-                        </div>
-                        <div class="skeleton-text skeleton-shimmer body-line"></div>
-                        <div class="skeleton-text skeleton-shimmer body-line-short"></div>
-                        <div class="comment-actions" style="margin-top: 12px;">
-                            <div class="reply-btn skeleton-shimmer" style="width: 120px; color: transparent;">&nbsp;</div>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-    } else if (type === 'notifications') {
-        // Notifications list skeleton
-        bodyContent = `
-            <div class="page-header-flex">
-                <h1 class="page-title">${title}</h1>
-            </div>
-            ${Array(4).fill().map(() => `
-                <div class="list-item">
-                    <div class="list-icon skeleton-shimmer"></div>
-                    <div class="list-content">
-                        <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 16px; margin-bottom: 6px;"></div>
-                        <div class="skeleton-text skeleton-shimmer" style="width: 85%; height: 12px; margin-bottom: 6px;"></div>
-                        <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
-                    </div>
-                </div>
-            `).join('')}
-        `;
-    } else if (type === 'author') {
-        return `
-        <div class="top-nav">
-            <div class="back-btn"><i data-lucide="arrow-left"></i> Назад</div>
-        </div>
-        <div class="container">
-            <div class="profile-header">
-                <div class="profile-avatar skeleton-shimmer" style="margin-bottom: 24px;"></div>
-                <div class="skeleton-text skeleton-shimmer" style="width: 50%; height: 24px; margin: 0 auto 12px;"></div>
-                <div class="skeleton-text skeleton-shimmer" style="width: 80%; height: 14px; margin: 0 auto 24px;"></div>
-                <div class="skeleton-shimmer" style="width: 100%; height: 48px; border-radius: 12px;"></div>
-            </div>
-            <h2 class="section-title">
-                <div class="skeleton-text skeleton-shimmer" style="width: 180px; height: 20px; margin: 0; display: inline-block; vertical-align: middle;"></div>
-            </h2>
-            ${Array(2).fill().map(() => `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="avatar skeleton-shimmer"></div>
-                        <div class="author-info" style="flex-grow: 1;">
-                            <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
-                            <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
-                        </div>
-                    </div>
-                    <div class="skeleton-text skeleton-shimmer title"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line-short"></div>
-                    <div class="skeleton-media skeleton-shimmer"></div>
-                    <div class="post-actions" style="border-top: none; padding-top: 0; margin-top: 24px;">
-                        <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
-                        <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
-                        <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
-                    </div>
-                </div>
-            `).join('')}
-        </div>`;
-    } else {
-        // Standard feed or category/author items list skeleton
-        bodyContent = `
-            <div class="page-header-flex">
-                <h1 class="page-title">${title}</h1>
-            </div>
-            ${Array(2).fill().map(() => `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="avatar skeleton-shimmer"></div>
-                        <div class="author-info" style="flex-grow: 1;">
-                            <div class="skeleton-text skeleton-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px;"></div>
-                            <div class="skeleton-text skeleton-shimmer" style="width: 20%; height: 10px; margin: 0;"></div>
-                        </div>
-                    </div>
-                    <div class="skeleton-text skeleton-shimmer title"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line"></div>
-                    <div class="skeleton-text skeleton-shimmer body-line-short"></div>
-                    <div class="skeleton-media skeleton-shimmer"></div>
-                    <div class="post-actions" style="border-top: none; padding-top: 0; margin-top: 24px;">
-                        <div class="action-item skeleton-shimmer" style="width: 60px; color: transparent;"></div>
-                        <div class="action-item skeleton-shimmer" style="width: 44px; color: transparent;"></div>
-                        <div class="action-item skeleton-shimmer ml-auto" style="width: 50px; color: transparent;"></div>
-                    </div>
-                </div>
-            `).join('')}
-        `;
-    }
-
-    return `<div class="container">${bodyContent}</div>`;
-}
-
 document.addEventListener('turbo:click', function(event) {
     const link = event.target.closest('a');
     if (!link) return;
@@ -215,7 +38,14 @@ document.addEventListener('turbo:click', function(event) {
     if (skeletonType) {
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
-            mainContent.innerHTML = getSkeletonHTML(skeletonType);
+            let template = document.getElementById(`skeleton-${skeletonType}`);
+            // Fallback to default if specific skeleton doesn't exist
+            if (!template && skeletonType !== 'none') {
+                template = document.getElementById('skeleton-default');
+            }
+            if (template) {
+                mainContent.innerHTML = template.innerHTML;
+            }
         }
     }
 });
