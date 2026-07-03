@@ -19,6 +19,46 @@ function initApp() {
             }
         }
     }
+    
+    // Tab Bar persistence logic
+    const tabBar = document.getElementById('main-tab-bar');
+    if (tabBar) {
+        const links = tabBar.querySelectorAll('a[data-skeleton]');
+        const activeClasses = ['opacity-100', 'font-extrabold', 'bg-black-5', 'border-t-3', 'border-border', '-mt-0-5'];
+        const defaultClasses = ['opacity-60', 'font-bold'];
+
+        if (!tabBar.dataset.listenersAttached) {
+            links.forEach(link => {
+                link.addEventListener('click', function() {
+                    const skeleton = this.dataset.skeleton;
+                    sessionStorage.setItem('active_tab', skeleton);
+                    
+                    links.forEach(l => {
+                        l.classList.remove(...activeClasses);
+                        l.classList.add(...defaultClasses);
+                    });
+                    this.classList.remove(...defaultClasses);
+                    this.classList.add(...activeClasses);
+                });
+            });
+            tabBar.dataset.listenersAttached = 'true';
+        }
+
+        // On full reload, restore from session storage if server didn't highlight any
+        const serverActiveTab = Array.from(links).find(l => l.classList.contains('font-extrabold'));
+        
+        if (serverActiveTab) {
+            sessionStorage.setItem('active_tab', serverActiveTab.dataset.skeleton);
+        } else {
+            const savedTab = sessionStorage.getItem('active_tab') || 'feed';
+            const targetLink = tabBar.querySelector(`a[data-skeleton="${savedTab}"]`);
+            if (targetLink) {
+                targetLink.classList.remove(...defaultClasses);
+                targetLink.classList.add(...activeClasses);
+            }
+        }
+    }
+
     if (typeof lucide !== 'undefined') lucide.createIcons();
     
     const urlParams = new URLSearchParams(window.location.search);
