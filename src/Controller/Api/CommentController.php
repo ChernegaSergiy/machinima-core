@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Comment;
 use App\Entity\Content;
 use App\Entity\User;
+use App\Service\Notification\TelegramNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -48,7 +49,7 @@ class CommentController extends AbstractController
     }
 
     #[Route('/projects/{id}/comments', name: 'api_add_comment', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function addComment(int $id, Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
+    public function addComment(int $id, Request $request, EntityManagerInterface $em, HubInterface $hub, TelegramNotificationService $telegramNotifier): JsonResponse
     {
         $project = $em->getRepository(Content::class)->find($id);
         if (!$project) {
@@ -92,6 +93,8 @@ class CommentController extends AbstractController
             $notification->setMessage($comment->getAuthorName().' відповів(ла) на ваш коментар.');
             $em->persist($notification);
             $em->flush();
+
+            $telegramNotifier->sendToUser($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getAuthorName());
         }
 
         $projectAuthor = $project->getCreatedBy();
@@ -105,6 +108,8 @@ class CommentController extends AbstractController
                 $notification->setMessage('Новий коментар до вашого проєкту від '.$comment->getAuthorName().'.');
                 $em->persist($notification);
                 $em->flush();
+
+                $telegramNotifier->sendToUser($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getAuthorName());
             }
         }
 
