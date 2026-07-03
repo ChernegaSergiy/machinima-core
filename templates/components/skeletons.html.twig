@@ -235,6 +235,58 @@
     </div>
 </template>
 
+<template id="skeleton-likes">
+    <div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90 pointer-events-none hide-on-tma">
+        <div class="font-bold flex items-center uppercase font-unbounded tracking-tight"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</div>
+    </div>
+    <div class="w-full max-w-600 mx-auto p-4">
+        <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
+            <h1 class="text-3xl font-bold m-0 font-unbounded tracking-tight uppercase line-clamp-1">Вподобання</h1>
+        </div>
+        {% for i in 1..2 %}
+            <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal pointer-events-none">
+                <div class="flex items-center mb-4">
+                    <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm mr-3 shrink-0 animate-shimmer"></div>
+                    <div class="flex-1">
+                        <div class="animate-shimmer" style="width: 35%; height: 14px; margin-bottom: 6px; border-radius: 4px;"></div>
+                        <div class="animate-shimmer" style="width: 20%; height: 10px; margin: 0; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <div class="animate-shimmer" style="width: 85%; height: 28px; margin-bottom: 12px; border-radius: 4px;"></div>
+                <div class="animate-shimmer" style="width: 100%; height: 16px; margin-bottom: 8px; border-radius: 4px;"></div>
+                <div class="animate-shimmer" style="width: 80%; height: 16px; margin-bottom: 16px; border-radius: 4px;"></div>
+                <div class="w-full aspect-video bg-surface border-2 border-border rounded animate-shimmer"></div>
+                <div class="flex items-center gap-3 mt-4 pt-4 border-t-2 border-border">
+                    <div class="animate-shimmer border-2 border-border rounded h-10 shadow-brutal-sm" style="width: 60px;"></div>
+                    <div class="animate-shimmer border-2 border-border rounded h-10 shadow-brutal-sm" style="width: 44px;"></div>
+                    <div class="animate-shimmer border-2 border-border rounded h-10 shadow-brutal-sm ml-auto" style="width: 50px;"></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</template>
+
+<template id="skeleton-following">
+    <div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90 pointer-events-none hide-on-tma">
+        <div class="font-bold flex items-center uppercase font-unbounded tracking-tight"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</div>
+    </div>
+    <div class="w-full max-w-600 mx-auto p-4">
+        <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
+            <h1 class="text-3xl font-bold m-0 font-unbounded tracking-tight uppercase line-clamp-1">Підписки</h1>
+        </div>
+        {% for i in 1..5 %}
+            <div class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 shadow-brutal pointer-events-none">
+                <div class="w-12 h-12 rounded bg-surface border-2 border-border shadow-brutal-sm mr-4 shrink-0 animate-shimmer"></div>
+                <div class="flex-1">
+                    <div class="animate-shimmer" style="width: 45%; height: 16px; margin-bottom: 6px; border-radius: 4px;"></div>
+                    <div class="animate-shimmer" style="width: 70%; height: 14px; margin: 0; border-radius: 4px;"></div>
+                </div>
+                <div class="animate-shimmer" style="width: 20px; height: 20px; border-radius: 4px; opacity: 0.3;"></div>
+            </div>
+        {% endfor %}
+    </div>
+</template>
+
 <template id="skeleton-default">
     <div class="w-full max-w-600 mx-auto p-4">
         <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-border">
