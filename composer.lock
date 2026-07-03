@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac488410ef361c6e6d107a0f2a6e7547",
+    "content-hash": "33e5f780946b2f88d9866899aa1cd377",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -1302,12 +1302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChernegaSergiy/telegram-bot-bundle.git",
-                "reference": "e02e61bab13d8830b95defd892092695d7dd16ca"
+                "reference": "1b64a5dd4241ea7cb4189e0beec5b3032934648d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/e02e61bab13d8830b95defd892092695d7dd16ca",
-                "reference": "e02e61bab13d8830b95defd892092695d7dd16ca",
+                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/1b64a5dd4241ea7cb4189e0beec5b3032934648d",
+                "reference": "1b64a5dd4241ea7cb4189e0beec5b3032934648d",
                 "shasum": ""
             },
             "require": {
@@ -1353,7 +1353,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-03T14:17:03+00:00"
+            "time": "2026-07-03T15:28:40+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6354,6 +6354,69 @@
                 "source": "https://github.com/webmozarts/assert/tree/2.4.1"
             },
             "time": "2026-06-15T15:31:57+00:00"
+        },
+        {
+            "name": "yzalis/identicon",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yzalis/Identicon",
+                "reference": "32ef7a62ab3a3939425e8273c6799e98c6288ce3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yzalis/Identicon/zipball/32ef7a62ab3a3939425e8273c6799e98c6288ce3",
+                "reference": "32ef7a62ab3a3939425e8273c6799e98c6288ce3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "ext-gd": "*",
+                "ext-imagick": "*",
+                "friendsofphp/php-cs-fixer": "^3.40",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-strict-rules": "^1.5",
+                "phpunit/phpunit": "^10.5"
+            },
+            "suggest": {
+                "ext-gd": "Required for GD-based PNG generation (default renderer)",
+                "ext-imagick": "Required for ImageMagick-based generation"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yzalis\\Identicon\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Laugueux",
+                    "email": "benjamin@yzalis.com"
+                }
+            ],
+            "description": "Generate unique identicon avatars from any string",
+            "homepage": "https://github.com/yzalis/Identicon",
+            "keywords": [
+                "avatar",
+                "hash",
+                "identicon",
+                "image",
+                "png",
+                "svg",
+                "unique"
+            ],
+            "time": "2026-02-03T09:29:12+00:00"
         }
     ],
     "packages-dev": [

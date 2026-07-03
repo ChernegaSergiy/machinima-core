@@ -32,7 +32,8 @@
         "symfony/security-bundle": "8.1.*",
         "symfony/serializer": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
-        "symfony/yaml": "8.1.*"
+        "symfony/yaml": "8.1.*",
+        "yzalis/identicon": "^3.0"
     },
     "config": {
         "allow-plugins": {
