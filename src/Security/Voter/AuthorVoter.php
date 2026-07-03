@@ -41,7 +41,7 @@ class AuthorVoter extends Voter
             return false;
         }
 
-        if ((int) $user->getId() === (int) $subject->getTelegramUserId()) {
+        if ($subject->getUser() && (int) $user->getId() === (int) $subject->getUser()->getId()) {
             return true;
         }
 
