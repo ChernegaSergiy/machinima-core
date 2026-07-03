@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
+use App\Service\Avatar\AvatarProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class AvatarController extends AbstractController
 {
     public function __construct(
-        private HttpClientInterface $httpClient,
+        private AvatarProviderInterface $avatarProvider,
         private CacheInterface $cache,
     ) {
     }
@@ -21,41 +21,10 @@ class AvatarController extends AbstractController
     #[Route('/avatar/{userId}', name: 'app_avatar', requirements: ['userId' => '\d+'])]
     public function getAvatar(int $userId): Response
     {
-        $token = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
-
-        $avatarUrl = $this->cache->get('user_avatar_'.$userId, function (ItemInterface $item) use ($userId, $token) {
-            // Cache the avatar URL for 24 hours to avoid hitting Telegram rate limits
+        $avatarUrl = $this->cache->get('user_avatar_'.$userId, function (ItemInterface $item) use ($userId) {
             $item->expiresAfter(86400);
 
-            if (empty($token)) {
-                return 'default';
-            }
-
-            try {
-                // Fetch user profile photos
-                $response = $this->httpClient->request('GET', "https://api.telegram.org/bot{$token}/getUserProfilePhotos", [
-                    'query' => ['user_id' => $userId, 'limit' => 1],
-                ]);
-                $data = $response->toArray(false);
-
-                if (!empty($data['result']['photos'][0][0]['file_id'])) {
-                    $fileId = $data['result']['photos'][0][0]['file_id'];
-
-                    // Get file path
-                    $fileResponse = $this->httpClient->request('GET', "https://api.telegram.org/bot{$token}/getFile", [
-                        'query' => ['file_id' => $fileId],
-                    ]);
-                    $fileData = $fileResponse->toArray(false);
-
-                    if (!empty($fileData['result']['file_path'])) {
-                        return "https://api.telegram.org/file/bot{$token}/".$fileData['result']['file_path'];
-                    }
-                }
-            } catch (\Exception $e) {
-                // Ignore exceptions (e.g. user blocked bot or network error) and fallback
-            }
-
-            return 'default';
+            return $this->avatarProvider->getAvatarUrl($userId);
         });
 
         if ('default' === $avatarUrl) {
