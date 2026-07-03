@@ -1,7 +1,5 @@
 twig:
     file_name_pattern: '*.twig'
-    globals:
-        bot_username: '%env(TELEGRAM_BOT_USERNAME)%'
 
 when@test:
     twig:
