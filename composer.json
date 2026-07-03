@@ -26,11 +26,13 @@
         "symfony/framework-bundle": "8.1.*",
         "symfony/mercure-bundle": "*",
         "symfony/messenger": "8.1.*",
+        "symfony/notifier": "8.1.*",
         "symfony/property-access": "8.1.*",
         "symfony/property-info": "8.1.*",
         "symfony/runtime": "8.1.*",
         "symfony/security-bundle": "8.1.*",
         "symfony/serializer": "8.1.*",
+        "symfony/telegram-notifier": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/yaml": "8.1.*",
         "yzalis/identicon": "^3.0"
