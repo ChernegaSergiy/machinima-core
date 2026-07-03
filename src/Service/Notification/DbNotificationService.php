@@ -43,14 +43,30 @@ class DbNotificationService
             $this->em->flush();
         }
 
-        if ($notification->getTargetId() && $notification->getTargetType()) {
+        if (!$notification->getTargetId() || !$notification->getTargetType()) {
+            return ['route' => 'app_notifications', 'params' => []];
+        }
+
+        return match ($notification->getTargetType()) {
+            'post' => ['route' => 'app_post', 'params' => ['id' => $notification->getTargetId()]],
+            'comment' => $this->getCommentRedirect($notification->getTargetId()),
+            'author' => ['route' => 'app_author', 'params' => ['id' => $notification->getTargetId()]],
+            'category' => ['route' => 'app_category', 'params' => ['id' => $notification->getTargetId()]],
+            default => ['route' => 'app_notifications', 'params' => []],
+        };
+    }
+
+    private function getCommentRedirect(int $commentId): array
+    {
+        $comment = $this->em->getRepository(\App\Entity\Comment::class)->find($commentId);
+        if ($comment && $comment->getContent()) {
             return [
-                'targetId' => $notification->getTargetId(),
-                'targetType' => $notification->getTargetType(),
+                'route' => 'app_post',
+                'params' => ['id' => $comment->getContent()->getId(), '_fragment' => 'comment-item-'.$commentId],
             ];
         }
 
-        return ['targetId' => null, 'targetType' => null];
+        return ['route' => 'app_notifications', 'params' => []];
     }
 
     public function getUserNotifications(int $userId): ?array
