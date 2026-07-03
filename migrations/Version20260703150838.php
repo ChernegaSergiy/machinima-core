@@ -23,7 +23,7 @@ final class Version20260703150838 extends AbstractMigration
         $this->addSql('CREATE TABLE user_identities (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, provider_name VARCHAR(50) NOT NULL, provider_id VARCHAR(255) NOT NULL, provider_data CLOB DEFAULT NULL, user_id INTEGER NOT NULL, CONSTRAINT FK_5D5EEA04A76ED395 FOREIGN KEY (user_id) REFERENCES user_data (user_id) ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)');
         $this->addSql('CREATE INDEX IDX_5D5EEA04A76ED395 ON user_identities (user_id)');
         $this->addSql('CREATE UNIQUE INDEX unique_provider_identity ON user_identities (provider_name, provider_id)');
-        
+
         // Migrate existing Telegram users into UserIdentity
         $this->addSql("INSERT INTO user_identities (provider_name, provider_id, user_id) SELECT 'telegram', user_id, user_id FROM user_data");
         $this->addSql('CREATE TEMPORARY TABLE __temp__content AS SELECT id, title, type, description, url, release_date, status, cover_file_id, created_by, created_at, updated_at, likes_count, dislikes_count, views_count, trending_score FROM content');
