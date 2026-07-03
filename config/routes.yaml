@@ -11,6 +11,6 @@ controllers:
     resource: routing.controllers
 
 machinima_bot_controllers:
-    resource: '@MachinimaBotBundle/src/Controller/'
+    resource: '@MachinimaBotBundle/Controller/'
     type: attribute
-    ignore_errors: true
+    prefix: /
