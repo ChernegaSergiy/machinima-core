@@ -43,7 +43,7 @@ class PostVoter extends Voter
 
         foreach ($subject->getStaff() as $staffItem) {
             $author = $staffItem->getAuthor();
-            if ($author && (int) $author->getTelegramUserId() === (int) $user->getId()) {
+            if ($author && $author->getUser() && (int) $author->getUser()->getId() === (int) $user->getId()) {
                 return true;
             }
         }
