@@ -27,25 +27,9 @@ class AvatarController extends AbstractController
             return $this->avatarProvider->getAvatarUrl($userId);
         });
 
-        if ('default' === $avatarUrl) {
-            return $this->generateDefaultAvatar($userId);
-        }
-
         // Cache the redirect itself in the browser for 1 hour
         $response = new RedirectResponse($avatarUrl);
         $response->headers->set('Cache-Control', 'public, max-age=3600');
-
-        return $response;
-    }
-
-    private function generateDefaultAvatar(int $userId): Response
-    {
-        $identicon = new \Identicon\Identicon();
-        $imageData = $identicon->getImageData((string) $userId, 100);
-
-        $response = new Response($imageData);
-        $response->headers->set('Content-Type', 'image/png');
-        $response->headers->set('Cache-Control', 'public, max-age=86400');
 
         return $response;
     }
