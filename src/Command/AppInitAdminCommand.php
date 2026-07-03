@@ -93,28 +93,37 @@ class AppInitAdminCommand extends Command
 
         $this->em->flush();
 
-        // 3. Setup Initial Admin User
-        $user = $userRepo->find($telegramId);
-        if (!$user) {
+        // 3. Setup Initial Admin User (via Identity)
+        $identityRepo = $this->em->getRepository(\App\Entity\UserIdentity::class);
+        $identity = $identityRepo->findOneBy(['providerName' => 'telegram', 'providerId' => (string) $telegramId]);
+
+        if ($identity) {
+            $user = $identity->getUser();
+        } else {
             $user = new User();
-            $user->setId($telegramId);
             $this->em->persist($user);
+
+            $identity = new \App\Entity\UserIdentity();
+            $identity->setUser($user);
+            $identity->setProviderName('telegram');
+            $identity->setProviderId((string) $telegramId);
+            $this->em->persist($identity);
         }
 
         if ($user->getUserRoles()->contains($adminRole)) {
-            $io->warning(sprintf('User %d already has ROLE_ADMIN.', $telegramId));
+            $io->warning(sprintf('User linked to Telegram ID %d already has ROLE_ADMIN.', $telegramId));
         } else {
             $user->addRole($adminRole);
             $io->success(sprintf('Assigned ROLE_ADMIN to Telegram ID %d.', $telegramId));
         }
 
         // 4. Setup Initial Author Profile
-        $author = $authorRepo->findOneBy(['telegramUserId' => $telegramId]);
+        $author = $authorRepo->findOneBy(['user' => $user]);
         if (!$author) {
             $author = new Author();
             $author->setName('Admin #'.$telegramId);
             $author->setState('private');
-            $author->setTelegramUserId($telegramId);
+            $author->setUser($user);
             $this->em->persist($author);
             $io->success(sprintf('Created private Author profile for Telegram ID %d.', $telegramId));
         }
