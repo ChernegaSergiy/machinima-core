@@ -128,6 +128,18 @@
             "config/packages/messenger.yaml"
         ]
     },
+    "symfony/notifier": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "178877daf79d2dbd62129dd03612cb1a2cb407cc"
+        },
+        "files": [
+            "config/packages/notifier.yaml"
+        ]
+    },
     "symfony/property-info": {
         "version": "8.1",
         "recipe": {
@@ -165,6 +177,15 @@
             "config/packages/security.yaml",
             "config/routes/security.yaml"
         ]
+    },
+    "symfony/telegram-notifier": {
+        "version": "8.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "5.0",
+            "ref": "a3b62351bdaf9af180ffaf8a9c5ae0df70886abe"
+        }
     },
     "symfony/twig-bundle": {
         "version": "8.1",
