@@ -29,7 +29,7 @@ class ProfileController extends AbstractController
         $followingCount = $this->entityManager->getRepository(Follower::class)->count(['user' => $user]);
         $likesCount = $this->entityManager->getRepository(ContentInteraction::class)->count(['user' => $user, 'interactionType' => 'like']);
 
-        $author = $this->entityManager->getRepository(Author::class)->findOneBy(['telegramUserId' => $userId]);
+        $author = $this->entityManager->getRepository(Author::class)->findOneBy(['user' => $user]);
 
         return $this->render('profile/index.html.twig', [
             'userData' => $user,

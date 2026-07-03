@@ -84,7 +84,7 @@ class AppController extends AbstractController
     public function author(int $id, EntityManagerInterface $em): Response
     {
         $author = $em->getRepository(Author::class)->find($id);
-        
+
         if (!$author || !$this->isGranted(\App\Security\Voter\AuthorVoter::VIEW, $author)) {
             throw $this->createNotFoundException();
         }
@@ -179,7 +179,7 @@ class AppController extends AbstractController
     public function post(int $id, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
     {
         $post = $em->getRepository(Content::class)->find($id);
-        
+
         if (!$post || !$this->isGranted(\App\Security\Voter\PostVoter::VIEW, $post)) {
             throw $this->createNotFoundException();
         }
@@ -287,8 +287,8 @@ class AppController extends AbstractController
 
         $lastComment = $em->getRepository(Comment::class)->findOneBy(['user' => $targetUser], ['createdAt' => 'DESC']);
         $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$targetUser->getId();
-        
-        $author = $em->getRepository(Author::class)->findOneBy(['telegramUserId' => $id]);
+
+        $author = $em->getRepository(Author::class)->findOneBy(['user' => $targetUser]);
 
         return $this->render('app/user.html.twig', [
             'targetUser' => $targetUser,
