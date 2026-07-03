@@ -274,6 +274,9 @@ class AppController extends AbstractController
     #[Route('/user/{id}', name: 'app_user', requirements: ['id' => '\d+'])]
     public function userProfile(int $id, EntityManagerInterface $em): Response
     {
+        if ($this->getUser() && $this->getUser()->getId() === $id) {
+            return $this->forward('App\Controller\Web\ProfileController::index');
+        }
         $targetUser = $em->getRepository(\App\Entity\User::class)->find($id);
         if (!$targetUser) {
             throw $this->createNotFoundException('User not found');
