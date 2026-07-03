@@ -112,11 +112,15 @@ class CommentService
         return true;
     }
 
-    public function deleteComment(int $commentId): ?Comment
+    public function deleteComment(int $commentId, int $userId, bool $isModerator): bool
     {
         $comment = $this->em->getRepository(Comment::class)->find($commentId);
         if (!$comment) {
-            return null;
+            return false;
+        }
+
+        if ($comment->getUser()->getId() !== $userId && !$isModerator) {
+            return false;
         }
 
         $this->em->remove($comment);
@@ -126,7 +130,7 @@ class CommentService
             'comment_id' => $commentId,
         ]);
 
-        return $comment;
+        return true;
     }
 
     private function notifyCommentReply(Comment $comment, User $user): void
