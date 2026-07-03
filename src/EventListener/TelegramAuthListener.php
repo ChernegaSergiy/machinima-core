@@ -51,14 +51,12 @@ class TelegramAuthListener
             $needsFlush = true;
         }
 
-        // We will temporarily keep author check using telegramUserId,
-        // until we refactor the Author entity in the next commit.
         $authorRepository = $this->entityManager->getRepository(Author::class);
-        $author = $authorRepository->findOneBy(['telegramUserId' => (int) $telegramId]);
+        $author = $authorRepository->findOneBy(['user' => $user]);
 
         if (!$author) {
             $author = new Author();
-            $author->setTelegramUserId((int) $telegramId);
+            $author->setUser($user);
 
             // Build a default name from Telegram data
             $nameParts = array_filter([$telegramUser['first_name'] ?? '', $telegramUser['last_name'] ?? '']);
