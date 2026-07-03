@@ -40,23 +40,11 @@ class AvatarController extends AbstractController
 
     private function generateDefaultAvatar(int $userId): Response
     {
-        $colors = [
-            '#000000', '#2B2B2B', '#E53935', '#D81B60', '#8E24AA', '#5E35B1',
-            '#3949AB', '#1E88E5', '#039BE5', '#00ACC1', '#00897B', '#43A047',
-            '#7CB342', '#F4511E', '#6D4C41',
-        ];
-        // Brutalist colors mix
+        $identicon = new \Identicon\Identicon();
+        $imageData = $identicon->getImageData((string) $userId, 100);
 
-        $color = $colors[$userId % count($colors)];
-        $initial = mb_substr((string) $userId, -1);
-
-        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-            <rect width="100" height="100" fill="'.$color.'"/>
-            <text x="50%" y="54%" fill="white" font-size="45" font-family="sans-serif" font-weight="bold" dominant-baseline="central" text-anchor="middle">'.$initial.'</text>
-        </svg>';
-
-        $response = new Response($svg);
-        $response->headers->set('Content-Type', 'image/svg+xml');
+        $response = new Response($imageData);
+        $response->headers->set('Content-Type', 'image/png');
         $response->headers->set('Cache-Control', 'public, max-age=86400');
 
         return $response;
