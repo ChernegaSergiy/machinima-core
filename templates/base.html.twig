@@ -73,6 +73,8 @@
 
     {% block tabbar %}
     {% set current_route = app.request.attributes.get('_route') %}
+    {% set root_routes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile'] %}
+    {% if current_route in root_routes and not app.request.query.get('back') %}
     <nav class="fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-border flex safe-pb z-100 max-w-600 mx-auto">
         {% set active_classes = 'opacity-100 font-extrabold bg-black-5 border-t-3 border-border -mt-0-5' %}
         {% set default_classes = 'opacity-60 font-bold' %}
@@ -101,6 +103,7 @@
             <span>Профіль</span>
         </a>
     </nav>
+    {% endif %}
     {% endblock %}
 
     <script type="module" src="https://unpkg.com/@hotwired/turbo@8.0.4/dist/turbo.es2017-esm.js"></script>
