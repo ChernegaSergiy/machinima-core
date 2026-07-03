@@ -111,7 +111,7 @@
                 {% for item in tree %}
                     <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
                         <div class="flex items-center mb-3">
-                            {% set profileLink = (app.user and item.entity.user.id == app.user.id) ? path('app_profile') : path('app_user', {id: item.entity.user.id}) %}
+                            {% set profileLink = path('app_user', {id: item.entity.user.id}) %}
                             <a href="{{ profileLink }}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
                             <div>
                                 <a href="{{ profileLink }}" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
