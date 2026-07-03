@@ -2,13 +2,10 @@
 
 namespace App\Controller\Web;
 
-use App\Entity\Author;
-use App\Entity\Category;
-use App\Entity\Comment;
-use App\Entity\Content;
-use App\Entity\Notification;
-use App\Service\Notification\TelegramNotificationService;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\App\AppPageService;
+use App\Service\Follow\FollowService;
+use App\Service\Interaction\ContentViewService;
+use App\Service\Recommendation\RecommendationPipeline;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,8 +13,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AppController extends AbstractController
 {
+    public function __construct(
+        private FollowService $followService,
+        private ContentViewService $contentViewService,
+        private AppPageService $appPageService,
+    ) {
+    }
+
     #[Route('/', name: 'app_index')]
-    public function index(\App\Service\Recommendation\RecommendationPipeline $recommendationPipeline): Response
+    public function index(RecommendationPipeline $recommendationPipeline): Response
     {
         $feed = $recommendationPipeline->getRecommendations($this->getUser(), 20);
 
@@ -27,128 +31,50 @@ class AppController extends AbstractController
     }
 
     #[Route('/categories', name: 'app_categories')]
-    public function categories(EntityManagerInterface $em): Response
+    public function categories(): Response
     {
-        $categories = $em->getRepository(Category::class)->findAll();
-
         return $this->render('app/categories.html.twig', [
-            'categories' => $categories,
+            'categories' => $this->appPageService->getCategories(),
         ]);
     }
 
     #[Route('/category/{id}', name: 'app_category', requirements: ['id' => '\d+'])]
-    public function category(int $id, EntityManagerInterface $em): Response
+    public function category(int $id): Response
     {
-        $category = $em->getRepository(Category::class)->find($id);
-        if (!$category) {
+        $data = $this->appPageService->getCategory($id, $this->getUser());
+        if (!$data) {
             throw $this->createNotFoundException();
         }
 
-        $qb = $em->getRepository(Content::class)->createQueryBuilder('c')
-            ->join('c.categories', 'cat')
-            ->where('cat.id = :categoryId')
-            ->setParameter('categoryId', $id);
-
-        if (!$this->isGranted('ROLE_MODERATOR')) {
-            $qb->leftJoin('c.staff', 'cs')
-               ->leftJoin('cs.author', 'a')
-               ->andWhere('a.state != :privateState OR a.state IS NULL')
-               ->setParameter('privateState', 'private');
-        }
-
-        $projects = $qb->orderBy('c.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        return $this->render('app/category.html.twig', [
-            'category' => $category,
-            'projects' => $projects,
-        ]);
+        return $this->render('app/category.html.twig', $data);
     }
 
     #[Route('/authors', name: 'app_authors')]
-    public function authors(EntityManagerInterface $em): Response
+    public function authors(): Response
     {
-        $qb = $em->getRepository(Author::class)->createQueryBuilder('a');
-        if (!$this->isGranted('ROLE_MODERATOR')) {
-            $qb->andWhere('a.state != :privateState OR a.state IS NULL')
-               ->setParameter('privateState', 'private');
-        }
-        $authors = $qb->getQuery()->getResult();
-
         return $this->render('app/authors.html.twig', [
-            'authors' => $authors,
+            'authors' => $this->appPageService->getAuthors($this->getUser()),
         ]);
     }
 
     #[Route('/author/{id}', name: 'app_author', requirements: ['id' => '\d+'])]
-    public function author(int $id, EntityManagerInterface $em): Response
+    public function author(int $id): Response
     {
-        $author = $em->getRepository(Author::class)->find($id);
-
-        if (!$author || !$this->isGranted(\App\Security\Voter\AuthorVoter::VIEW, $author)) {
+        $data = $this->appPageService->getAuthorDetail($id, $this->getUser());
+        if (!$data) {
             throw $this->createNotFoundException();
         }
 
-        $projects = $em->createQueryBuilder()
-            ->select('c')
-            ->from(Content::class, 'c')
-            ->join('c.staff', 's')
-            ->where('s.author = :author')
-            ->setParameter('author', $author)
-            ->orderBy('c.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        $isFollowing = false;
-        if ($this->getUser()) {
-            $follower = $em->getRepository(\App\Entity\Follower::class)->findOneBy([
-                'user' => $this->getUser(),
-                'author' => $author,
-            ]);
-            $isFollowing = null !== $follower;
-        }
-
-        return $this->render('app/author.html.twig', [
-            'author' => $author,
-            'projects' => $projects,
-            'isFollowing' => $isFollowing,
-        ]);
+        return $this->render('app/author.html.twig', $data);
     }
 
     #[Route('/author/{id}/follow', name: 'app_author_follow', requirements: ['id' => '\d+'], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function followAuthor(int $id, EntityManagerInterface $em, TelegramNotificationService $telegramNotifier): Response
+    public function followAuthor(int $id): Response
     {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-
-        $author = $em->getRepository(Author::class)->find($id);
-        if (!$author) {
+        $result = $this->followService->follow($this->getUser(), $id);
+        if (!$result) {
             return $this->json(['error' => 'Author not found'], 404);
-        }
-
-        $existing = $em->getRepository(\App\Entity\Follower::class)->findOneBy(['user' => $user, 'author' => $author]);
-        if (!$existing) {
-            $follower = new \App\Entity\Follower();
-            $follower->setUser($user);
-            $follower->setAuthor($author);
-            $em->persist($follower);
-
-            $authorUser = $author->getUser();
-            if ($authorUser && $authorUser->getId() !== $user->getId()) {
-                $notification = new Notification();
-                $notification->setUser($authorUser);
-                $notification->setType('new_follower');
-                $notification->setTargetId($user->getId());
-                $notification->setTargetType('user');
-                $notification->setMessage('На вас підписався новий користувач.');
-                $em->persist($notification);
-
-                $telegramNotifier->sendToUser($authorUser, 'На вас підписався новий користувач у Machinima');
-            }
-
-            $em->flush();
         }
 
         return $this->json(['status' => 'followed']);
@@ -156,146 +82,50 @@ class AppController extends AbstractController
 
     #[Route('/author/{id}/unfollow', name: 'app_author_unfollow', requirements: ['id' => '\d+'], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function unfollowAuthor(int $id, EntityManagerInterface $em): Response
+    public function unfollowAuthor(int $id): Response
     {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
-
-        $author = $em->getRepository(Author::class)->find($id);
-        if (!$author) {
+        $result = $this->followService->unfollow($this->getUser(), $id);
+        if (!$result) {
             return $this->json(['error' => 'Author not found'], 404);
-        }
-
-        $existing = $em->getRepository(\App\Entity\Follower::class)->findOneBy(['user' => $user, 'author' => $author]);
-        if ($existing) {
-            $em->remove($existing);
-            $em->flush();
         }
 
         return $this->json(['status' => 'unfollowed']);
     }
 
     #[Route('/post/{id}', name: 'app_post', requirements: ['id' => '\d+'])]
-    public function post(int $id, EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request): Response
+    public function post(int $id): Response
     {
-        $post = $em->getRepository(Content::class)->find($id);
-
-        if (!$post || !$this->isGranted(\App\Security\Voter\PostVoter::VIEW, $post)) {
+        $data = $this->appPageService->getPostPageData($id, $this->getUser());
+        if (!$data) {
             throw $this->createNotFoundException();
         }
 
-        if ($user = $this->getUser()) {
-            $interaction = $em->getRepository(\App\Entity\ContentInteraction::class)->findOneBy([
-                'user' => $user,
-                'content' => $post,
-                'interactionType' => 'view',
-            ]);
+        $this->contentViewService->trackView($this->getUser(), $data['post']);
 
-            $now = new \DateTime();
-            $twentyFourHoursAgo = (new \DateTime('-24 hours'))->format('Y-m-d H:i:s');
-
-            // Count as a new view if this is the first view, or if more than 24 hours have passed
-            if (!$interaction || $interaction->getCreatedAt() < $twentyFourHoursAgo) {
-                $post->setViewsCount($post->getViewsCount() + 1);
-
-                if ($interaction) {
-                    $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
-                } else {
-                    $interaction = new \App\Entity\ContentInteraction();
-                    $interaction->setUser($user);
-                    $interaction->setContent($post);
-                    $interaction->setInteractionType('view');
-                    $interaction->setCreatedAt($now->format('Y-m-d H:i:s'));
-                    $em->persist($interaction);
-                }
-
-                $em->flush();
-            }
-        }
-
-        $comments = $em->getRepository(Comment::class)->findBy(['content' => $post], ['createdAt' => 'ASC']);
-
-        // Build comment tree
-        $commentTree = [];
-        $commentMap = [];
-        foreach ($comments as $comment) {
-            $commentMap[$comment->getId()] = [
-                'entity' => $comment,
-                'children' => [],
-            ];
-        }
-
-        foreach ($comments as $comment) {
-            $isOrphan = false;
-            if ($comment->getParent()) {
-                $parentId = $comment->getParent()->getId();
-                if (isset($commentMap[$parentId])) {
-                    $commentMap[$parentId]['children'][] = &$commentMap[$comment->getId()];
-                } else {
-                    $isOrphan = true;
-                }
-            }
-
-            if (!$comment->getParent() || $isOrphan) {
-                $commentTree[] = &$commentMap[$comment->getId()];
-            }
-        }
-
-        $isModerator = false;
-        if ($this->getUser()) {
-            $isModerator = $this->isGranted('ROLE_MODERATOR');
-        }
-
-        return $this->render('app/post.html.twig', [
-            'post' => $post,
-            'commentTree' => $commentTree,
-            'commentsCount' => count($comments),
-            'isModerator' => $isModerator,
-        ]);
+        return $this->render('app/post.html.twig', $data);
     }
 
     #[Route('/notifications', name: 'app_notifications')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function notifications(EntityManagerInterface $em): Response
+    public function notifications(): Response
     {
-        /** @var \App\Entity\User|null $user */
-        $user = $this->getUser();
-
-        $notifications = $em->getRepository(Notification::class)->findBy(
-            ['user' => $user],
-            ['createdAt' => 'DESC']
-        );
-
         return $this->render('app/notifications.html.twig', [
-            'notifications' => $notifications,
+            'notifications' => $this->appPageService->getNotifications($this->getUser()),
         ]);
     }
 
     #[Route('/user/{id}', name: 'app_user', requirements: ['id' => '\d+'])]
-    public function userProfile(int $id, EntityManagerInterface $em): Response
+    public function userProfile(int $id): Response
     {
-        if ($this->getUser() && $this->getUser()->getId() === $id) {
-            return $this->forward('App\Controller\Web\ProfileController::index');
-        }
-        $targetUser = $em->getRepository(\App\Entity\User::class)->find($id);
-        if (!$targetUser) {
+        $data = $this->appPageService->getUserProfile($id, $this->getUser());
+        if (!$data) {
             throw $this->createNotFoundException('User not found');
         }
 
-        $followingCount = $em->getRepository(\App\Entity\Follower::class)->count(['user' => $targetUser]);
-        $likesCount = $em->getRepository(\App\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
+        if (isset($data['self'])) {
+            return $this->forward('App\Controller\Web\ProfileController::index');
+        }
 
-        $lastComment = $em->getRepository(Comment::class)->findOneBy(['user' => $targetUser], ['createdAt' => 'DESC']);
-        $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$targetUser->getId();
-
-        $author = $em->getRepository(Author::class)->findOneBy(['user' => $targetUser]);
-
-        return $this->render('app/user.html.twig', [
-            'targetUser' => $targetUser,
-            'followingCount' => $followingCount,
-            'likesCount' => $likesCount,
-            'name' => $name,
-            'author' => $author,
-        ]);
+        return $this->render('app/user.html.twig', $data);
     }
 }
