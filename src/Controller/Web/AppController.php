@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Comment;
 use App\Entity\Content;
 use App\Entity\Notification;
+use App\Service\Notification\TelegramNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -117,7 +118,7 @@ class AppController extends AbstractController
 
     #[Route('/author/{id}/follow', name: 'app_author_follow', requirements: ['id' => '\d+'], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function followAuthor(int $id, EntityManagerInterface $em): Response
+    public function followAuthor(int $id, EntityManagerInterface $em, TelegramNotificationService $telegramNotifier): Response
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -134,18 +135,17 @@ class AppController extends AbstractController
             $follower->setAuthor($author);
             $em->persist($follower);
 
-            // Create internal notification for the author
-            if ($author->getTelegramUserId()) {
-                $authorUser = $em->getRepository(\App\Entity\User::class)->find($author->getTelegramUserId());
-                if ($authorUser && $authorUser->getId() !== $user->getId()) {
-                    $notification = new Notification();
-                    $notification->setUser($authorUser);
-                    $notification->setType('new_follower');
-                    $notification->setTargetId($user->getId());
-                    $notification->setTargetType('user');
-                    $notification->setMessage('На вас підписався новий користувач.');
-                    $em->persist($notification);
-                }
+            $authorUser = $author->getUser();
+            if ($authorUser && $authorUser->getId() !== $user->getId()) {
+                $notification = new Notification();
+                $notification->setUser($authorUser);
+                $notification->setType('new_follower');
+                $notification->setTargetId($user->getId());
+                $notification->setTargetType('user');
+                $notification->setMessage('На вас підписався новий користувач.');
+                $em->persist($notification);
+
+                $telegramNotifier->sendToUser($authorUser, 'На вас підписався новий користувач у Machinima');
             }
 
             $em->flush();
