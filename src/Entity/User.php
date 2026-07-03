@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column(name: 'user_id', type: 'integer')]
     private ?int $id = null;
 
