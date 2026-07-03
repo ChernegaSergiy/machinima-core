@@ -15,7 +15,7 @@
     {% for project in projects %}
     <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal">
         {% if project.staff|length > 0 %}
-            <a href="{{ path('app_author', {id: project.staff|first.author.id}) }}" class="flex items-center mb-4 no-underline text-inherit group transition-all">
+            <a href="{{ path('app_author', {id: project.staff|first.author.id}) }}" data-skeleton="author" class="flex items-center mb-4 no-underline text-inherit group transition-all">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0 group-active:translate-brutal-sm group-active:shadow-xs transition-all"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
                     <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ project.staff|first.author.name }}</div>
@@ -32,13 +32,13 @@
             </div>
         {% endif %}
         
-        <a href="{{ path('app_post', {id: project.id}) }}" class="block no-underline">
+        <a href="{{ path('app_post', {id: project.id}) }}" data-skeleton="post" class="block no-underline">
             <h3 class="text-xl font-bold m-0 mb-3 leading-snug text-primary font-unbounded tracking-tight uppercase">{{ project.title }}</h3>
         </a>
         
         <div class="text-base text-primary leading-relaxed mb-4 font-semibold line-clamp-3">{{ project.description }}</div>
         
-        <a href="{{ path('app_post', {id: project.id}) }}" class="w-full aspect-video bg-surface border-2 border-border rounded flex items-center justify-center text-primary overflow-hidden relative">
+        <a href="{{ path('app_post', {id: project.id}) }}" data-skeleton="post" class="w-full aspect-video bg-surface border-2 border-border rounded flex items-center justify-center text-primary overflow-hidden relative">
             {% if project.coverFileId %}
                 {% if project.coverFileId starts with 'http' %}
                     <img src="{{ project.coverFileId }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
