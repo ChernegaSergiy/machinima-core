@@ -10,7 +10,7 @@
 <div class="w-full max-w-600 mx-auto p-4">
     <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal">
         {% if post.staff|length > 0 %}
-            <a href="{{ path('app_author', {id: post.staff|first.author.id}) }}" class="flex items-center mb-4 no-underline text-inherit group transition-all">
+            <a href="{{ path('app_author', {id: post.staff|first.author.id}) }}" data-skeleton="author" class="flex items-center mb-4 no-underline text-inherit group transition-all">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0 group-active:translate-brutal-sm group-active:shadow-xs transition-all"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
                     <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ post.staff|first.author.name }}</div>
@@ -56,7 +56,7 @@
     <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase">Команда проєкту</h2>
     <div class="mb-6">
         {% for staffItem in post.staff %}
-            <a href="{{ path('app_author', {id: staffItem.author.id}) }}" class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 shadow-brutal no-underline text-inherit group active:translate-brutal-sm active:shadow-xs transition-all">
+            <a href="{{ path('app_author', {id: staffItem.author.id}) }}" data-skeleton="author" class="flex items-center p-4 bg-surface rounded border-2 border-border mb-4 shadow-brutal no-underline text-inherit group active:translate-brutal-sm active:shadow-xs transition-all">
                 <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm">
                     <i data-lucide="user" class="w-6 h-6 stroke-2"></i>
                 </div>
@@ -112,9 +112,9 @@
                     <div class="bg-surface border-2 border-border rounded p-4 mb-4 shadow-brutal comment-item" id="comment-item-{{ item.entity.id }}">
                         <div class="flex items-center mb-3">
                             {% set profileLink = path('app_user', {id: item.entity.user.id}) %}
-                            <a href="{{ profileLink }}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
+                            <a href="{{ profileLink }}" data-skeleton="profile" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
                             <div>
-                                <a href="{{ profileLink }}" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
+                                <a href="{{ profileLink }}" data-skeleton="profile" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.authorName }}</a>
                                 <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
