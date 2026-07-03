@@ -28,8 +28,9 @@ class Author
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $state = null;
 
-    #[ORM\Column(name: 'telegram_user_id', type: 'integer', nullable: true)]
-    private ?int $telegramUserId = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: true, onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -96,14 +97,14 @@ class Author
         return $this;
     }
 
-    public function getTelegramUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->telegramUserId;
+        return $this->user;
     }
 
-    public function setTelegramUserId(?int $telegramUserId): self
+    public function setUser(?User $user): self
     {
-        $this->telegramUserId = $telegramUserId;
+        $this->user = $user;
 
         return $this;
     }
