@@ -122,12 +122,12 @@ class RoleService
         $user->addRole($role);
 
         if ($this->doesRoleInclude($role_name, 'ROLE_CREATOR')) {
-            $author = $this->em->getRepository(Author::class)->findOneBy(['telegramUserId' => $user_id]);
+            $author = $this->em->getRepository(Author::class)->findOneBy(['user' => $user]);
             if (!$author) {
                 $author = new Author();
                 $author->setName('Creator #'.$user_id);
                 $author->setState('private');
-                $author->setTelegramUserId($user_id);
+                $author->setUser($user);
                 $this->em->persist($author);
             }
         }
