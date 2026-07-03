@@ -22,7 +22,7 @@ class AuthorRepository extends ServiceEntityRepository
     public function getTopAuthors(int $limit = 10): array
     {
         $qb = $this->createQueryBuilder('a');
-        $qb->select('a.id', 'a.name', 'a.biography', 'a.channelLink', 'a.createdAt', 'a.state', 'a.telegramUserId', 'COUNT(cs.content) as projects_count')
+        $qb->select('a.id', 'a.name', 'a.biography', 'a.channelLink', 'a.createdAt', 'a.state', 'IDENTITY(a.user) as user_id', 'COUNT(cs.content) as projects_count')
            ->leftJoin(ContentStaff::class, 'cs', 'WITH', 'cs.author = a')
            ->leftJoin(Content::class, 'c', 'WITH', 'cs.content = c AND c.status = :status')
            ->where('a.state = :state')
@@ -38,14 +38,14 @@ class AuthorRepository extends ServiceEntityRepository
     public function getAllAuthors(): array
     {
         $qb = $this->createQueryBuilder('a');
-        $qb->select('a.id', 'a.name', 'a.biography', 'a.channelLink as channel_link', 'a.createdAt as created_at', 'a.state', 'a.telegramUserId as telegram_user_id');
+        $qb->select('a.id', 'a.name', 'a.biography', 'a.channelLink as channel_link', 'a.createdAt as created_at', 'a.state', 'IDENTITY(a.user) as user_id');
 
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function findByTelegramId(int $telegramUserId): ?Author
+    public function findByUserId(int $userId): ?Author
     {
-        return $this->findOneBy(['telegramUserId' => $telegramUserId]);
+        return $this->findOneBy(['user' => $userId]);
     }
 
     public function getAuthorProjects(int $author_id, int $limit = 10, int $offset = 0): array

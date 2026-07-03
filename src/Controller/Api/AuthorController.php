@@ -91,7 +91,7 @@ class AuthorController extends AbstractController
             'channel_link' => $author->getChannelLink(),
             'created_at' => $author->getCreatedAt(),
             'state' => $author->getState(),
-            'telegram_user_id' => $author->getTelegramUserId(),
+            'user_id' => $author->getUser()?->getId(),
         ];
     }
 }
