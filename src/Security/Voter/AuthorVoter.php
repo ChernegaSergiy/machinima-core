@@ -6,10 +6,10 @@ namespace App\Security\Voter;
 
 use App\Entity\Author;
 use App\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Bundle\SecurityBundle\Security;
 
 class AuthorVoter extends Voter
 {
@@ -17,18 +17,18 @@ class AuthorVoter extends Voter
 
     public function __construct(
         private Security $security,
-    ) {}
+    ) {
+    }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $attribute === self::VIEW && $subject instanceof Author;
+        return self::VIEW === $attribute && $subject instanceof Author;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var Author $subject */
-
-        if ($subject->getState() !== 'private') {
+        if ('private' !== $subject->getState()) {
             return true;
         }
 
@@ -41,7 +41,7 @@ class AuthorVoter extends Voter
             return false;
         }
 
-        if ((int)$user->getId() === (int)$subject->getTelegramUserId()) {
+        if ((int) $user->getId() === (int) $subject->getTelegramUserId()) {
             return true;
         }
 
