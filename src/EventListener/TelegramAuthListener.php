@@ -19,35 +19,50 @@ class TelegramAuthListener
     public function __invoke(TelegramUserAuthenticatedEvent $event): void
     {
         $telegramUser = $event->getTelegramUserData();
-        $userId = $telegramUser['id'] ?? 0;
+        $telegramId = (string) ($telegramUser['id'] ?? '');
 
-        if (!$userId) {
+        if (!$telegramId) {
             return; // Safety check
         }
 
-        $userRepository = $this->entityManager->getRepository(User::class);
-        $user = $userRepository->find($userId);
+        $identityRepo = $this->entityManager->getRepository(\App\Entity\UserIdentity::class);
+        $identity = $identityRepo->findOneBy([
+            'providerName' => 'telegram',
+            'providerId' => $telegramId,
+        ]);
 
         $needsFlush = false;
 
-        if (!$user) {
+        if ($identity) {
+            $user = $identity->getUser();
+            // Optional: update provider data if changed
+            $identity->setProviderData($telegramUser);
+        } else {
             $user = new User();
-            $user->setId($userId);
             $this->entityManager->persist($user);
+
+            $identity = new \App\Entity\UserIdentity();
+            $identity->setUser($user);
+            $identity->setProviderName('telegram');
+            $identity->setProviderId($telegramId);
+            $identity->setProviderData($telegramUser);
+            $this->entityManager->persist($identity);
+
             $needsFlush = true;
         }
 
-        // Also ensure an Author record exists for this user
+        // We will temporarily keep author check using telegramUserId,
+        // until we refactor the Author entity in the next commit.
         $authorRepository = $this->entityManager->getRepository(Author::class);
-        $author = $authorRepository->findOneBy(['telegramUserId' => $userId]);
+        $author = $authorRepository->findOneBy(['telegramUserId' => (int) $telegramId]);
 
         if (!$author) {
             $author = new Author();
-            $author->setTelegramUserId($userId);
+            $author->setTelegramUserId((int) $telegramId);
 
             // Build a default name from Telegram data
             $nameParts = array_filter([$telegramUser['first_name'] ?? '', $telegramUser['last_name'] ?? '']);
-            $name = !empty($nameParts) ? implode(' ', $nameParts) : 'Користувач #'.$userId;
+            $name = !empty($nameParts) ? implode(' ', $nameParts) : 'Користувач #'.$telegramId;
 
             $author->setName($name);
             $author->setState('active');
