@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0f7f3d15a0c74bbe7e88060fcbffe26",
+    "content-hash": "ac488410ef361c6e6d107a0f2a6e7547",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -1264,7 +1264,7 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-bot",
-                "reference": "a07e67b7adea7ae5be9d3b0a5fea53441e39f2e3"
+                "reference": "63957ee9831c8d6245cec9e68f8e0f418efe45b3"
             },
             "require": {
                 "morfeditorial/telegram-bot-bundle": "*@dev",
@@ -1282,6 +1282,16 @@
                     "Morfeditorial\\": "src/"
                 }
             },
+            "license": [
+                "LicenseRef-CSSM-Unlimited-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Serhii Cherneha",
+                    "email": "chernegasergiy3@gmail.com"
+                }
+            ],
+            "description": "The official Telegram Bot for the Machinima platform.",
             "transport-options": {
                 "relative": true
             }
@@ -1292,12 +1302,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChernegaSergiy/telegram-bot-bundle.git",
-                "reference": "e1d6b9752619eeda9c5e3047380271ac54cdd20b"
+                "reference": "e02e61bab13d8830b95defd892092695d7dd16ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/e1d6b9752619eeda9c5e3047380271ac54cdd20b",
-                "reference": "e1d6b9752619eeda9c5e3047380271ac54cdd20b",
+                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/e02e61bab13d8830b95defd892092695d7dd16ca",
+                "reference": "e02e61bab13d8830b95defd892092695d7dd16ca",
                 "shasum": ""
             },
             "require": {
@@ -1305,7 +1315,8 @@
                 "symfony/config": "^7.0|^8.0",
                 "symfony/dependency-injection": "^7.0|^8.0",
                 "symfony/http-client": "^7.0|^8.0",
-                "symfony/http-kernel": "^7.0|^8.0"
+                "symfony/http-kernel": "^7.0|^8.0",
+                "symfony/security-bundle": "^8.1"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.95"
@@ -1342,7 +1353,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-02T00:06:59+00:00"
+            "time": "2026-07-03T14:17:03+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
