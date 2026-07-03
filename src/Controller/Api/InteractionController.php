@@ -2,22 +2,22 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Content;
-use App\Entity\ContentInteraction;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\Interaction\InteractionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Mercure\HubInterface;
-use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/api')]
 class InteractionController extends AbstractController
 {
+    public function __construct(
+        private InteractionService $interactionService,
+    ) {
+    }
+
     #[Route('/interact', name: 'api_interact', methods: ['POST'])]
-    public function interact(Request $request, EntityManagerInterface $em, HubInterface $hub): JsonResponse
+    public function interact(Request $request): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
 
@@ -25,129 +25,36 @@ class InteractionController extends AbstractController
             return $this->json(['success' => false, 'error' => 'Missing content_id or type'], 400);
         }
 
-        $contentId = (int) $body['content_id'];
-        $type = (string) $body['type'];
-        $userId = isset($body['user_id']) ? (int) $body['user_id'] : null;
-
-        $content = $em->getRepository(Content::class)->find($contentId);
-        if (!$content) {
-            return $this->json(['success' => false, 'error' => 'Content not found'], 404);
-        }
-
-        if ('view' === $type) {
+        if ('view' === $body['type']) {
             return $this->json(['success' => false, 'error' => 'View tracking is now handled server-side'], 400);
         }
-        // Like or Dislike
-        if (!$userId) {
+
+        if (!isset($body['user_id'])) {
             return $this->json(['success' => false, 'error' => 'User ID is required for liking/disliking'], 400);
         }
 
-        $user = $em->getRepository(User::class)->find($userId);
-        if (!$user) {
-            return $this->json(['success' => false, 'error' => 'User not found'], 404);
-        }
-
-        if (!in_array($type, ['like', 'dislike'])) {
-            return $this->json(['success' => false, 'error' => 'Invalid interaction type'], 400);
-        }
-
-        $interaction = $em->getRepository(ContentInteraction::class)->createQueryBuilder('ci')
-            ->where('ci.user = :user')
-            ->andWhere('ci.content = :content')
-            ->andWhere('ci.interactionType IN (:types)')
-            ->setParameter('user', $user)
-            ->setParameter('content', $content)
-            ->setParameter('types', ['like', 'dislike'])
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if ($interaction) {
-            if ($interaction->getInteractionType() === $type) {
-                // Remove interaction
-                $em->remove($interaction);
-                if ('like' === $type) {
-                    $content->setLikesCount(max(0, $content->getLikesCount() - 1));
-                } else {
-                    $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
-                }
-            } else {
-                // Switch interaction
-                $interaction->setInteractionType($type);
-                if ('like' === $type) {
-                    $content->setLikesCount($content->getLikesCount() + 1);
-                    $content->setDislikesCount(max(0, $content->getDislikesCount() - 1));
-                } else {
-                    $content->setDislikesCount($content->getDislikesCount() + 1);
-                    $content->setLikesCount(max(0, $content->getLikesCount() - 1));
-                }
-            }
-        } else {
-            // New interaction
-            $interaction = new ContentInteraction();
-            $interaction->setUser($user);
-            $interaction->setContent($content);
-            $interaction->setInteractionType($type);
-            $interaction->setCreatedAt(date('Y-m-d H:i:s'));
-            $em->persist($interaction);
-
-            if ('like' === $type) {
-                $content->setLikesCount($content->getLikesCount() + 1);
-            } else {
-                $content->setDislikesCount($content->getDislikesCount() + 1);
-            }
-        }
-
-        $em->flush();
-
-        // Broadcast new stats via Mercure
-        $update = new Update(
-            'machinima/updates',
-            json_encode([
-                'type' => 'STATS_UPDATE',
-                'content_id' => $contentId,
-                'likes' => $content->getLikesCount(),
-                'dislikes' => $content->getDislikesCount(),
-                'views' => $content->getViewsCount(),
-            ])
+        $result = $this->interactionService->interact(
+            (int) $body['content_id'],
+            (string) $body['type'],
+            (int) $body['user_id'],
         );
-        try {
-            $hub->publish($update);
-        } catch (\Throwable $e) {
-            // Ignore Mercure errors if hub is not running
+
+        if (!$result) {
+            return $this->json(['success' => false, 'error' => 'Content or user not found'], 404);
         }
 
-        return $this->json([
-            'success' => true,
-            'likes' => $content->getLikesCount(),
-            'dislikes' => $content->getDislikesCount(),
-            'views' => $content->getViewsCount(),
-        ]);
+        return $this->json(array_merge(['success' => true], $result));
     }
 
     #[Route('/user/{userId}/interactions', name: 'api_user_interactions', methods: ['GET'])]
-    public function getUserInteractions(int $userId, EntityManagerInterface $em): JsonResponse
+    public function getUserInteractions(int $userId): JsonResponse
     {
-        $user = $em->getRepository(User::class)->find($userId);
-        if (!$user) {
+        $result = $this->interactionService->getUserInteractions($userId);
+
+        if (!$result) {
             return $this->json(['success' => false, 'error' => 'User not found'], 404);
         }
 
-        $interactions = $em->getRepository(ContentInteraction::class)->findBy(['user' => $user]);
-        $likedIds = [];
-        $dislikedIds = [];
-        foreach ($interactions as $interaction) {
-            if ('like' === $interaction->getInteractionType()) {
-                $likedIds[] = $interaction->getContent()->getId();
-            } elseif ('dislike' === $interaction->getInteractionType()) {
-                $dislikedIds[] = $interaction->getContent()->getId();
-            }
-        }
-
-        return $this->json([
-            'success' => true,
-            'likes' => $likedIds,
-            'dislikes' => $dislikedIds,
-        ]);
+        return $this->json(array_merge(['success' => true], $result));
     }
 }
