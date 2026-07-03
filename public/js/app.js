@@ -6,7 +6,7 @@ function initApp() {
         
         if (tg.initData) {
             document.body.classList.add('is-tma');
-            const currentRoute = document.body.dataset.route || window.APP_CONFIG.currentRoute;
+            const currentRoute = document.body.dataset.route;
             const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
             if (!rootRoutes.includes(currentRoute)) {
                 tg.BackButton.show();
