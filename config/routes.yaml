@@ -9,3 +9,8 @@
 
 controllers:
     resource: routing.controllers
+
+machinima_bot_controllers:
+    resource: '@MachinimaBotBundle/src/Controller/'
+    type: attribute
+    ignore_errors: true
