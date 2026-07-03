@@ -71,7 +71,8 @@
 
     <script>
         (function() {
-            var userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+            var userId = {{ app.user ? app.user.id : 'null' }};
+            window.currentUserId = userId;
             var tgData = window.Telegram?.WebApp?.initData;
             
             // Apply owner-specific CSS immediately
