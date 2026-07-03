@@ -15,7 +15,7 @@
     {% for project in feed %}
     <div class="bg-surface border-2 border-border rounded p-4 mb-6 shadow-brutal">
         {% if project.staff|length > 0 %}
-            <a href="{{ path('app_author', {id: project.staff|first.author.id}) }}" class="flex items-center mb-4 no-underline text-inherit group transition-all">
+            <a href="{{ path('app_author', {id: project.staff|first.author.id}) }}" data-skeleton="author" class="flex items-center mb-4 no-underline text-inherit group transition-all">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0 group-active:translate-brutal-sm group-active:shadow-xs transition-all"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
                     <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ project.staff|first.author.name }}</div>
