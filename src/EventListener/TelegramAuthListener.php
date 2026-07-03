@@ -12,14 +12,18 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 class TelegramAuthListener
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
     public function __invoke(TelegramUserAuthenticatedEvent $event): void
     {
-        $telegramUser = $event->getTelegramUser();
-        $userId = $telegramUser->getId();
+        $telegramUser = $event->getTelegramUserData();
+        $userId = $telegramUser['id'] ?? 0;
+
+        if (!$userId) {
+            return; // Safety check
+        }
 
         $userRepository = $this->entityManager->getRepository(User::class);
         $user = $userRepository->find($userId);
@@ -40,14 +44,14 @@ class TelegramAuthListener
         if (!$author) {
             $author = new Author();
             $author->setTelegramUserId($userId);
-            
+
             // Build a default name from Telegram data
-            $nameParts = array_filter([$telegramUser->getFirstName(), $telegramUser->getLastName()]);
-            $name = !empty($nameParts) ? implode(' ', $nameParts) : 'Користувач #' . $userId;
-            
+            $nameParts = array_filter([$telegramUser['first_name'] ?? '', $telegramUser['last_name'] ?? '']);
+            $name = !empty($nameParts) ? implode(' ', $nameParts) : 'Користувач #'.$userId;
+
             $author->setName($name);
             $author->setState('active');
-            
+
             $this->entityManager->persist($author);
             $needsFlush = true;
         }
