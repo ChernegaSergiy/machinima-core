@@ -12,15 +12,14 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $workflow: '@state_machine.content_publishing'
 
     App\Service\Avatar\AvatarProviderInterface:
         alias: App\Service\Avatar\DefaultAvatarProvider
 
     App\Service\Media\MediaProviderInterface:
         alias: App\Service\Media\DefaultMediaProvider
-        bind:
-            $botToken: '%env(TELEGRAM_BOT_TOKEN)%'
-            $workflow: '@state_machine.content_publishing'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
