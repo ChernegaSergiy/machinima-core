@@ -1025,7 +1025,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             provider?: scalar|Param|null,
  *             user?: scalar|Param|null, // Default: "REMOTE_USER"
  *         },
- *         telegram_tma?: array<mixed>,
  *         login_link?: array{
  *             check_route?: scalar|Param|null, // Route that will validate the login link - e.g. "app_login_link_verify".
  *             check_post_only?: scalar|Param|null, // If true, only HTTP POST requests to "check_route" will be handled by the authenticator. // Default: false
@@ -1277,9 +1276,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         html_to_text_converter?: scalar|Param|null, // A service implementing the "Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface". // Default: null
  *     },
  * }
- * @psalm-type TelegramBotConfig = array{
- *     token?: scalar|Param|null, // The Telegram Bot API token.
- * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1290,7 +1286,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     mercure?: MercureConfig,
  *     twig?: TwigConfig,
- *     telegram_bot?: TelegramBotConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1302,7 +1297,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
- *         telegram_bot?: TelegramBotConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1314,7 +1308,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
- *         telegram_bot?: TelegramBotConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1326,7 +1319,6 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         security?: SecurityConfig,
  *         mercure?: MercureConfig,
  *         twig?: TwigConfig,
- *         telegram_bot?: TelegramBotConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,
