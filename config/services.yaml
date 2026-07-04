@@ -24,7 +24,7 @@ services:
             $channel: '@App\Contract\NotificationChannelPort'
 
     App\Service\Avatar\AvatarProviderInterface:
-        alias: App\Service\Avatar\IdenticonAvatarProvider
+        alias: App\Service\Avatar\ThumbsAvatarProvider
 
     App\Service\Avatar\ThumbsAvatarProvider:
         arguments:
