@@ -1,0 +1,10 @@
+{#
+  Adapter-side bridge template for Telegram WebApp SDK.
+  NOT included in core templates. Should be extended by adapter-specific templates
+  that provide Telegram capabilities via PlatformUiContext.
+#}
+<script>
+window.getTelegramWebApp = function() {
+    return window.Telegram?.WebApp || null;
+};
+</script>
