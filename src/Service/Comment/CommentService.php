@@ -7,7 +7,7 @@ namespace App\Service\Comment;
 use App\Entity\Comment;
 use App\Entity\Content;
 use App\Entity\User;
-use App\Service\Notification\TelegramNotificationService;
+use App\Contract\NotificationChannelPort;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
@@ -17,7 +17,7 @@ class CommentService
     public function __construct(
         private EntityManagerInterface $em,
         private HubInterface $hub,
-        private TelegramNotificationService $telegramNotifier,
+        private NotificationChannelPort $notifier,
     ) {
     }
 
@@ -149,7 +149,7 @@ class CommentService
         $this->em->persist($notification);
         $this->em->flush();
 
-        $this->telegramNotifier->sendToUser($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getAuthorName());
+        $this->notifier->send($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getAuthorName());
     }
 
     private function notifyProjectAuthor(Comment $comment, User $user, Content $project): void
@@ -173,7 +173,7 @@ class CommentService
         $this->em->persist($notification);
         $this->em->flush();
 
-        $this->telegramNotifier->sendToUser($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getAuthorName());
+        $this->notifier->send($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getAuthorName());
     }
 
     private function broadcastCommentEvent(string $type, int $contentId, array $data): void
