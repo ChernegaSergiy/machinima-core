@@ -56,10 +56,5 @@ services:
               ]
         public: true
 
-    Morfeditorial\TelegramBotBundle\Routing\UpdateDispatcher:
-        arguments:
-            $commands: !tagged_iterator telegram_bot.command
-            $screens: !tagged_iterator telegram_bot.screen
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
