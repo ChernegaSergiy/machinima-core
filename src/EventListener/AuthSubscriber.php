@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use App\Entity\Author;
 use App\Entity\User;
 use App\Event\UserAuthenticatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,19 +48,6 @@ class AuthSubscriber
 
         if ($displayName && !$user->getDisplayName()) {
             $user->setDisplayName($displayName);
-            $needsFlush = true;
-        }
-
-        $authorRepository = $this->entityManager->getRepository(Author::class);
-        $author = $authorRepository->findOneBy(['user' => $user]);
-
-        if (!$author) {
-            $author = new Author();
-            $author->setUser($user);
-            $author->setName($displayName ?? 'Користувач #'.$assertion->getProviderSubjectId());
-            $author->setState('active');
-
-            $this->entityManager->persist($author);
             $needsFlush = true;
         }
 
