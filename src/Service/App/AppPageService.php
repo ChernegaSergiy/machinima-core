@@ -6,7 +6,7 @@ namespace App\Service\App;
 
 use App\Entity\Author;
 use App\Entity\Category;
-
+use App\Entity\Comment;
 use App\Entity\Content;
 use App\Entity\Follower;
 use App\Entity\Notification;
