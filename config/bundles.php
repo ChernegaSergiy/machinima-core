@@ -8,5 +8,4 @@ return [
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
     Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
-    Morfeditorial\TelegramBotBundle\TelegramBotBundle::class => ['all' => true],
 ];

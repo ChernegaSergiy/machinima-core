@@ -16,6 +16,22 @@ class Kernel extends BaseKernel
         return $_SERVER['APP_PROFILE'] ?? $_ENV['APP_PROFILE'] ?? 'core-only';
     }
 
+    public function registerBundles(): iterable
+    {
+        yield from parent::registerBundles();
+
+        $profile = $this->getProfile();
+        $profileBundlesPath = $this->getConfigDir().'/profiles/'.$profile.'/bundles.php';
+
+        if (is_file($profileBundlesPath)) {
+            foreach (require $profileBundlesPath as $class => $envs) {
+                if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                    yield new $class();
+                }
+            }
+        }
+    }
+
     private function configureContainer(ContainerConfigurator $container): void
     {
         $configDir = preg_replace('{/config$}', '/{config}', $this->getConfigDir());
