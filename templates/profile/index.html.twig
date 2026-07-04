@@ -85,30 +85,5 @@
 
 </div>
 
-<script>
-(function() {
-    const tgUser = window.__PLATFORM__?.initDataUnsafe?.user;
-    if (tgUser) {
-        const user = tgUser;
-        const nameEl = document.getElementById('profile-name');
-        const usernameEl = document.getElementById('profile-username');
-        const avatarImgEl = document.getElementById('profile-avatar-img');
-        const avatarPlaceholderEl = document.getElementById('profile-avatar-placeholder');
 
-        if (nameEl) nameEl.textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-        if (usernameEl) {
-            if (user.username) {
-                usernameEl.textContent = '@' + user.username;
-            } else {
-                usernameEl.style.display = 'none';
-            }
-        }
-        if (avatarImgEl && user.photo_url) {
-            avatarImgEl.src = user.photo_url;
-            avatarImgEl.style.display = 'block';
-            if (avatarPlaceholderEl) avatarPlaceholderEl.style.display = 'none';
-        }
-    }
-})();
-</script>
 {% endblock %}
