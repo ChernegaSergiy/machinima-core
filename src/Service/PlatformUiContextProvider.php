@@ -7,7 +7,6 @@ namespace App\Service;
 use App\Contract\NullPlatformUiContext;
 use App\Contract\PlatformUiContext;
 use App\Contract\PlatformUiContextProvider as PlatformUiContextProviderInterface;
-use App\Contract\TelegramPlatformUiContext;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class PlatformUiContextProvider implements PlatformUiContextProviderInterface
@@ -23,14 +22,6 @@ class PlatformUiContextProvider implements PlatformUiContextProviderInterface
 
         if (!$request) {
             return new NullPlatformUiContext();
-        }
-
-        $initData = $request->headers->get('X-Init-Data')
-            ?? $request->cookies->get('tma_init_data')
-            ?? $request->query->get('initData');
-
-        if ($initData) {
-            return new TelegramPlatformUiContext($initData);
         }
 
         return new NullPlatformUiContext();
