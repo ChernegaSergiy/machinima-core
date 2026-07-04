@@ -87,8 +87,9 @@
 
 <script>
 (function() {
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-        const user = window.Telegram.WebApp.initDataUnsafe.user;
+    const tgUser = window.__PLATFORM__?.initDataUnsafe?.user || window.Telegram?.WebApp?.initDataUnsafe?.user;
+    if (tgUser) {
+        const user = tgUser;
         const nameEl = document.getElementById('profile-name');
         const usernameEl = document.getElementById('profile-username');
         const avatarImgEl = document.getElementById('profile-avatar-img');
