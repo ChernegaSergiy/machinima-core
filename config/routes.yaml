@@ -9,8 +9,3 @@
 
 controllers:
     resource: routing.controllers
-
-machinima_bot_controllers:
-    resource: '@MachinimaBotBundle/Controller/'
-    type: attribute
-    prefix: /
