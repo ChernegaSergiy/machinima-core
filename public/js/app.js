@@ -1,26 +1,37 @@
+function getPlatform() {
+    return window.__PLATFORM__ || { isEmbedded: false, initData: null };
+}
+
+function getInitData() {
+    const plat = getPlatform();
+    if (plat.isEmbedded && plat.initData) {
+        return plat.initData;
+    }
+    return window.Telegram?.WebApp?.initData || null;
+}
+
 function initApp() {
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-        tg.ready();
-        tg.expand();
-        
-        if (tg.initData) {
-            document.body.classList.add('is-tma');
-            const currentRoute = document.body.dataset.route;
-            const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
-            if (!rootRoutes.includes(currentRoute)) {
+    const plat = getPlatform();
+
+    if (plat.isEmbedded && plat.initData) {
+        document.body.classList.add('is-tma');
+        const currentRoute = document.body.dataset.route;
+        const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
+        if (!rootRoutes.includes(currentRoute)) {
+            const tg = window.Telegram?.WebApp;
+            if (tg) {
                 tg.BackButton.show();
                 if (!window.tgBackAssigned) {
                     tg.BackButton.onClick(() => window.history.back());
                     window.tgBackAssigned = true;
                 }
-            } else {
-                tg.BackButton.hide();
             }
+        } else {
+            const tgBackBtn = window.Telegram?.WebApp?.BackButton;
+            if (tgBackBtn) tgBackBtn.hide();
         }
     }
-    
-    // Tab Bar persistence logic
+
     const tabBar = document.getElementById('main-tab-bar');
     if (tabBar) {
         const links = tabBar.querySelectorAll('a[data-skeleton]');
@@ -32,7 +43,7 @@ function initApp() {
                 link.addEventListener('click', function() {
                     const skeleton = this.dataset.skeleton;
                     sessionStorage.setItem('active_tab', skeleton);
-                    
+
                     links.forEach(l => {
                         l.classList.remove(...activeClasses);
                         l.classList.add(...defaultClasses);
@@ -44,9 +55,8 @@ function initApp() {
             tabBar.dataset.listenersAttached = 'true';
         }
 
-        // On full reload, restore from session storage if server didn't highlight any
         const serverActiveTab = Array.from(links).find(l => l.classList.contains('font-extrabold'));
-        
+
         if (serverActiveTab) {
             sessionStorage.setItem('active_tab', serverActiveTab.dataset.skeleton);
         } else {
@@ -60,12 +70,11 @@ function initApp() {
     }
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
-    
+
     const urlParams = new URLSearchParams(window.location.search);
     const scrollTargetId = urlParams.get('scrollTo') || (window.location.hash ? window.location.hash.substring(1) : null);
-    
+
     if (scrollTargetId) {
-        // Clean up the URL to avoid scrolling again on manual refresh
         if (urlParams.has('scrollTo')) {
             urlParams.delete('scrollTo');
             const qs = urlParams.toString();
@@ -73,7 +82,6 @@ function initApp() {
             window.history.replaceState({}, '', newUrl);
         }
 
-        // Double requestAnimationFrame ensures the DOM is fully laid out and painted
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 const target = document.getElementById(scrollTargetId);
@@ -88,7 +96,6 @@ function initApp() {
     }
 }
 
-// Check initial load
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
@@ -99,7 +106,6 @@ document.addEventListener('turbo:load', function(event) {
     initApp();
 });
 
-// Save scroll position before navigating away
 document.addEventListener('turbo:click', function(event) {
     const link = event.target.closest('a');
     if (!link) return;
@@ -108,7 +114,6 @@ document.addEventListener('turbo:click', function(event) {
 
     const skeletonType = link.getAttribute('data-skeleton');
     if (skeletonType) {
-        // Remove any leftover skeleton overlay first
         const old = document.getElementById('skeleton-overlay-active');
         if (old) old.remove();
 
@@ -126,7 +131,6 @@ document.addEventListener('turbo:click', function(event) {
     }
 });
 
-// Restore scroll position after page loads
 document.addEventListener('turbo:load', function(event) {
     const y = sessionStorage.getItem('scroll:' + window.location.pathname);
     if (y) {
@@ -140,11 +144,10 @@ document.addEventListener('turbo:load', function(event) {
     if (overlay) overlay.remove();
 });
 
-// Robust Architecture: Inject auth header into every Turbo navigation request natively.
 document.addEventListener('turbo:before-fetch-request', function (event) {
-    const tgData = window.Telegram?.WebApp?.initData;
-    if (tgData && typeof tgData === 'string') {
-        event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+    const initData = getInitData();
+    if (initData && typeof initData === 'string') {
+        event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
     }
 });
 
@@ -162,7 +165,6 @@ function setActive(el, active) {
     else el.classList.remove('active');
 }
 
-// Global interaction logic for feed items
 window.interactFeed = async function(contentId, type, btnElement) {
     if (btnElement && type !== 'view') {
         btnElement.style.pointerEvents = 'none';
@@ -170,10 +172,10 @@ window.interactFeed = async function(contentId, type, btnElement) {
         btnElement.style.transition = 'opacity 0.2s';
     }
     try {
-        const tgData = window.Telegram?.WebApp?.initData;
+        const initData = getInitData();
         const headers = { 'Content-Type': 'application/json' };
-        if (tgData && typeof tgData === 'string') {
-            headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+        if (initData && typeof initData === 'string') {
+            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const res = await fetch('/api/interact', {
             method: 'POST',
@@ -185,12 +187,12 @@ window.interactFeed = async function(contentId, type, btnElement) {
             })
         });
         const data = await res.json();
-        
+
         if (btnElement && type !== 'view') {
             btnElement.style.pointerEvents = 'auto';
             btnElement.style.opacity = '1';
         }
-        
+
         if (data.success) {
             if (btnElement && type !== 'view') {
                 const postActions = btnElement.closest('.post-actions');
@@ -209,7 +211,7 @@ window.interactFeed = async function(contentId, type, btnElement) {
                             }
                         }
                     }
-                    
+
                     if (type === 'dislike') {
                         const wasActive = btnElement.classList.contains('active');
                         setActive(btnElement, !wasActive);
@@ -232,34 +234,39 @@ window.interactFeed = async function(contentId, type, btnElement) {
     }
 };
 
-// Load active interactions on page load
 document.addEventListener('turbo:load', async function() {
-    const tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
-    if (!tgUserId) return;
-    try {
-        const res = await fetch('/api/user/' + tgUserId + '/interactions');
-        const data = await res.json();
-        if (data.success) {
-            const likedIds = data.likes || [];
-            const dislikedIds = data.dislikes || [];
-            document.querySelectorAll('.post-actions').forEach(actions => {
-                const postId = parseInt(actions.getAttribute('data-post-id'));
-                if (likedIds.includes(postId)) {
-                    const likeBtn = actions.querySelector('.btn-like');
-                    if (likeBtn) setActive(likeBtn, true);
-                } else if (dislikedIds.includes(postId)) {
-                    const dislikeBtn = actions.querySelector('.btn-dislike');
-                    if (dislikeBtn) setActive(dislikeBtn, true);
-                }
-            });
-        }
-    } catch(e) {}
+    const plat = getPlatform();
+    const initData = getInitData();
+
+    let tgUserId = window.currentUserId;
+    if (!tgUserId && plat.isEmbedded) {
+        tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+    }
+    if (tgUserId) {
+        try {
+            const res = await fetch('/api/user/' + tgUserId + '/interactions');
+            const data = await res.json();
+            if (data.success) {
+                const likedIds = data.likes || [];
+                const dislikedIds = data.dislikes || [];
+                document.querySelectorAll('.post-actions').forEach(actions => {
+                    const postId = parseInt(actions.getAttribute('data-post-id'));
+                    if (likedIds.includes(postId)) {
+                        const likeBtn = actions.querySelector('.btn-like');
+                        if (likeBtn) setActive(likeBtn, true);
+                    } else if (dislikedIds.includes(postId)) {
+                        const dislikeBtn = actions.querySelector('.btn-dislike');
+                        if (dislikeBtn) setActive(dislikeBtn, true);
+                    }
+                });
+            }
+        } catch(e) {}
+    }
 
     try {
-        const tgData = window.Telegram?.WebApp?.initData;
         const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
-        if (tgData && typeof tgData === 'string') {
-            headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+        if (initData && typeof initData === 'string') {
+            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const unreadRes = await fetch('/api/notifications/unread-count', {
             headers: headers,
@@ -275,8 +282,6 @@ document.addEventListener('turbo:load', async function() {
         }
     } catch(e) {}
 
-
-    
     if (!window.mercureListenerAttached && window.APP_CONFIG && window.APP_CONFIG.mercureUrl) {
         try {
             const eventSource = new EventSource(window.APP_CONFIG.mercureUrl);
@@ -292,10 +297,10 @@ document.addEventListener('turbo:load', async function() {
                 }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
                     try {
-                        const tgData = window.Telegram?.WebApp?.initData;
                         const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
-                        if (tgData && typeof tgData === 'string') {
-                            headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+                        const initData = getInitData();
+                        if (initData && typeof initData === 'string') {
+                            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
                         }
                         const unreadRes = await fetch('/api/notifications/unread-count', {
                             headers: headers,
