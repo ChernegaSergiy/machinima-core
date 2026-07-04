@@ -18,7 +18,18 @@ class Kernel extends BaseKernel
 
     public function registerBundles(): iterable
     {
-        yield from parent::registerBundles();
+        if (!is_file($this->getBundlesPath())) {
+            yield new \Symfony\Bundle\FrameworkBundle\FrameworkBundle();
+
+            return;
+        }
+
+        foreach ($this->getBundlesDefinition() as $class => $envs) {
+                if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                    yield new $class();
+                }
+            }
+        }
 
         $profile = $this->getProfile();
         $profileBundlesPath = $this->getConfigDir().'/profiles/'.$profile.'/bundles.php';
