@@ -14,7 +14,7 @@ services:
         autoconfigure: true
         bind:
             $workflow: '@state_machine.content_publishing'
-            App\Contract\NotificationChannelPort: '@App\Service\Notification\TelegramNotificationService'
+            App\Contract\NotificationChannelPort: '@App\Contract\Notification\NullNotificationChannel'
 
     App\Service\Avatar\AvatarProviderInterface:
         alias: App\Service\Avatar\DefaultAvatarProvider

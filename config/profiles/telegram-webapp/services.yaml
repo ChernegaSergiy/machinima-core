@@ -1,0 +1,4 @@
+services:
+    _defaults:
+        bind:
+            App\Contract\NotificationChannelPort: '@App\Service\Notification\TelegramNotificationService'
