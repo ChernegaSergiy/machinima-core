@@ -1,4 +1,5 @@
 services:
-    _defaults:
-        bind:
-            App\Contract\NotificationChannelPort: '@App\Service\Notification\TelegramNotificationService'
+    App\Service\Notification\NotificationGateway:
+        arguments:
+            $channel: '@App\Service\Notification\TelegramNotificationService'
+            $logger: '@logger'

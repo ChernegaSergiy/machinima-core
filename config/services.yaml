@@ -14,7 +14,14 @@ services:
         autoconfigure: true
         bind:
             $workflow: '@state_machine.content_publishing'
-            App\Contract\NotificationChannelPort: '@App\Contract\Notification\NullNotificationChannel'
+
+    App\Contract\NotificationChannelPort:
+        alias: App\Contract\Notification\NullNotificationChannel
+        public: true
+
+    App\Service\Notification\NotificationGateway:
+        arguments:
+            $channel: '@App\Contract\NotificationChannelPort'
 
     App\Service\Avatar\AvatarProviderInterface:
         alias: App\Service\Avatar\DefaultAvatarProvider
