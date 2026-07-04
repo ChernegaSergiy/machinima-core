@@ -7,30 +7,63 @@ function getInitData() {
 }
 
 function getTelegramWebApp() {
-    return window.Telegram?.WebApp || null;
+    return null;
+}
+
+function initEmbedded() {
+    const plat = getPlatform();
+    if (!plat.isEmbedded || !plat.initData) return;
+
+    document.body.classList.add('is-tma');
+    document.title = 'Morf TMA';
+
+    const currentRoute = document.body.dataset.route;
+    const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
+
+    const tg = getTelegramWebApp();
+    if (tg) {
+        if (!rootRoutes.includes(currentRoute)) {
+            tg.BackButton.show();
+            if (!window.tgBackAssigned) {
+                tg.BackButton.onClick(() => window.history.back());
+                window.tgBackAssigned = true;
+            }
+        } else {
+            var backBtn = tg.BackButton;
+            if (backBtn) backBtn.hide();
+        }
+
+        var updateTheme = function() {
+            document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
+        };
+        updateTheme();
+        tg.onEvent('themeChanged', updateTheme);
+
+        var cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
+        if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
+        document.cookie = cookieStr;
+    }
+
+    if (!window.tgLinkIntercept) {
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a');
+            var initData = getTelegramWebApp()?.initData;
+            if (link && link.href && link.href.startsWith(window.location.origin) && initData) {
+                try {
+                    var url = new URL(link.href);
+                    if (!url.searchParams.has('initData')) {
+                        url.searchParams.set('initData', initData);
+                        link.href = url.toString();
+                    }
+                } catch(err) {}
+            }
+        });
+        window.tgLinkIntercept = true;
+    }
 }
 
 function initApp() {
-    const plat = getPlatform();
-
-    if (plat.isEmbedded && plat.initData) {
-        document.body.classList.add('is-tma');
-        const currentRoute = document.body.dataset.route;
-        const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
-        if (!rootRoutes.includes(currentRoute)) {
-            const tg = getTelegramWebApp();
-            if (tg) {
-                tg.BackButton.show();
-                if (!window.tgBackAssigned) {
-                    tg.BackButton.onClick(() => window.history.back());
-                    window.tgBackAssigned = true;
-                }
-            }
-        } else {
-            const backBtn = getTelegramWebApp()?.BackButton;
-            if (backBtn) backBtn.hide();
-        }
-    }
+    initEmbedded();
 
     const tabBar = document.getElementById('main-tab-bar');
     if (tabBar) {
