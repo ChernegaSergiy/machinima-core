@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsEventListener(event: TelegramUserAuthenticatedEvent::class)]
-class TelegramAuthListener
+class TelegramToIdentityBridge
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
