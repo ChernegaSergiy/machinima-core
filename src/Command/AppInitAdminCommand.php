@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -30,14 +31,16 @@ class AppInitAdminCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('telegram_id', InputArgument::REQUIRED, 'The Telegram User ID to assign as the initial admin')
+            ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'Provider name (e.g., telegram)', 'telegram')
+            ->addOption('subject-id', null, InputOption::VALUE_REQUIRED, 'Provider subject identifier (e.g., Telegram user ID)')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $telegramId = (int) $input->getArgument('telegram_id');
+        $provider = $input->getOption('provider');
+        $subjectId = $input->getOption('subject-id');
 
         $roleRepo = $this->em->getRepository(Role::class);
         $userRepo = $this->em->getRepository(User::class);
@@ -95,7 +98,7 @@ class AppInitAdminCommand extends Command
 
         // 3. Setup Initial Admin User (via Identity)
         $identityRepo = $this->em->getRepository(\App\Entity\UserIdentity::class);
-        $identity = $identityRepo->findOneBy(['providerName' => 'telegram', 'providerId' => (string) $telegramId]);
+        $identity = $identityRepo->findOneBy(['providerName' => $provider, 'providerId' => (string) $subjectId]);
 
         if ($identity) {
             $user = $identity->getUser();
@@ -105,16 +108,16 @@ class AppInitAdminCommand extends Command
 
             $identity = new \App\Entity\UserIdentity();
             $identity->setUser($user);
-            $identity->setProviderName('telegram');
-            $identity->setProviderId((string) $telegramId);
+            $identity->setProviderName($provider);
+            $identity->setProviderId((string) $subjectId);
             $this->em->persist($identity);
         }
 
         if ($user->getUserRoles()->contains($adminRole)) {
-            $io->warning(sprintf('User linked to Telegram ID %d already has ROLE_ADMIN.', $telegramId));
+            $io->warning(sprintf('User linked to %s ID %s already has ROLE_ADMIN.', $provider, $subjectId));
         } else {
             $user->addRole($adminRole);
-            $io->success(sprintf('Assigned ROLE_ADMIN to Telegram ID %d.', $telegramId));
+            $io->success(sprintf('Assigned ROLE_ADMIN to %s ID %s.', $provider, $subjectId));
         }
 
         // 4. Setup Initial Author Profile
