@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "283238ca110f8d82038261e96fc33be8",
+    "content-hash": "bf8134eff6f5b7f073d3fe443f3a576a",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -1257,6 +1257,36 @@
                 }
             ],
             "time": "2021-09-28T19:18:28+00:00"
+        },
+        {
+            "name": "morfeditorial/machinima-telegram-adapter",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../machinima-telegram-adapter",
+                "reference": "44d8746b1ba9dfa76ecc7ad30698684275c036ef"
+            },
+            "require": {
+                "morfeditorial/machinima-app": "*@dev",
+                "morfeditorial/telegram-bot-bundle": "dev-main",
+                "php": ">=8.4",
+                "symfony/framework-bundle": "8.1.*",
+                "symfony/notifier": "8.1.*",
+                "symfony/telegram-notifier": "8.1.*"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Morfeditorial\\MachinimaTelegramAdapter\\": "src/"
+                }
+            },
+            "license": [
+                "LicenseRef-CSSM-Unlimited-2.0"
+            ],
+            "description": "Telegram platform adapter for the Machinima core app.",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "morfeditorial/telegram-bot-bundle",
@@ -6500,16 +6530,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.27.1",
+            "version": "v3.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74"
+                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ae2071bffb38f04847fc0864d730c94b9cb8ab74",
-                "reference": "ae2071bffb38f04847fc0864d730c94b9cb8ab74",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
+                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
                 "shasum": ""
             },
             "require": {
@@ -6564,7 +6594,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.27.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.28.0"
             },
             "funding": [
                 {
@@ -6576,7 +6606,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-30T17:09:26+00:00"
+            "time": "2026-07-03T20:44:34+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -8176,6 +8206,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "morfeditorial/machinima-telegram-adapter": 20,
         "morfeditorial/telegram-bot-bundle": 20
     },
     "prefer-stable": true,

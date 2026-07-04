@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\Contract\PlatformAdapterInterface;
 use Symfony\Component\HttpFoundation\Request;
-// TaggedIterator removed – no adapters currently
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 /**
  * Registry that collects all platform adapters (tagged with `app.platform_adapter`).
@@ -18,6 +18,7 @@ final class PlatformAdapterRegistry
     private iterable $adapters;
 
     public function __construct(
+        #[TaggedIterator('app.platform_adapter')]
         iterable $adapters = [],
     ) {
         $this->adapters = $adapters;

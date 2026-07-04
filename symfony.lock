@@ -47,6 +47,9 @@
             ".php-cs-fixer.dist.php"
         ]
     },
+    "morfeditorial/machinima-telegram-adapter": {
+        "version": "dev-main"
+    },
     "morfeditorial/telegram-bot-bundle": {
         "version": "dev-main"
     },
