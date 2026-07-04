@@ -16,6 +16,14 @@ class Kernel extends BaseKernel
         return $_SERVER['APP_PROFILE'] ?? $_ENV['APP_PROFILE'] ?? 'core-only';
     }
 
+    protected function getContainerClass(): string
+    {
+        $class = parent::getContainerClass();
+        $profile = $this->getProfile();
+
+        return 'core-only' === $profile ? $class : $class.str_replace('-', '_', $profile);
+    }
+
     public function registerBundles(): iterable
     {
         if (!is_file($this->getBundlesPath())) {
