@@ -2,7 +2,6 @@
 
 namespace App\Command;
 
-use App\Entity\Author;
 use App\Entity\Role;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,7 +42,6 @@ class AppInitAdminCommand extends Command
 
         $roleRepo = $this->em->getRepository(Role::class);
         $userRepo = $this->em->getRepository(User::class);
-        $authorRepo = $this->em->getRepository(Author::class);
 
         // 1. Setup Roles
         $adminRole = $roleRepo->findOneBy(['roleName' => 'ROLE_ADMIN']);
@@ -117,17 +115,6 @@ class AppInitAdminCommand extends Command
         } else {
             $user->addRole($adminRole);
             $io->success(sprintf('Assigned ROLE_ADMIN to %s ID %s.', $provider, $subjectId));
-        }
-
-        // 4. Setup Initial Author Profile
-        $author = $authorRepo->findOneBy(['user' => $user]);
-        if (!$author) {
-            $author = new Author();
-            $author->setName('Admin #'.$telegramId);
-            $author->setState('private');
-            $author->setUser($user);
-            $this->em->persist($author);
-            $io->success(sprintf('Created private Author profile for Telegram ID %d.', $telegramId));
         }
 
         $this->em->flush();
