@@ -24,7 +24,11 @@ services:
             $channel: '@App\Contract\NotificationChannelPort'
 
     App\Service\Avatar\AvatarProviderInterface:
-        alias: App\Service\Avatar\DefaultAvatarProvider
+        alias: App\Service\Avatar\IdenticonAvatarProvider
+
+    App\Service\Avatar\ThumbsAvatarProvider:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
 
     App\Service\Media\MediaProviderInterface:
         alias: App\Service\Media\DefaultMediaProvider
