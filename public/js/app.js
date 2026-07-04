@@ -272,9 +272,6 @@ document.addEventListener('turbo:load', async function() {
     const initData = getInitData();
 
     let tgUserId = window.currentUserId;
-    if (!tgUserId && plat.isEmbedded) {
-        tgUserId = plat.initDataUnsafe?.user?.id;
-    }
     if (tgUserId) {
         try {
             const res = await fetch('/api/user/' + tgUserId + '/interactions');
