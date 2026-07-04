@@ -2,7 +2,7 @@
 
 namespace App\Service\Avatar;
 
-class DefaultAvatarProvider implements AvatarProviderInterface
+class IdenticonAvatarProvider implements AvatarProviderInterface
 {
     public function getAvatarUrl(int $userId): string
     {
