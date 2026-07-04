@@ -21,9 +21,6 @@ class Comment
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column(name: 'author_name', type: 'string', length: 255, nullable: true)]
-    private ?string $authorName = null;
-
     #[ORM\Column(type: 'text')]
     private ?string $text = null;
 
@@ -62,18 +59,6 @@ class Comment
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getAuthorName(): ?string
-    {
-        return $this->authorName;
-    }
-
-    public function setAuthorName(?string $authorName): self
-    {
-        $this->authorName = $authorName;
 
         return $this;
     }
