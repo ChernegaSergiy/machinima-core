@@ -57,19 +57,19 @@ class Kernel extends BaseKernel
         $container->import($configDir.'/{packages}/*.{php,yaml}');
         $container->import($configDir.'/{packages}/'.$this->environment.'/*.{php,yaml}');
 
-        $profile = $this->getProfile();
-        $profileDir = $configDir.'/{profiles}/'.$profile;
-        if (is_dir($this->getConfigDir().'/profiles/'.$profile)) {
-            $container->import($profileDir.'/{packages}/*.{php,yaml}');
-            $container->import($profileDir.'/{services}.yaml');
-        }
-
         if (is_file($this->getConfigDir().'/services.yaml')) {
             $container->import($configDir.'/services.yaml');
             $container->import($configDir.'/{services}_'.$this->environment.'.yaml');
         } else {
             $container->import($configDir.'/{services}.php');
             $container->import($configDir.'/{services}_'.$this->environment.'.php');
+        }
+
+        $profile = $this->getProfile();
+        $profileDir = $configDir.'/{profiles}/'.$profile;
+        if (is_dir($this->getConfigDir().'/profiles/'.$profile)) {
+            $container->import($profileDir.'/{packages}/*.{php,yaml}');
+            $container->import($profileDir.'/{services}.yaml');
         }
     }
 
