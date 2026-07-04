@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e86afe637ad6d23ba43569ca5227b07b",
+    "content-hash": "283238ca110f8d82038261e96fc33be8",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -1257,44 +1257,6 @@
                 }
             ],
             "time": "2021-09-28T19:18:28+00:00"
-        },
-        {
-            "name": "morfeditorial/machinima-bot",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "../machinima-bot",
-                "reference": "63957ee9831c8d6245cec9e68f8e0f418efe45b3"
-            },
-            "require": {
-                "morfeditorial/telegram-bot-bundle": "*@dev",
-                "php": ">=8.2",
-                "symfony/dependency-injection": "^8.1",
-                "symfony/http-kernel": "^8.1",
-                "symfony/workflow": "^8.1"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.95"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "Morfeditorial\\": "src/"
-                }
-            },
-            "license": [
-                "LicenseRef-CSSM-Unlimited-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Serhii Cherneha",
-                    "email": "chernegasergiy3@gmail.com"
-                }
-            ],
-            "description": "The official Telegram Bot for the Machinima platform.",
-            "transport-options": {
-                "relative": true
-            }
         },
         {
             "name": "morfeditorial/telegram-bot-bundle",
@@ -8214,7 +8176,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "morfeditorial/machinima-bot": 20,
         "morfeditorial/telegram-bot-bundle": 20
     },
     "prefer-stable": true,
