@@ -3,11 +3,11 @@ function getPlatform() {
 }
 
 function getInitData() {
-    const plat = getPlatform();
-    if (plat.isEmbedded && plat.initData) {
-        return plat.initData;
-    }
-    return window.Telegram?.WebApp?.initData || null;
+    return getPlatform().initData;
+}
+
+function getTelegramWebApp() {
+    return window.Telegram?.WebApp || null;
 }
 
 function initApp() {
@@ -18,7 +18,7 @@ function initApp() {
         const currentRoute = document.body.dataset.route;
         const rootRoutes = ['app_index', 'app_categories', 'app_authors', 'app_notifications', 'app_profile', 'app_login'];
         if (!rootRoutes.includes(currentRoute)) {
-            const tg = window.Telegram?.WebApp;
+            const tg = getTelegramWebApp();
             if (tg) {
                 tg.BackButton.show();
                 if (!window.tgBackAssigned) {
@@ -27,8 +27,8 @@ function initApp() {
                 }
             }
         } else {
-            const tgBackBtn = window.Telegram?.WebApp?.BackButton;
-            if (tgBackBtn) tgBackBtn.hide();
+            const backBtn = getTelegramWebApp()?.BackButton;
+            if (backBtn) backBtn.hide();
         }
     }
 
@@ -147,7 +147,7 @@ document.addEventListener('turbo:load', function(event) {
 document.addEventListener('turbo:before-fetch-request', function (event) {
     const initData = getInitData();
     if (initData && typeof initData === 'string') {
-        event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+        event.detail.fetchOptions.headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
     }
 });
 
@@ -175,7 +175,7 @@ window.interactFeed = async function(contentId, type, btnElement) {
         const initData = getInitData();
         const headers = { 'Content-Type': 'application/json' };
         if (initData && typeof initData === 'string') {
-            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const res = await fetch('/api/interact', {
             method: 'POST',
@@ -240,7 +240,7 @@ document.addEventListener('turbo:load', async function() {
 
     let tgUserId = window.currentUserId;
     if (!tgUserId && plat.isEmbedded) {
-        tgUserId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id;
+        tgUserId = plat.initDataUnsafe?.user?.id;
     }
     if (tgUserId) {
         try {
@@ -266,7 +266,7 @@ document.addEventListener('turbo:load', async function() {
     try {
         const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
         if (initData && typeof initData === 'string') {
-            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const unreadRes = await fetch('/api/notifications/unread-count', {
             headers: headers,
@@ -300,7 +300,7 @@ document.addEventListener('turbo:load', async function() {
                         const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
                         const initData = getInitData();
                         if (initData && typeof initData === 'string') {
-                            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+                            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
                         }
                         const unreadRes = await fetch('/api/notifications/unread-count', {
                             headers: headers,
