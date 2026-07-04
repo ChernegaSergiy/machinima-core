@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service\Follow;
 
+use App\Contract\NotificationChannelPort;
 use App\Entity\Author;
 use App\Entity\Follower;
 use App\Entity\Notification;
 use App\Entity\User;
-use App\Contract\NotificationChannelPort;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FollowService

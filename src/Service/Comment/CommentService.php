@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service\Comment;
 
+use App\Contract\NotificationChannelPort;
 use App\Entity\Comment;
 use App\Entity\Content;
 use App\Entity\User;
-use App\Contract\NotificationChannelPort;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
