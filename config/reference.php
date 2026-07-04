@@ -1015,6 +1015,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *             cache_pool?: string|Param, // The cache pool to use for storing the limiter state // Default: "cache.rate_limiter"
  *             storage_service?: string|Param, // The service ID of a custom storage implementation, this precedes any configured "cache_pool" // Default: null
  *         },
+ *         telegram_tma?: array<mixed>,
  *         x509?: array{
  *             provider?: scalar|Param|null,
  *             user?: scalar|Param|null, // Default: "SSL_CLIENT_S_DN_Email"
@@ -1276,6 +1277,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         html_to_text_converter?: scalar|Param|null, // A service implementing the "Symfony\Component\Mime\HtmlToTextConverter\HtmlToTextConverterInterface". // Default: null
  *     },
  * }
+ * @psalm-type TelegramBotConfig = array{
+ *     token?: scalar|Param|null, // The Telegram Bot API token.
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1286,6 +1290,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     security?: SecurityConfig,
  *     mercure?: MercureConfig,
  *     twig?: TwigConfig,
+ *     telegram_bot?: TelegramBotConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
