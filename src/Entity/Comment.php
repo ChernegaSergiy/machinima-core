@@ -63,6 +63,21 @@ class Comment
         return $this;
     }
 
+    public function getDisplayName(): string
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $name = $user->getDisplayName();
+            if ($name) {
+                return $name;
+            }
+
+            return 'Користувач #'.$user->getId();
+        }
+
+        return 'Користувач';
+    }
+
     public function getText(): ?string
     {
         return $this->text;

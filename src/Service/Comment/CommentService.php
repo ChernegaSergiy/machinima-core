@@ -36,7 +36,7 @@ class CommentService
             'id' => $c->getId(),
             'content_id' => $project->getId(),
             'user_id' => $c->getUser()->getId(),
-            'author_name' => $c->getAuthorName(),
+            'author_name' => $c->getDisplayName(),
             'text' => $c->getText(),
             'parent_id' => $c->getParent() ? $c->getParent()->getId() : null,
             'created_at' => $c->getCreatedAt(),
@@ -59,7 +59,6 @@ class CommentService
         $comment = new Comment();
         $comment->setContent($project);
         $comment->setUser($user);
-        $comment->setAuthorName($data['author_name'] ?? 'Користувач');
         $comment->setText($data['text']);
         $comment->setCreatedAt(date('Y-m-d H:i:s'));
 
@@ -77,7 +76,7 @@ class CommentService
             'id' => $comment->getId(),
             'content_id' => $project->getId(),
             'user_id' => $user->getId(),
-            'author_name' => $comment->getAuthorName(),
+            'author_name' => $comment->getDisplayName(),
             'text' => $comment->getText(),
             'parent_id' => $comment->getParent() ? $comment->getParent()->getId() : null,
             'created_at' => $comment->getCreatedAt(),
@@ -147,11 +146,11 @@ class CommentService
         $notification->setType('comment_reply');
         $notification->setTargetId($comment->getId());
         $notification->setTargetType('comment');
-        $notification->setMessage($comment->getAuthorName().' відповів(ла) на ваш коментар.');
+        $notification->setMessage($comment->getDisplayName().' відповів(ла) на ваш коментар.');
         $this->em->persist($notification);
         $this->em->flush();
 
-        $this->notifier->send($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getAuthorName());
+        $this->notifier->send($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getDisplayName());
     }
 
     private function notifyProjectAuthor(Comment $comment, User $user, Content $project): void
@@ -171,11 +170,11 @@ class CommentService
         $notification->setType('new_comment');
         $notification->setTargetId($comment->getId());
         $notification->setTargetType('comment');
-        $notification->setMessage('Новий коментар до вашого проєкту від '.$comment->getAuthorName().'.');
+        $notification->setMessage('Новий коментар до вашого проєкту від '.$comment->getDisplayName().'.');
         $this->em->persist($notification);
         $this->em->flush();
 
-        $this->notifier->send($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getAuthorName());
+        $this->notifier->send($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getDisplayName());
     }
 
     private function broadcastCommentEvent(string $type, int $contentId, array $data): void

@@ -126,7 +126,7 @@ class ContentService
         return $result ?: null;
     }
 
-    public function addComment(int $content_id, int $user_id, string $author_name, string $text, ?int $parent_id = null): int
+    public function addComment(int $content_id, int $user_id, string $text, ?int $parent_id = null): int
     {
         $comment = new Comment();
 
@@ -140,7 +140,6 @@ class ContentService
 
         $comment->setContent($content);
         $comment->setUser($user);
-        $comment->setAuthorName($author_name);
         $comment->setText($text);
 
         if ($parent_id) {

@@ -6,7 +6,7 @@ namespace App\Service\App;
 
 use App\Entity\Author;
 use App\Entity\Category;
-use App\Entity\Comment;
+
 use App\Entity\Content;
 use App\Entity\Follower;
 use App\Entity\Notification;
@@ -174,8 +174,7 @@ class AppPageService
         $followingCount = $this->em->getRepository(Follower::class)->count(['user' => $targetUser]);
         $likesCount = $this->em->getRepository(\App\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
 
-        $lastComment = $this->em->getRepository(Comment::class)->findOneBy(['user' => $targetUser], ['createdAt' => 'DESC']);
-        $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$targetUser->getId();
+        $name = $targetUser->getDisplayName() ?? 'Користувач #'.$targetUser->getId();
 
         $author = $this->em->getRepository(Author::class)->findOneBy(['user' => $targetUser]);
 
