@@ -45,14 +45,19 @@ class AuthSubscriber
             $needsFlush = true;
         }
 
+        $displayName = $assertion->getDisplayName();
+
+        if ($displayName && !$user->getDisplayName()) {
+            $user->setDisplayName($displayName);
+            $needsFlush = true;
+        }
+
         $authorRepository = $this->entityManager->getRepository(Author::class);
         $author = $authorRepository->findOneBy(['user' => $user]);
 
         if (!$author) {
             $author = new Author();
             $author->setUser($user);
-
-            $displayName = $assertion->getDisplayName();
             $author->setName($displayName ?? 'Користувач #'.$assertion->getProviderSubjectId());
             $author->setState('active');
 
