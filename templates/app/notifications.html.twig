@@ -49,10 +49,10 @@ async function markAllAsRead() {
             btn.style.opacity = '0.5';
             btn.style.pointerEvents = 'none';
         }
-        const tgData = window.Telegram?.WebApp?.initData;
+        const initData = window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData;
         const headers = { 'Content-Type': 'application/json' };
-        if (tgData && typeof tgData === 'string') {
-            headers['X-Telegram-Init-Data'] = tgData.replace(/[^\x20-\x7E]/g, '');
+        if (initData && typeof initData === 'string') {
+            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const res = await fetch('/api/notifications/read', { method: 'POST', headers: headers });
         if (res.ok) {
