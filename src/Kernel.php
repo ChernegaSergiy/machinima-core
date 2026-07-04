@@ -24,13 +24,6 @@ class Kernel extends BaseKernel
             return;
         }
 
-        foreach ($this->getBundlesDefinition() as $class => $envs) {
-                if ($envs[$this->environment] ?? $envs['all'] ?? false) {
-                    yield new $class();
-                }
-            }
-        }
-
         $profile = $this->getProfile();
         $profileBundlesPath = $this->getConfigDir().'/profiles/'.$profile.'/bundles.php';
 
@@ -39,6 +32,12 @@ class Kernel extends BaseKernel
                 if ($envs[$this->environment] ?? $envs['all'] ?? false) {
                     yield new $class();
                 }
+            }
+        }
+
+        foreach ($this->getBundlesDefinition() as $class => $envs) {
+            if ($envs[$this->environment] ?? $envs['all'] ?? false) {
+                yield new $class();
             }
         }
     }
