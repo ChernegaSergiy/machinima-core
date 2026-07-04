@@ -150,7 +150,6 @@
 </div>
 
 <script>
-    window.authorName = 'Користувач';
     window.postId = {{ post.id }};
     window.replyToId = null;
     window.editModeId = null;
@@ -387,7 +386,6 @@
                     },
                     body: JSON.stringify({
                         user_id: currentUserId,
-                        author_name: authorName,
                         text: text,
                         parent_id: replyToId
                     })
