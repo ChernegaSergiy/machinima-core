@@ -87,7 +87,7 @@
 
 <script>
 (function() {
-    const tgUser = window.__PLATFORM__?.initDataUnsafe?.user || window.Telegram?.WebApp?.initDataUnsafe?.user;
+    const tgUser = window.__PLATFORM__?.initDataUnsafe?.user;
     if (tgUser) {
         const user = tgUser;
         const nameEl = document.getElementById('profile-name');

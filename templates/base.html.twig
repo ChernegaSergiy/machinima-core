@@ -16,6 +16,10 @@
             capabilities: {{ platform_context().capabilities|json_encode|raw }}
         };
 
+        function getTelegramWebApp() {
+            return window.Telegram?.WebApp || null;
+        }
+
         if (window.__PLATFORM__.isEmbedded) {
             document.title = 'Morf TMA';
         }
@@ -46,25 +50,26 @@
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             });
         } else {
-            const tg = window.Telegram?.WebApp;
+            var tg = getTelegramWebApp();
             if (tg && tg.initData) {
-                const updateTheme = () => {
+                var updateTheme = function() {
                     document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
                 };
                 updateTheme();
                 tg.onEvent('themeChanged', updateTheme);
 
-                let cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
+                var cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
                 if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
                 document.cookie = cookieStr;
 
                 document.addEventListener('click', function(e) {
-                    const link = e.target.closest('a');
-                    if (link && link.href && link.href.startsWith(window.location.origin) && window.Telegram?.WebApp?.initData) {
+                    var link = e.target.closest('a');
+                    var initData = getTelegramWebApp()?.initData;
+                    if (link && link.href && link.href.startsWith(window.location.origin) && initData) {
                         try {
-                            const url = new URL(link.href);
+                            var url = new URL(link.href);
                             if (!url.searchParams.has('initData')) {
-                                url.searchParams.set('initData', window.Telegram.WebApp.initData);
+                                url.searchParams.set('initData', initData);
                                 link.href = url.toString();
                             }
                         } catch(err) {}
