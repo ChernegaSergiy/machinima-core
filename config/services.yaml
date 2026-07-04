@@ -14,6 +14,7 @@ services:
         autoconfigure: true
         bind:
             $workflow: '@state_machine.content_publishing'
+            $projectDir: '%kernel.project_dir%'
 
     App\Contract\NotificationChannelPort:
         alias: App\Contract\Notification\NullNotificationChannel
