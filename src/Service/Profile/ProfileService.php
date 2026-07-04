@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service\Profile;
 
 use App\Entity\Author;
+use App\Entity\Comment;
 use App\Entity\ContentInteraction;
 use App\Entity\Follower;
 use App\Entity\User;
@@ -25,8 +26,12 @@ class ProfileService
         $likesCount = $this->em->getRepository(ContentInteraction::class)->count(['user' => $user, 'interactionType' => 'like']);
         $author = $this->em->getRepository(Author::class)->findOneBy(['user' => $user]);
 
+        $lastComment = $this->em->getRepository(Comment::class)->findOneBy(['user' => $user], ['createdAt' => 'DESC']);
+        $name = $lastComment ? $lastComment->getAuthorName() : 'Користувач #'.$user->getId();
+
         return [
             'userData' => $user,
+            'name' => $name,
             'followingCount' => $followingCount,
             'likesCount' => $likesCount,
             'myAuthorPage' => $author,
