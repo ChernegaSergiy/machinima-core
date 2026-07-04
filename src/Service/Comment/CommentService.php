@@ -9,6 +9,7 @@ use App\Entity\Content;
 use App\Entity\User;
 use App\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
@@ -18,6 +19,7 @@ class CommentService
         private EntityManagerInterface $em,
         private HubInterface $hub,
         private NotificationGateway $notifier,
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -185,7 +187,12 @@ class CommentService
 
         try {
             $this->hub->publish($update);
-        } catch (\Exception) {
+        } catch (\Exception $e) {
+            $this->logger->error('Mercure broadcast failed', [
+                'type' => $type,
+                'content_id' => $contentId,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 }
