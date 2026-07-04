@@ -8,14 +8,14 @@ use App\Entity\Author;
 use App\Entity\Follower;
 use App\Entity\Notification;
 use App\Entity\User;
-use App\Service\Notification\TelegramNotificationService;
+use App\Contract\NotificationChannelPort;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FollowService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private TelegramNotificationService $telegramNotifier,
+        private NotificationChannelPort $notifier,
     ) {
     }
 
@@ -43,7 +43,7 @@ class FollowService
                 $notification->setMessage('На вас підписався новий користувач.');
                 $this->em->persist($notification);
 
-                $this->telegramNotifier->sendToUser($authorUser, 'На вас підписався новий користувач у Machinima');
+                $this->notifier->send($authorUser, 'На вас підписався новий користувач у Machinima');
             }
 
             $this->em->flush();
