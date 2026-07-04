@@ -25,7 +25,8 @@ class PlatformUiContextProvider implements PlatformUiContextProviderInterface
             return new NullPlatformUiContext();
         }
 
-        $initData = $request->headers->get('X-Telegram-Init-Data')
+        $initData = $request->headers->get('X-Init-Data')
+            ?? $request->headers->get('X-Telegram-Init-Data')
             ?? $request->cookies->get('tma_init_data')
             ?? $request->query->get('initData');
 
