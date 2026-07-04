@@ -73,16 +73,16 @@
         (function() {
             var userId = {{ app.user ? app.user.id : 'null' }};
             window.currentUserId = userId;
-            var tgData = window.Telegram?.WebApp?.initData;
+            var initData = window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData;
             
             // Apply owner-specific CSS immediately
             var style = document.createElement('style');
             var css = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
             
             // Verify moderator status asynchronously to bypass cache
-            if (tgData) {
+            if (initData) {
                 fetch('/api/me', {
-                    headers: { 'X-Telegram-Init-Data': tgData }
+                    headers: { 'X-Telegram-Init-Data': initData }
                 })
                 .then(r => r.json())
                 .then(data => {
@@ -150,7 +150,7 @@
 </div>
 
 <script>
-    window.authorName = window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Користувач';
+    window.authorName = window.__PLATFORM__?.initDataUnsafe?.user?.first_name || window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Користувач';
     window.postId = {{ post.id }};
     window.replyToId = null;
     window.editModeId = null;
@@ -172,13 +172,13 @@
     window.interact = async function(type, btnElement) {
         let step = 'init';
         try {
-            step = 'tgData';
-            const tgData = window.Telegram?.WebApp?.initData;
+            step = 'initData';
+            const initData = window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData;
             
             step = 'headers';
             const headers = { 'Content-Type': 'application/json' };
-            if (tgData && typeof tgData === 'string') {
-                const cleaned = tgData.replace(/[^\x20-\x7E]/g, '').trim();
+            if (initData && typeof initData === 'string') {
+                const cleaned = initData.replace(/[^\x20-\x7E]/g, '').trim();
                 if (cleaned.length > 0) {
                     headers['X-Telegram-Init-Data'] = cleaned;
                 }
@@ -283,7 +283,7 @@
                 method: 'DELETE',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                    'X-Telegram-Init-Data': window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData || ''
                 },
                 body: JSON.stringify({ user_id: currentUserId })
             });
@@ -374,7 +374,7 @@
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData || ''
                     },
                     body: JSON.stringify({ user_id: currentUserId, text: text })
                 });
@@ -383,7 +383,7 @@
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || ''
+                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || window.Telegram?.WebApp?.initData || ''
                     },
                     body: JSON.stringify({
                         user_id: currentUserId,
