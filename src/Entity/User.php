@@ -40,6 +40,9 @@ class User implements UserInterface
     #[ORM\Column(name: 'created_at', type: 'text', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
     private ?string $createdAt = null;
 
+    #[ORM\Column(name: 'display_name', type: 'string', length: 255, nullable: true)]
+    private ?string $displayName = null;
+
     public function __construct()
     {
         $this->roles = new ArrayCollection();
@@ -185,6 +188,18 @@ class User implements UserInterface
     public function setCreatedAt(?string $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getDisplayName(): ?string
+    {
+        return $this->displayName;
+    }
+
+    public function setDisplayName(?string $displayName): self
+    {
+        $this->displayName = $displayName;
 
         return $this;
     }
