@@ -7,7 +7,6 @@ namespace App\Service;
 use App\Contract\NullPlatformUiContext;
 use App\Contract\PlatformUiContext;
 use App\Contract\PlatformUiContextProvider as PlatformUiContextProviderInterface;
-use App\Service\PlatformAdapterRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

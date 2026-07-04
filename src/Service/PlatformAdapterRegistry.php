@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Contract\PlatformAdapterInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Registry that collects all platform adapters (tagged with `app.platform_adapter`).
@@ -35,6 +35,7 @@ final class PlatformAdapterRegistry
                 return $adapter;
             }
         }
+
         return null;
     }
 }
