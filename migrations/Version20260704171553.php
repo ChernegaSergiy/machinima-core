@@ -19,7 +19,8 @@ final class Version20260704171553 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('UPDATE user_data SET display_name = (SELECT author_name FROM comments WHERE comments.user_id = user_data.user_id AND author_name IS NOT NULL AND author_name != \'\' LIMIT 1) WHERE display_name IS NULL OR display_name = \'\'');
+
         $this->addSql('CREATE TEMPORARY TABLE __temp__comments AS SELECT id, content_id, user_id, text, created_at, parent_id, updated_at FROM comments');
         $this->addSql('DROP TABLE comments');
         $this->addSql('CREATE TABLE comments (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, content_id INTEGER NOT NULL, user_id INTEGER NOT NULL, text CLOB NOT NULL, created_at CLOB DEFAULT \'CURRENT_TIMESTAMP\', parent_id INTEGER DEFAULT NULL, updated_at CLOB DEFAULT NULL, CONSTRAINT FK_5F9E962A84A0A3ED FOREIGN KEY (content_id) REFERENCES content (id) ON UPDATE NO ACTION ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_5F9E962AA76ED395 FOREIGN KEY (user_id) REFERENCES user_data (user_id) ON UPDATE NO ACTION ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_5F9E962A727ACA70 FOREIGN KEY (parent_id) REFERENCES comments (id) ON UPDATE NO ACTION ON DELETE CASCADE NOT DEFERRABLE INITIALLY IMMEDIATE)');
