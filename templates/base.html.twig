@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
-    <title>Тільки через Telegram</title>
+    <title>{% if platform_context().isEmbedded %}Morf{% else %}Machinima{% endif %}</title>
     <meta name="turbo-cache-control" content="no-cache" />
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <script>
-        if (window.Telegram?.WebApp?.initData) {
-            document.title = "Morf TMA";
+        window.__PLATFORM__ = {
+            isEmbedded: {{ platform_context().isEmbedded ? 'true' : 'false' }},
+            platformName: '{{ platform_context().platformName }}',
+            theme: '{{ platform_context().theme }}',
+            initData: {{ platform_context().initData ? ('\'' ~ platform_context().initData|e('js') ~ '\'') : 'null' }},
+            botLink: {{ platform_context().botLink ? ('\'' ~ platform_context().botLink|e('js') ~ '\'') : 'null' }},
+            capabilities: {{ platform_context().capabilities|json_encode|raw }}
+        };
+
+        if (window.__PLATFORM__.isEmbedded) {
+            document.title = 'Morf TMA';
         }
-        
-        // STRICT ACCESS CONTROL
-        if (!window.Telegram || !window.Telegram.WebApp || !window.Telegram.WebApp.initData) {
+
+        if (!window.__PLATFORM__.isEmbedded) {
             document.documentElement.style.visibility = 'hidden';
-            
+
             document.addEventListener('DOMContentLoaded', function() {
                 document.documentElement.style.visibility = '';
                 document.body.innerHTML = `
@@ -23,44 +31,46 @@
                         <div class="w-22 h-22 mx-auto mb-6 rounded bg-surface flex items-center justify-center text-primary border-2 border-border shadow-brutal overflow-hidden shrink-0">
                             <i data-lucide="lock" class="w-10 h-10 stroke-1-5"></i>
                         </div>
-                        <h1 class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">Тільки через Telegram</h1>
+                        <h1 class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">Machinima</h1>
                         <p class="text-base text-primary mb-6 leading-relaxed font-semibold">
-                            Цей застосунок розроблено спеціально для використання всередині Telegram.
+                            Цей застосунок призначено для використання в підтримуваному середовищі.
                         </p>
-                        <a href="{{ get_bot_link() }}" class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs w-full">
+                        {% if platform_context().botLink %}
+                        <a href="{{ platform_context().botLink }}" class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs w-full">
                             <i data-lucide="external-link" class="mr-2 w-[18px] h-[18px] stroke-2-5"></i>
                             Відкрити бота
                         </a>
+                        {% endif %}
                     </div>
                 </div>`;
                 if (typeof lucide !== 'undefined') lucide.createIcons();
             });
         } else {
-            const tg = window.Telegram.WebApp;
-            window.currentUserId = tg.initDataUnsafe?.user?.id;
-            const updateTheme = () => {
-                document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
-            };
-            updateTheme();
-            tg.onEvent('themeChanged', updateTheme);
+            const tg = window.Telegram?.WebApp;
+            if (tg && tg.initData) {
+                const updateTheme = () => {
+                    document.documentElement.style.setProperty('--shimmer-base', tg.colorScheme === 'dark' ? '255, 255, 255' : '0, 0, 0');
+                };
+                updateTheme();
+                tg.onEvent('themeChanged', updateTheme);
 
-            let cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
-            if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
-            document.cookie = cookieStr;
+                let cookieStr = "tma_init_data=" + encodeURIComponent(tg.initData) + "; path=/; max-age=86400;";
+                if (window.location.protocol === 'https:') cookieStr += " SameSite=None; Secure;";
+                document.cookie = cookieStr;
 
-            // Fallback for strict browsers (like WebKitGTK on Linux/Fedora) that drop JS cookies
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a');
-                if (link && link.href && link.href.startsWith(window.location.origin) && window.Telegram?.WebApp?.initData) {
-                    try {
-                        const url = new URL(link.href);
-                        if (!url.searchParams.has('initData')) {
-                            url.searchParams.set('initData', window.Telegram.WebApp.initData);
-                            link.href = url.toString();
-                        }
-                    } catch(err) {}
-                }
-            });
+                document.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (link && link.href && link.href.startsWith(window.location.origin) && window.Telegram?.WebApp?.initData) {
+                        try {
+                            const url = new URL(link.href);
+                            if (!url.searchParams.has('initData')) {
+                                url.searchParams.set('initData', window.Telegram.WebApp.initData);
+                                link.href = url.toString();
+                            }
+                        } catch(err) {}
+                    }
+                });
+            }
         }
     </script>
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
@@ -76,7 +86,7 @@
     <nav id="main-tab-bar" data-turbo-permanent class="fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-border flex safe-pb z-100 max-w-600 mx-auto">
         {% set active_classes = 'opacity-100 font-extrabold bg-black-5 border-t-3 border-border -mt-0-5' %}
         {% set default_classes = 'opacity-60 font-bold' %}
-        
+
         <a href="{{ path('app_index') }}" data-skeleton="feed" class="flex-1 flex flex-col items-center justify-center py-4 text-primary text-xs transition-all uppercase font-unbounded active:bg-black-10 {% if current_route == 'app_index' %}{{ active_classes }}{% else %}{{ default_classes }}{% endif %}">
             <i data-lucide="play-square" class="mb-1 w-6 h-6 stroke-2-5"></i>
             <span>Стрічка</span>
@@ -112,33 +122,31 @@
         let adjustPaddingFrame;
         function adjustBottomPadding() {
             if (adjustPaddingFrame) cancelAnimationFrame(adjustPaddingFrame);
-            
+
             adjustPaddingFrame = requestAnimationFrame(() => {
                 const bottomFixedElements = document.querySelectorAll('.fixed.bottom-0');
                 let maxPadding = 0;
-                
+
                 bottomFixedElements.forEach(el => {
                     if (window.getComputedStyle(el).display !== 'none') {
                         const height = el.offsetHeight;
                         if (height > maxPadding) maxPadding = height;
                     }
                 });
-                
-                // Set CSS variable instead of directly manipulating styles
+
                 document.documentElement.style.setProperty('--bottom-overlay-height', maxPadding + 'px');
             });
         }
-        
-        // Trigger recalculation on key events
+
         document.addEventListener('DOMContentLoaded', adjustBottomPadding);
         window.addEventListener('resize', adjustBottomPadding);
         document.addEventListener('turbo:load', adjustBottomPadding);
         document.addEventListener('turbo:render', adjustBottomPadding);
-        
-        // Optimized MutationObserver for DOM changes
+
         const observer = new MutationObserver(adjustBottomPadding);
         observer.observe(document.body, { childList: true, subtree: true });
     </script>
+    {% block platform_bridge %}{% endblock %}
     <script src="/js/app.js?v={{ random() }}"></script>
     {% include 'components/skeletons.html.twig' %}
     {% block javascripts %}{% endblock %}
