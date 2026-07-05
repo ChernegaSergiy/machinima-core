@@ -22,7 +22,7 @@ final class IdentityProviderRegistry
     }
 
     /**
-     * @return array<int, array{name: string, label: string, icon: string, description?: string}>
+     * @return array<int, array{name: string, label: string, icon: string, login_url?: string, description?: string}>
      */
     public function getAvailableProviders(): array
     {
