@@ -50,6 +50,8 @@ services:
             - '../src/Entity/'
             - '../src/Service/IdentityProviderRegistry.php'
 
+    App\Twig\PlatformBridgeExtension: ~
+
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
     role_service:

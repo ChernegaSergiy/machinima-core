@@ -26,4 +26,20 @@ interface PlatformAdapterInterface
      * @throws \LogicException if the adapter does not support the request
      */
     public function getContext(Request $request): PlatformUiContext;
+
+    /**
+     * Returns the Twig template path for bridge assets (scripts/styles),
+     * or null if the adapter does not need to inject client-side code.
+     */
+    public function getBridgeTemplatePath(): ?string;
+
+    /**
+     * Returns the URL for zero-click login, or null if not supported.
+     */
+    public function getZeroClickLoginUrl(): ?string;
+
+    /**
+     * Returns the login route name for this platform, or null.
+     */
+    public function getLoginRouteName(): ?string;
 }

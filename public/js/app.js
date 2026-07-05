@@ -140,7 +140,7 @@ document.addEventListener('turbo:load', function(event) {
 document.addEventListener('turbo:before-fetch-request', function (event) {
     const initData = getInitData();
     if (initData && typeof initData === 'string') {
-        event.detail.fetchOptions.headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+        event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
     }
 });
 
@@ -168,7 +168,7 @@ window.interactFeed = async function(contentId, type, btnElement) {
         const initData = getInitData();
         const headers = { 'Content-Type': 'application/json' };
         if (initData && typeof initData === 'string') {
-            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const res = await fetch('/api/interact', {
             method: 'POST',
@@ -253,11 +253,11 @@ document.addEventListener('turbo:load', async function() {
         } catch(e) {}
     }
 
-    try {
-        const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
-        if (initData && typeof initData === 'string') {
-            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
-        }
+        try {
+                const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
+                if (initData && typeof initData === 'string') {
+                    headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+                }
         const unreadRes = await fetch('/api/notifications/unread-count', {
             headers: headers,
             cache: 'no-store'
@@ -280,6 +280,8 @@ document.addEventListener('turbo:load', async function() {
                 if (data.type === 'NEW_COMMENT' && window.location.pathname === '/notifications') {
                     if (typeof Turbo !== 'undefined') {
                         Turbo.visit(window.location.href, { action: "replace" });
+                    } else if (window.history.length > 1) {
+                        window.history.back();
                     } else {
                         window.location.reload();
                     }
