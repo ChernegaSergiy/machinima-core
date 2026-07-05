@@ -44,9 +44,20 @@ class UserIdentity
         return $this;
     }
 
+    private const PROVIDER_ICONS = [
+        'telegram' => 'send',
+        'google' => 'chrome',
+        'github' => 'github',
+    ];
+
     public function getProviderName(): ?string
     {
         return $this->providerName;
+    }
+
+    public function getLucideIcon(): string
+    {
+        return self::PROVIDER_ICONS[$this->providerName] ?? 'circle-user';
     }
 
     public function setProviderName(string $providerName): self
