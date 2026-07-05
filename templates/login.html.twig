@@ -14,11 +14,11 @@
         <div class="flex flex-col gap-3">
             {% for provider in providers %}
                 {% if provider.login_url|default(null) %}
-                <a href="{{ provider.login_url }}"
-                   class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs w-full">
-                    <i data-lucide="{{ provider.icon }}" class="mr-2 w-[18px] h-[18px] stroke-2-5"></i>
-                    {{ provider.label }}
-                </a>
+                    <a href="{{ provider.login_url }}"
+                       class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs w-full">
+                        <i data-lucide="{{ provider.icon }}" class="mr-2 w-[18px] h-[18px] stroke-2-5"></i>
+                        {{ provider.label }}
+                    </a>
                 {% endif %}
             {% endfor %}
         </div>
