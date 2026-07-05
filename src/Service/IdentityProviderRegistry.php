@@ -6,7 +6,6 @@ namespace App\Service;
 
 use App\Contract\IdentityProviderMetadataProvider;
 use App\Contract\IdentityProviderPort;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 
 final class IdentityProviderRegistry
 {
@@ -17,7 +16,6 @@ final class IdentityProviderRegistry
      * @param iterable<IdentityProviderPort> $providers
      */
     public function __construct(
-        #[TaggedIterator('app.identity_provider')]
         iterable $providers,
     ) {
         $this->providers = iterator_to_array($providers);

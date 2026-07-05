@@ -24,6 +24,10 @@ services:
         arguments:
             $channel: '@App\Contract\NotificationChannelPort'
 
+    App\Service\IdentityProviderRegistry:
+        arguments:
+            $providers: !tagged_iterator app.identity_provider
+
     App\Service\Avatar\AvatarProviderInterface:
         alias: App\Service\Avatar\ThumbsAvatarProvider
 
@@ -42,7 +46,9 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
-        exclude: '../src/Entity/'
+        exclude:
+            - '../src/Entity/'
+            - '../src/Service/IdentityProviderRegistry.php'
 
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
