@@ -1366,7 +1366,7 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-telegram-adapter",
-                "reference": "f1c80d4ed2658d8290593853ae27c3533417dbb8"
+                "reference": "1bb7ab0d54dabf8e21aab508299a105d65a062e2"
             },
             "require": {
                 "lcobucci/jwt": "^4.0",
@@ -1404,12 +1404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChernegaSergiy/telegram-bot-bundle.git",
-                "reference": "1b64a5dd4241ea7cb4189e0beec5b3032934648d"
+                "reference": "b698bd0c1392f2384cbab726aa4678cc92b3f3be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/1b64a5dd4241ea7cb4189e0beec5b3032934648d",
-                "reference": "1b64a5dd4241ea7cb4189e0beec5b3032934648d",
+                "url": "https://api.github.com/repos/ChernegaSergiy/telegram-bot-bundle/zipball/b698bd0c1392f2384cbab726aa4678cc92b3f3be",
+                "reference": "b698bd0c1392f2384cbab726aa4678cc92b3f3be",
                 "shasum": ""
             },
             "require": {
@@ -1455,7 +1455,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2026-07-03T15:28:40+00:00"
+            "time": "2026-07-05T15:51:19+00:00"
         },
         {
             "name": "opis/json-schema",

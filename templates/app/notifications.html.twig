@@ -52,7 +52,7 @@ async function markAllAsRead() {
         const initData = window.__PLATFORM__?.initData;
         const headers = { 'Content-Type': 'application/json' };
         if (initData && typeof initData === 'string') {
-            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
+            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
         }
         const res = await fetch('/api/notifications/read', { method: 'POST', headers: headers });
         if (res.ok) {

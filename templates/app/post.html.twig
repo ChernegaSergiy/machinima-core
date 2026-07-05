@@ -82,7 +82,7 @@
             // Verify moderator status asynchronously to bypass cache
             if (initData) {
                 fetch('/api/me', {
-                    headers: { 'X-Init-Data': initData }
+                    headers: { 'X-Telegram-Init-Data': initData }
                 })
                 .then(r => r.json())
                 .then(data => {
@@ -179,7 +179,7 @@
             if (initData && typeof initData === 'string') {
                 const cleaned = initData.replace(/[^\x20-\x7E]/g, '').trim();
                 if (cleaned.length > 0) {
-                    headers['X-Init-Data'] = cleaned;
+                    headers['X-Telegram-Init-Data'] = cleaned;
                 }
             }
 
@@ -282,7 +282,7 @@
                 method: 'DELETE',
                 headers: { 
                     'Content-Type': 'application/json',
-                    'X-Init-Data': window.__PLATFORM__?.initData || ''
+                    'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
                 },
                 body: JSON.stringify({ user_id: currentUserId })
             });
@@ -373,7 +373,7 @@
                     method: 'PUT',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Init-Data': window.__PLATFORM__?.initData || ''
+                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
                     },
                     body: JSON.stringify({ user_id: currentUserId, text: text })
                 });
@@ -382,7 +382,7 @@
                     method: 'POST',
                     headers: { 
                         'Content-Type': 'application/json',
-                        'X-Init-Data': window.__PLATFORM__?.initData || ''
+                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
                     },
                     body: JSON.stringify({
                         user_id: currentUserId,
