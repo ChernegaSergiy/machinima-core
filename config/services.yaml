@@ -50,12 +50,6 @@ services:
             - '../src/Entity/'
             - '../src/Service/IdentityProviderRegistry.php'
 
-    App\Service\PlatformBridgeRenderer:
-        arguments:
-            $adapters: !tagged_iterator app.platform_adapter
-
-    App\Twig\PlatformBridgeExtension: ~
-
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
     role_service:
