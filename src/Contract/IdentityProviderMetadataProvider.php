@@ -7,7 +7,7 @@ namespace App\Contract;
 interface IdentityProviderMetadataProvider
 {
     /**
-     * @return array{label: string, icon: string, description?: string}
+     * @return array{label: string, icon: string, login_url?: string, description?: string}
      */
     public function getMetadata(): array;
 }
