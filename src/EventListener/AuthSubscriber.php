@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
+use App\Entity\Role;
 use App\Entity\User;
 use App\Event\UserAuthenticatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,6 +33,7 @@ class AuthSubscriber
             $user = $identity->getUser();
         } else {
             $user = new User();
+            $user->setUserState('active');
             $this->entityManager->persist($user);
 
             $identity = new \App\Entity\UserIdentity();
@@ -40,6 +42,17 @@ class AuthSubscriber
             $identity->setProviderId($assertion->getProviderSubjectId());
             $identity->setProviderData($assertion->getClaims());
             $this->entityManager->persist($identity);
+
+            $roleRepo = $this->entityManager->getRepository(Role::class);
+            $role = $roleRepo->findOneBy(['roleName' => 'ROLE_USER']);
+
+            if (null === $role) {
+                $role = new Role();
+                $role->setRoleName('ROLE_USER');
+                $this->entityManager->persist($role);
+            }
+
+            $user->addRole($role);
 
             $needsFlush = true;
         }
