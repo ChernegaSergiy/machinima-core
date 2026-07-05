@@ -38,4 +38,16 @@ final class PlatformAdapterRegistry
 
         return null;
     }
+
+    /**
+     * Returns every registered adapter, regardless of whether it supports
+     * the current request. Used to render bridge assets unconditionally —
+     * see PlatformAdapterInterface::getBridgeTemplatePath() for why.
+     *
+     * @return iterable<PlatformAdapterInterface>
+     */
+    public function all(): iterable
+    {
+        return $this->adapters;
+    }
 }
