@@ -19,6 +19,18 @@ final class LoginController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(): Response
     {
+        // Zero-click Telegram login authenticates the user directly on the
+        // security firewall (see telegram-bot-bundle's `telegram_tma`
+        // authenticator) — there is no redirect involved, the session is
+        // just silently upgraded to an authenticated one on whichever
+        // request happened to carry `initData`, including this very one.
+        // Without this check, a successfully zero-click-authenticated user
+        // would still see the "choose a login method" screen, because
+        // nothing here ever looked at the auth state before rendering it.
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_index');
+        }
+
         $providers = $this->registry->getAvailableProviders();
 
         if (0 === count($providers)) {
