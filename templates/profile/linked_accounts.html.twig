@@ -27,7 +27,7 @@
         {% endfor %}
     {% endif %}
 
-    {% if available_providers|length > 0 %}
+    {% if available_providers|length > 0 and link_route_exists %}
         <h2 class="text-xl font-bold mb-5 text-primary border-b-2 border-border pb-2 font-unbounded tracking-tight uppercase mt-6">Додати акаунт</h2>
         {% for provider in available_providers %}
             <a href="{{ path('popular_oidcs_link', {provider: provider.name}) }}"

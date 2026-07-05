@@ -39,9 +39,12 @@ final class LinkedAccountsController extends AbstractController
             fn (array $provider) => !in_array($provider['name'], $linkedProviders, true),
         );
 
+        $linkRouteExists = $this->getContainer()->get('router')->getRouteCollection()->has('popular_oidcs_link');
+
         return $this->render('profile/linked_accounts.html.twig', [
             'identities' => $identities,
             'available_providers' => array_values($availableProviders),
+            'link_route_exists' => $linkRouteExists,
         ]);
     }
 }
