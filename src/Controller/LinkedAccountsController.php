@@ -10,12 +10,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 
 final class LinkedAccountsController extends AbstractController
 {
     public function __construct(
         private IdentityProviderRegistry $registry,
         private EntityManagerInterface $entityManager,
+        private RouterInterface $router,
     ) {
     }
 
@@ -39,7 +41,7 @@ final class LinkedAccountsController extends AbstractController
             fn (array $provider) => !in_array($provider['name'], $linkedProviders, true),
         );
 
-        $linkRouteExists = $this->getContainer()->get('router')->getRouteCollection()->has('popular_oidcs_link');
+        $linkRouteExists = $this->router->getRouteCollection()->has('popular_oidcs_link');
 
         return $this->render('profile/linked_accounts.html.twig', [
             'identities' => $identities,
