@@ -9,9 +9,21 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Marker interface for platform adapters.
  *
- * Each adapter must be able to decide whether it can handle the current
- * HTTP request (`supports`) and, if so, provide a concrete `PlatformUiContext`
- * implementation (`getContext`).
+ * A platform adapter has exactly two responsibilities:
+ *   1. Detect whether the current request originates from its platform
+ *      (`supports`) and describe it for the UI layer (`getContext`).
+ *   2. Declare a client-side "bridge" template — JS/markup that self-detects
+ *      the platform in the browser and bootstraps it (theming, zero-click
+ *      session bootstrap, etc).
+ *
+ * Actual authentication is deliberately NOT part of this contract. It is a
+ * Symfony Security concern, wired via a security authenticator factory
+ * (see telegram-bot-bundle's `telegram_tma` firewall authenticator). Two
+ * previous methods, `getZeroClickLoginUrl()` and `getLoginRouteName()`,
+ * used to live here but were never called by anything — they were a
+ * half-finished idea that the bridge template + authenticator approach
+ * below has now fully superseded. Removed to keep the contract honest
+ * about what the core actually uses.
  */
 interface PlatformAdapterInterface
 {
@@ -28,18 +40,17 @@ interface PlatformAdapterInterface
     public function getContext(Request $request): PlatformUiContext;
 
     /**
-     * Returns the Twig template path for bridge assets (scripts/styles),
-     * or null if the adapter does not need to inject client-side code.
+     * Returns the Twig template path for the platform's bridge assets
+     * (scripts/styles), or null if the adapter does not need to inject
+     * client-side code.
+     *
+     * IMPORTANT: this template is rendered UNCONDITIONALLY on every page,
+     * for every registered adapter — not just the one that `supports()`
+     * the current request. This is intentional: on the very first request
+     * from inside e.g. a Telegram Mini App, the server has no way to know
+     * that yet (Telegram passes initData via a URL fragment, which never
+     * reaches the server). The bridge script itself is responsible for
+     * self-detecting its platform client-side and no-op'ing otherwise.
      */
     public function getBridgeTemplatePath(): ?string;
-
-    /**
-     * Returns the URL for zero-click login, or null if not supported.
-     */
-    public function getZeroClickLoginUrl(): ?string;
-
-    /**
-     * Returns the login route name for this platform, or null.
-     */
-    public function getLoginRouteName(): ?string;
 }
