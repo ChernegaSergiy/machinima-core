@@ -17,15 +17,24 @@ security:
 
     firewalls:
         dev:
-            # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
         main:
             lazy: true
             provider: app_user_provider
             # telegram_tma authenticator is loaded via profile config
+            entry_point: form_login
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_index
+            logout:
+                path: app_logout
 
-    access_control: []
+    access_control:
+        - { path: ^/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/oauth/, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER }
 
 when@test:
     security:

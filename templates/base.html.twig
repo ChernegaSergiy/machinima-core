@@ -111,7 +111,7 @@
         const observer = new MutationObserver(adjustBottomPadding);
         observer.observe(document.body, { childList: true, subtree: true });
     </script>
-    {{ platform_bridge_assets()|raw }}
+    {% block platform_bridge %}{% endblock %}
     <script src="/js/app.js?v={{ random() }}"></script>
     {% include 'components/skeletons.html.twig' %}
     {% block javascripts %}{% endblock %}
