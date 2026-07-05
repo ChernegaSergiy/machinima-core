@@ -31,6 +31,10 @@ services:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
+    App\Service\Avatar\InitialsAvatarProvider:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
     App\Service\Media\MediaProviderInterface:
         alias: App\Service\Media\DefaultMediaProvider
 
