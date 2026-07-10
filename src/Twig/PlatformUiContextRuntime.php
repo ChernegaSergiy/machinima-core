@@ -8,7 +8,6 @@ use App\Contract\PlatformUiContext;
 use App\Contract\PlatformUiContextProvider;
 use App\Service\PlatformAdapterRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Asset\Packages;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -19,7 +18,6 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
         private PlatformAdapterRegistry $registry,
         private Security $security,
         private RequestStack $requestStack,
-        private Packages $packages,
     ) {
     }
 
@@ -29,10 +27,16 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * Resolved (asset-URL) bootstrap module paths for every registered
-     * adapter that declares one. Only relevant while there is no
-     * authenticated user yet — once a session is authenticated, no adapter
-     * needs to try bootstrapping again.
+     * Bootstrap module paths for every registered adapter that declares one,
+     * resolved to public URLs. Only relevant while there is no authenticated
+     * user yet — once a session is authenticated, no adapter needs to try
+     * bootstrapping again.
+     *
+     * This project doesn't use symfony/asset anywhere (it isn't even
+     * installed) — every other asset in base.html.twig is a plain hardcoded
+     * `/path` with a manual `?v=` cache-buster, so bootstrap/ui-hints module
+     * paths follow the same convention rather than introducing a new
+     * dependency for just this.
      *
      * @return list<string>
      */
@@ -46,7 +50,7 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
         foreach ($this->registry->all() as $adapter) {
             $path = $adapter->getBootstrapModulePath();
             if (null !== $path) {
-                $paths[] = $this->packages->getUrl($path);
+                $paths[] = $this->toPublicUrl($path);
             }
         }
 
@@ -54,8 +58,8 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * Resolved (asset-URL) UI-hints module path for the adapter owning the
-     * current authenticated session, or null if there isn't one.
+     * UI-hints module path for the adapter owning the current authenticated
+     * session, resolved to a public URL, or null if there isn't one.
      */
     public function getUiHintsModulePath(): ?string
     {
@@ -72,6 +76,11 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
         $adapter = $this->registry->findByPlatformName($providerName);
         $path = $adapter?->getUiHintsModulePath();
 
-        return null !== $path ? $this->packages->getUrl($path) : null;
+        return null !== $path ? $this->toPublicUrl($path) : null;
+    }
+
+    private function toPublicUrl(string $path): string
+    {
+        return '/' . ltrim($path, '/');
     }
 }
