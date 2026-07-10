@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Contract\BootstrapOnlyIdentityProvider;
 use App\Contract\IdentityProviderMetadataProvider;
 use App\Contract\IdentityProviderPort;
 
@@ -29,6 +30,10 @@ final class IdentityProviderRegistry
         $result = [];
 
         foreach ($this->providers as $provider) {
+            if ($provider instanceof BootstrapOnlyIdentityProvider) {
+                continue;
+            }
+
             $name = $provider->getProviderName();
 
             if ($provider instanceof IdentityProviderMetadataProvider) {
