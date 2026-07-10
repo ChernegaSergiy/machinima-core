@@ -1,30 +1,82 @@
 function getPlatform() {
-    return window.__PLATFORM__ || { isEmbedded: false, initData: null };
+    return window.__PLATFORM__ || { isEmbedded: false };
 }
 
-function getInitData() {
-    return getPlatform().initData;
-}
+/**
+ * Zero-click login bootstrap. Core knows NOTHING about how any given
+ * platform detects itself or what an "assertion" looks like — it only
+ * dynamically imports each registered adapter's bootstrap module and calls
+ * its `detect()`. The only thing core owns is the transport (one POST to
+ * /api/auth/bootstrap) and the reload circuit breaker below.
+ */
+async function bootstrapAuth() {
+    const modulePaths = window.__BOOTSTRAP_MODULE_PATHS__ || [];
+    if (modulePaths.length === 0) return;
 
-function getPlatformBridge() {
-    return window.__PLATFORM_BRIDGE__ || null;
-}
+    // Circuit breaker: at most one bootstrap attempt per page load. Without
+    // this, a broken or slow-to-settle adapter (cookie not accepted, race
+    // between detection and server state) could reload forever.
+    const attempts = Number(sessionStorage.getItem('bootstrap_attempts') || '0');
+    if (attempts >= 1) return;
+    sessionStorage.setItem('bootstrap_attempts', String(attempts + 1));
 
-function initEmbedded() {
-    const plat = getPlatform();
-    if (!plat.isEmbedded || !plat.initData) return;
+    for (const modulePath of modulePaths) {
+        let result = null;
+        try {
+            const mod = await import(modulePath);
+            result = await mod.detect();
+        } catch (e) {
+            console.error('Platform bootstrap module failed:', modulePath, e);
+        }
 
-    document.body.classList.add('is-embedded');
+        if (!result || typeof result.assertion !== 'string' || !result.assertion) continue;
 
-    // Delegate platform-specific initialization to the adapter bridge
-    if (typeof window.__PLATFORM_BRIDGE_INIT__ === 'function') {
-        window.__PLATFORM_BRIDGE_INIT__();
+        try {
+            const res = await fetch('/api/auth/bootstrap', {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ provider: result.provider, assertion: result.assertion }),
+            });
+
+            if (res.ok) {
+                sessionStorage.removeItem('bootstrap_attempts');
+                window.location.reload();
+                return;
+            }
+        } catch (e) {
+            console.error('Platform bootstrap request failed:', e);
+        }
+
+        // This adapter detected itself but bootstrap failed — don't try the
+        // remaining adapters too, and don't reload again this page load.
+        return;
     }
 }
 
-function initApp() {
-    initEmbedded();
+/**
+ * Presentational-only hook for the adapter owning the current session
+ * (theme, back-button, etc). Never involved in login. Core just dispatches
+ * a generic navigation event; what a hints module does with it is its own
+ * business.
+ */
+function loadUiHints() {
+    const modulePath = window.__UI_HINTS_MODULE_PATH__;
+    if (!modulePath || window.__uiHintsLoaded) return;
+    window.__uiHintsLoaded = true;
 
+    import(modulePath)
+        .then(mod => mod.apply(getPlatform()))
+        .catch(e => console.error('Platform UI hints module failed:', modulePath, e));
+}
+
+document.addEventListener('turbo:load', function() {
+    window.dispatchEvent(new CustomEvent('platform:navigate', {
+        detail: { route: document.body.dataset.route },
+    }));
+});
+
+function initApp() {
     const tabBar = document.getElementById('main-tab-bar');
     if (tabBar) {
         const links = tabBar.querySelectorAll('a[data-skeleton]');
@@ -137,13 +189,6 @@ document.addEventListener('turbo:load', function(event) {
     if (overlay) overlay.remove();
 });
 
-document.addEventListener('turbo:before-fetch-request', function (event) {
-    const initData = getInitData();
-    if (initData && typeof initData === 'string') {
-        event.detail.fetchOptions.headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
-    }
-});
-
 function setActive(el, active) {
     const svg = el && el.querySelector('svg');
     if (!svg) return;
@@ -165,14 +210,10 @@ window.interactFeed = async function(contentId, type, btnElement) {
         btnElement.style.transition = 'opacity 0.2s';
     }
     try {
-        const initData = getInitData();
-        const headers = { 'Content-Type': 'application/json' };
-        if (initData && typeof initData === 'string') {
-            headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
-        }
         const res = await fetch('/api/interact', {
             method: 'POST',
-            headers: headers,
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify({
                 content_id: contentId,
                 type: type,
@@ -228,8 +269,8 @@ window.interactFeed = async function(contentId, type, btnElement) {
 };
 
 document.addEventListener('turbo:load', async function() {
-    const plat = getPlatform();
-    const initData = getInitData();
+    bootstrapAuth();
+    loadUiHints();
 
     let tgUserId = window.currentUserId;
     if (tgUserId) {
@@ -254,12 +295,9 @@ document.addEventListener('turbo:load', async function() {
     }
 
         try {
-                const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
-                if (initData && typeof initData === 'string') {
-                    headers['X-Telegram-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
-                }
         const unreadRes = await fetch('/api/notifications/unread-count', {
-            headers: headers,
+            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
+            credentials: 'same-origin',
             cache: 'no-store'
         });
         const unreadData = await unreadRes.json();
@@ -289,13 +327,9 @@ document.addEventListener('turbo:load', async function() {
                 }
                 if (data.type === 'NEW_COMMENT' || data.type === 'STATS_UPDATE') {
                     try {
-                        const headers = { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' };
-                        const initData = getInitData();
-                        if (initData && typeof initData === 'string') {
-                            headers['X-Init-Data'] = initData.replace(/[^\x20-\x7E]/g, '');
-                        }
                         const unreadRes = await fetch('/api/notifications/unread-count', {
-                            headers: headers,
+                            headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' },
+                            credentials: 'same-origin',
                             cache: 'no-store'
                         });
                         const unreadData = await unreadRes.json();
