@@ -81,6 +81,6 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
 
     private function toPublicUrl(string $path): string
     {
-        return '/' . ltrim($path, '/');
+        return '/' . ltrim($path, '/') . '?v=' . time();
     }
 }
