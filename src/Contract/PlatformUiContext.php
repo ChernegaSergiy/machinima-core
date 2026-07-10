@@ -12,8 +12,6 @@ interface PlatformUiContext
 
     public function getTheme(): string;
 
-    public function getInitData(): ?string;
-
     public function getUserId(): ?string;
 
     public function getBotLink(): ?string;
