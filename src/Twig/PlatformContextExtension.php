@@ -13,7 +13,8 @@ class PlatformContextExtension extends AbstractExtension
     {
         return [
             new TwigFunction('platform_context', [PlatformUiContextRuntime::class, 'getContext']),
-            new TwigFunction('platform_bridge_template_paths', [PlatformUiContextRuntime::class, 'getBridgeTemplatePaths']),
+            new TwigFunction('platform_bootstrap_module_paths', [PlatformUiContextRuntime::class, 'getBootstrapModulePaths']),
+            new TwigFunction('platform_ui_hints_module_path', [PlatformUiContextRuntime::class, 'getUiHintsModulePath']),
         ];
     }
 }
