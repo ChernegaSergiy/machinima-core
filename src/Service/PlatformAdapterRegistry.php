@@ -40,14 +40,30 @@ final class PlatformAdapterRegistry
     }
 
     /**
-     * Returns every registered adapter, regardless of whether it supports
-     * the current request. Used to render bridge assets unconditionally —
-     * see PlatformAdapterInterface::getBridgeTemplatePath() for why.
+     * Returns every registered adapter. Used to render bootstrap modules
+     * unconditionally for unauthenticated requests — see
+     * PlatformAdapterInterface::getBootstrapModulePath() for why.
      *
      * @return iterable<PlatformAdapterInterface>
      */
     public function all(): iterable
     {
         return $this->adapters;
+    }
+
+    /**
+     * Finds an adapter by its stable platform name (e.g. 'telegram'). Used to
+     * resolve the adapter owning an already-authenticated session, stored by
+     * name in the session — never by sniffing the current request.
+     */
+    public function findByPlatformName(string $name): ?PlatformAdapterInterface
+    {
+        foreach ($this->adapters as $adapter) {
+            if ($adapter->getPlatformName() === $name) {
+                return $adapter;
+            }
+        }
+
+        return null;
     }
 }
