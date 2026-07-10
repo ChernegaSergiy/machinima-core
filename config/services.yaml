@@ -28,6 +28,10 @@ services:
         arguments:
             $providers: !tagged_iterator app.identity_provider
 
+    App\Service\PlatformAdapterRegistry:
+        arguments:
+            $adapters: !tagged_iterator app.platform_adapter
+
     App\Service\Avatar\AvatarProviderInterface:
         alias: App\Service\Avatar\ThumbsAvatarProvider
 
@@ -49,6 +53,7 @@ services:
         exclude:
             - '../src/Entity/'
             - '../src/Service/IdentityProviderRegistry.php'
+            - '../src/Service/PlatformAdapterRegistry.php'
 
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
