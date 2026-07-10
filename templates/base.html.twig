@@ -11,12 +11,14 @@
             isEmbedded: {{ platform_context().isEmbedded ? 'true' : 'false' }},
             platformName: '{{ platform_context().platformName }}',
             theme: '{{ platform_context().theme }}',
-            initData: {{ platform_context().initData ? ('\'' ~ platform_context().initData|e('js') ~ '\'') : 'null' }},
             botLink: {{ platform_context().botLink ? ('\'' ~ platform_context().botLink|e('js') ~ '\'') : 'null' }},
             capabilities: {{ platform_context().capabilities|json_encode|raw }}
         };
-        // Snapshot of what the SERVER knew — bridge uses this to decide if zero-click is needed.
-        window.__SERVER_EMBEDDED__ = window.__PLATFORM__.isEmbedded;
+        // Every registered adapter's bootstrap module (empty once a session is
+        // authenticated — see PlatformUiContextRuntime::getBootstrapModulePaths()).
+        window.__BOOTSTRAP_MODULE_PATHS__ = {{ platform_bootstrap_module_paths()|json_encode|raw }};
+        // The one adapter owning THIS session, if any (see getUiHintsModulePath()).
+        window.__UI_HINTS_MODULE_PATH__ = {{ platform_ui_hints_module_path() ? ('\'' ~ platform_ui_hints_module_path()|e('js') ~ '\'') : 'null' }};
 
         if (window.__PLATFORM__.isEmbedded) {
             document.title = 'Morf TMA';
@@ -111,11 +113,6 @@
         const observer = new MutationObserver(adjustBottomPadding);
         observer.observe(document.body, { childList: true, subtree: true });
     </script>
-    {% block platform_bridge %}
-        {% for bridge_path in platform_bridge_template_paths() %}
-            {% include bridge_path %}
-        {% endfor %}
-    {% endblock %}
     <script src="/js/app.js?v={{ random() }}"></script>
     {% include 'components/skeletons.html.twig' %}
     {% block javascripts %}{% endblock %}
