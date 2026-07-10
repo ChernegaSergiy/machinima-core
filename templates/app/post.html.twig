@@ -73,17 +73,14 @@
         (function() {
             var userId = {{ app.user ? app.user.id : 'null' }};
             window.currentUserId = userId;
-            var initData = window.__PLATFORM__?.initData;
-            
+
             // Apply owner-specific CSS immediately
             var style = document.createElement('style');
             var css = '.owner-actions[data-owner-id="' + userId + '"] { display: flex !important; }';
-            
+
             // Verify moderator status asynchronously to bypass cache
-            if (initData) {
-                fetch('/api/me', {
-                    headers: { 'X-Telegram-Init-Data': initData }
-                })
+            if (userId) {
+                fetch('/api/me', { credentials: 'same-origin' })
                 .then(r => r.json())
                 .then(data => {
                     if (data.is_moderator) {
@@ -171,29 +168,18 @@
     window.interact = async function(type, btnElement) {
         let step = 'init';
         try {
-            step = 'initData';
-            const initData = window.__PLATFORM__?.initData;
-            
-            step = 'headers';
-            const headers = { 'Content-Type': 'application/json' };
-            if (initData && typeof initData === 'string') {
-                const cleaned = initData.replace(/[^\x20-\x7E]/g, '').trim();
-                if (cleaned.length > 0) {
-                    headers['X-Telegram-Init-Data'] = cleaned;
-                }
-            }
-
             step = 'fetch_call';
             if (btnElement && type !== 'view') {
                 btnElement.style.pointerEvents = 'none';
                 btnElement.style.opacity = '0.5';
                 btnElement.style.transition = 'opacity 0.2s';
             }
-            
+
             const targetUrl = window.location.origin + '/api/interact';
             const res = await fetch(targetUrl, {
                 method: 'POST',
-                headers: headers,
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({
                     content_id: window.postId,
                     type: type,
@@ -280,10 +266,8 @@
         try {
             const res = await fetch(`/api/comments/${id}`, {
                 method: 'DELETE',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
-                },
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ user_id: currentUserId })
             });
             const data = await res.json();
@@ -371,19 +355,15 @@
             if (editModeId) {
                 res = await fetch(`/api/comments/${editModeId}`, {
                     method: 'PUT',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
-                    },
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
                     body: JSON.stringify({ user_id: currentUserId, text: text })
                 });
             } else {
                 res = await fetch(`/api/projects/${postId}/comments`, {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'X-Telegram-Init-Data': window.__PLATFORM__?.initData || ''
-                    },
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
                     body: JSON.stringify({
                         user_id: currentUserId,
                         text: text,
