@@ -21,11 +21,6 @@ class NullPlatformUiContext implements PlatformUiContext
         return 'light';
     }
 
-    public function getInitData(): ?string
-    {
-        return null;
-    }
-
     public function getUserId(): ?string
     {
         return null;
