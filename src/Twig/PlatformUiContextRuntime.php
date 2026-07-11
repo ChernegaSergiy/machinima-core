@@ -69,6 +69,7 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
 
         $request = $this->requestStack->getCurrentRequest();
         $providerName = $request?->hasSession() === true ? $request->getSession()->get('active_platform_provider') : null;
+
         if (!is_string($providerName)) {
             return null;
         }
