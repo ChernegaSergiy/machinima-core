@@ -1,4 +1,16 @@
+<div align="center">
+
+<img src="assets/images/morf-logo.svg" alt="MORF" width="320" />
+
 # machinima-app
+
+*Core of the Machinima platform.*
+
+[Architecture](#architecture) · [Run profiles](#run-profiles) · [Tech stack](#tech-stack) · [Installation](#installation) · [Project structure](#project-structure) · [Contributing](#contributing) · [License](#license)
+
+---
+
+</div>
 
 Core of the Machinima platform — a Symfony application that works as a regular website and, at the same time, as a Telegram Mini App, without hard-coding Telegram anywhere in the core.
 
