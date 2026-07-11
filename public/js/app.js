@@ -10,7 +10,14 @@ function getPlatform() {
  * /api/auth/bootstrap) and the reload circuit breaker below.
  */
 async function bootstrapAuth() {
-    const modulePaths = window.__BOOTSTRAP_MODULE_PATHS__ || [];
+    const metaTag = document.querySelector('meta[name="platform-bootstrap-module-paths"]');
+    let modulePaths = [];
+    if (metaTag && metaTag.getAttribute('content')) {
+        try {
+            modulePaths = JSON.parse(metaTag.getAttribute('content'));
+        } catch (e) {}
+    }
+
     if (modulePaths.length === 0) return;
 
     // Circuit breaker: at most one bootstrap attempt per page load. Without
