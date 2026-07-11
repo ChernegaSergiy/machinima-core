@@ -20,9 +20,12 @@ async function bootstrapAuth() {
     if (attempts >= 1) return;
     sessionStorage.setItem('bootstrap_attempts', String(attempts + 1));
 
-    for (const modulePath of modulePaths) {
+    for (let modulePath of modulePaths) {
         let result = null;
         try {
+            if (!modulePath.startsWith('/') && !modulePath.startsWith('http')) {
+                modulePath = '/' + modulePath;
+            }
             const mod = await import(modulePath);
             result = await mod.detect();
         } catch (e) {
@@ -61,9 +64,13 @@ async function bootstrapAuth() {
  * business.
  */
 function loadUiHints() {
-    const modulePath = window.__UI_HINTS_MODULE_PATH__;
+    let modulePath = window.__UI_HINTS_MODULE_PATH__;
     if (!modulePath || window.__uiHintsLoaded) return;
     window.__uiHintsLoaded = true;
+
+    if (!modulePath.startsWith('/') && !modulePath.startsWith('http')) {
+        modulePath = '/' + modulePath;
+    }
 
     import(modulePath)
         .then(mod => mod.apply(getPlatform()))
