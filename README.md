@@ -74,19 +74,20 @@ symfony server:start -d
 
 ## Project structure
 
-```
-src/
-├── Contract/       # platform-agnostic contracts (adapters, identity providers, UI context)
-├── Controller/      # web + API controllers
-├── Entity/          # Doctrine entities
-├── Event/            # domain events (e.g. UserAuthenticatedEvent)
-├── EventListener/   # event subscribers
-├── Security/          # authentication/authorization
-├── Service/           # adapter/provider registries and other business logic
-├── Twig/              # Twig extensions/runtime
-└── Kernel.php
-
-config/profiles/     # configuration per run profile
-templates/            # Twig templates
-migrations/           # Doctrine migrations
+```text
+machinima-app/
++-- config/
+|   \-- profiles/       # configuration per run profile
++-- migrations/         # Doctrine migrations
++-- src/
+|   +-- Contract/       # platform-agnostic contracts (adapters, identity providers, UI context)
+|   +-- Controller/     # web + API controllers
+|   +-- Entity/         # Doctrine entities
+|   +-- Event/          # domain events (e.g. UserAuthenticatedEvent)
+|   +-- EventListener/  # event subscribers
+|   +-- Security/       # authentication/authorization
+|   +-- Service/        # adapter/provider registries and other business logic
+|   +-- Twig/           # Twig extensions/runtime
+|   \-- Kernel.php
+\-- templates/          # Twig templates
 ```
