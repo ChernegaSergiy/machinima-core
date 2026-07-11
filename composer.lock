@@ -1366,7 +1366,7 @@
             "dist": {
                 "type": "path",
                 "url": "../machinima-telegram-adapter",
-                "reference": "fe134effe8bebed62a06f27013ad975b0258a8ea"
+                "reference": "69f2796327933e2cb50f49891bebb3a16daebb77"
             },
             "require": {
                 "lcobucci/jwt": "^4.0",
