@@ -18,18 +18,18 @@
             <a href="{{ target_url }}" data-skeleton="{{ notif.targetType }}" class="flex items-center p-4 rounded border-2 mb-4 cursor-pointer transition-all shadow-brutal active:translate-brutal active:shadow-none no-underline text-inherit border-border bg-surface notification-item">
                 <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
                 <div class="flex-1">
-                    <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення {% if not notif.isRead %}<span class="bg-accent text-white py-0-5 px-2 rounded text-[10px] font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>{% endif %}</div>
-                    <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">{{ notif.message }}</div>
-                    <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ notif.createdAt|date('c') }}" data-format="datetime">{{ notif.createdAt|date('d.m.Y H:i') }}</time></div>
+                    <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення {% if not notif.isRead %}<span class="bg-accent text-white py-0-5 px-2 rounded text-xs font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>{% endif %}</div>
+                    <div class="text-sm text-primary mb-1 leading-normal font-semibold">{{ notif.message }}</div>
+                    <div class="text-xs text-muted font-bold uppercase"><time class="local-time" datetime="{{ notif.createdAt|date('c') }}" data-format="datetime">{{ notif.createdAt|date('d.m.Y H:i') }}</time></div>
                 </div>
             </a>
         {% else %}
             <div class="flex items-center p-4 rounded border-2 mb-4 transition-all shadow-brutal text-inherit no-underline border-border bg-surface notification-item">
                 <div class="w-12 h-12 rounded bg-surface flex items-center justify-center text-primary mr-4 shrink-0 border-2 border-border shadow-brutal-sm"><i data-lucide="bell" class="w-6 h-6 stroke-2"></i></div>
                 <div class="flex-1">
-                    <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення {% if not notif.isRead %}<span class="bg-accent text-white py-0-5 px-2 rounded text-[10px] font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>{% endif %}</div>
-                    <div class="text-[14px] text-primary mb-1 leading-normal font-semibold">{{ notif.message }}</div>
-                    <div class="text-[12px] text-muted font-bold uppercase"><time class="local-time" datetime="{{ notif.createdAt|date('c') }}" data-format="datetime">{{ notif.createdAt|date('d.m.Y H:i') }}</time></div>
+                    <div class="flex items-center text-lg font-bold mb-1 font-unbounded tracking-tight uppercase text-primary">Сповіщення {% if not notif.isRead %}<span class="bg-accent text-white py-0-5 px-2 rounded text-xs font-bold ml-2 uppercase font-unbounded inline-block">Нове</span>{% endif %}</div>
+                    <div class="text-sm text-primary mb-1 leading-normal font-semibold">{{ notif.message }}</div>
+                    <div class="text-xs text-muted font-bold uppercase"><time class="local-time" datetime="{{ notif.createdAt|date('c') }}" data-format="datetime">{{ notif.createdAt|date('d.m.Y H:i') }}</time></div>
                 </div>
             </div>
         {% endif %}

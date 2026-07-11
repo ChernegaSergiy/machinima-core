@@ -12,7 +12,7 @@
         <div class="w-22 h-22 mx-auto mb-5 rounded bg-surface flex items-center justify-center text-primary border-2 border-border shadow-brutal overflow-hidden shrink-0">
             <i data-lucide="user" class="w-10 h-10 stroke-1-5 shrink-0"></i>
         </div>
-        <h1 class="text-[26px] font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">{{ author.name }}</h1>
+        <h1 class="text-2xl font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">{{ author.name }}</h1>
         
         {% if author.biography %}
             <p class="text-base text-primary mb-6 leading-relaxed font-semibold">{{ author.biography }}</p>
@@ -20,13 +20,13 @@
         
         <div class="flex gap-2 justify-center items-center mb-6">
             {% if author.channelLink %}
-                <a href="{{ author.channelLink }}" target="_blank" class="bg-border text-surface py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120 no-underline">
+                <a href="{{ author.channelLink }}" target="_blank" class="bg-border text-surface py-3 px-6 rounded font-bold text-sm uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120 no-underline">
                     Канал
                 </a>
             {% endif %}
             
             {% if app.user %}
-                {% set btn_base = 'py-3 px-6 rounded font-bold text-[14px] uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120' %}
+                {% set btn_base = 'py-3 px-6 rounded font-bold text-sm uppercase flex items-center justify-center cursor-pointer border-2 border-border shadow-btn transition-all font-unbounded active:translate-brutal-sm active:shadow-xs m-0 min-w-120' %}
                 {% set btn_primary = 'bg-border text-surface' %}
                 {% set btn_secondary = 'bg-surface text-primary' %}
                 
@@ -90,9 +90,9 @@
         </a>
         
         <div class="post-actions flex items-center gap-3 mt-4 pt-4 border-t-2 border-border" data-post-id="{{ project.id }}">
-            <div class="btn-like inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'like', this)"><i data-lucide="heart" class="w-[18px] h-[18px] stroke-2-5"></i> <span class="likes-count">{{ project.likesCount }}</span></div>
-            <div class="btn-dislike inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'dislike', this)"><i data-lucide="thumbs-down" class="w-[18px] h-[18px] stroke-2-5"></i></div>
-            <div class="inline-flex items-center justify-center gap-1-5 text-[14px] font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto pointer-events-none"><i data-lucide="eye" class="w-[18px] h-[18px] stroke-2-5"></i> {{ project.viewsCount }}</div>
+            <div class="btn-like inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'like', this)"><i data-lucide="heart" class="w-5 h-5 stroke-2-5"></i> <span class="likes-count">{{ project.likesCount }}</span></div>
+            <div class="btn-dislike inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'dislike', this)"><i data-lucide="thumbs-down" class="w-5 h-5 stroke-2-5"></i></div>
+            <div class="inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto pointer-events-none"><i data-lucide="eye" class="w-5 h-5 stroke-2-5"></i> {{ project.viewsCount }}</div>
         </div>
     </div>
     {% else %}
