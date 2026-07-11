@@ -6,7 +6,7 @@
 
 *Core of the Machinima platform.*
 
-[Architecture](#architecture) · [Run profiles](#run-profiles) · [Tech stack](#tech-stack) · [Installation](#installation) · [Project structure](#project-structure) · [Contributing](#contributing) · [License](#license)
+[Architecture](#architecture) · [Run profiles](#run-profiles) · [Tech stack](#tech-stack) · [Installation](#installation) · [Contributing](#contributing)
 
 ---
 
