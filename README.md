@@ -49,7 +49,6 @@ Main environment variables:
 | `APP_PROFILE` | `core-only` / `telegram-webapp` / `telegram-bot` |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `TELEGRAM_BOT_TOKEN` | bot token (needed by the Telegram adapter and for verifying Mini App `initData`) |
-| `TELEGRAM_BOT_USERNAME` | bot username |
 | `TELEGRAM_DSN` | DSN for Symfony Notifier (Telegram notifications) |
 | `MERCURE_URL` / `MERCURE_PUBLIC_URL` / `MERCURE_JWT_SECRET` | Mercure hub for real-time updates |
 | `MESSENGER_TRANSPORT_DSN` | transport for asynchronous messages |
