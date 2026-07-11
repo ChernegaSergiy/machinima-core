@@ -64,17 +64,34 @@ async function bootstrapAuth() {
  * business.
  */
 function loadUiHints() {
-    let modulePath = window.__UI_HINTS_MODULE_PATH__;
-    if (!modulePath || window.__uiHintsLoaded) return;
+    const metaTag = document.querySelector('meta[name="platform-ui-hints-module-path"]');
+    let modulePath = metaTag ? metaTag.getAttribute('content') : null;
+
+    if (!modulePath || window.__uiHintsLoaded) {
+        return;
+    }
     window.__uiHintsLoaded = true;
 
     if (!modulePath.startsWith('/') && !modulePath.startsWith('http')) {
         modulePath = '/' + modulePath;
     }
 
+    let urlObj;
+    try {
+        urlObj = new URL(modulePath, window.location.origin);
+    } catch(e) {
+        urlObj = new URL('/' + modulePath, window.location.origin);
+    }
+    urlObj.searchParams.set('v', new Date().getTime());
+    modulePath = urlObj.pathname + urlObj.search;
+
     import(modulePath)
-        .then(mod => mod.apply(getPlatform()))
-        .catch(e => console.error('Platform UI hints module failed:', modulePath, e));
+        .then(mod => {
+            mod.apply(getPlatform());
+        })
+        .catch(e => {
+            console.error('Platform UI hints module failed:', modulePath, e);
+        });
 }
 
 document.addEventListener('turbo:load', function() {

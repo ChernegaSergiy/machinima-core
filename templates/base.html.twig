@@ -17,13 +17,14 @@
         // Every registered adapter's bootstrap module (empty once a session is
         // authenticated — see PlatformUiContextRuntime::getBootstrapModulePaths()).
         window.__BOOTSTRAP_MODULE_PATHS__ = {{ platform_bootstrap_module_paths()|json_encode|raw }};
-        // The one adapter owning THIS session, if any (see getUiHintsModulePath()).
-        window.__UI_HINTS_MODULE_PATH__ = {{ platform_ui_hints_module_path() ? ('\'' ~ platform_ui_hints_module_path()|e('js') ~ '\'') : 'null' }};
 
         if (window.__PLATFORM__.isEmbedded) {
             document.title = 'Morf TMA';
         }
     </script>
+    {% if platform_ui_hints_module_path() %}
+        <meta name="platform-ui-hints-module-path" content="{{ platform_ui_hints_module_path() }}">
+    {% endif %}
     <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
