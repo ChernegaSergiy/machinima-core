@@ -11,7 +11,7 @@
             isEmbedded: {{ platform_context().isEmbedded ? 'true' : 'false' }},
             platformName: '{{ platform_context().platformName }}',
             theme: '{{ platform_context().theme }}',
-            botLink: {{ platform_context().botLink ? ('\'' ~ platform_context().botLink|e('js') ~ '\'') : 'null' }},
+
             capabilities: {{ platform_context().capabilities|json_encode|raw }}
         };
         // Every registered adapter's bootstrap module (empty once a session is
