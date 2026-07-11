@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90 hide-on-tma">
-    <a href="{{ path('app_index') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</a>
+    <a href="{{ path('app_index') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2.5"></i> Назад</a>
 </div>
 
 <div class="w-full max-w-600 mx-auto p-4">
@@ -13,7 +13,7 @@
             <a href="{{ path('app_author', {id: post.staff|first.author.id}) }}" data-skeleton="author" class="flex items-center mb-4 no-underline text-inherit group transition-all">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0 group-active:translate-brutal-sm group-active:shadow-xs transition-all"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
-                    <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ post.staff|first.author.name }}</div>
+                    <div class="font-bold text-lg text-primary mb-0.5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ post.staff|first.author.name }}</div>
                     <div class="text-sm text-muted font-semibold uppercase">{{ post.type }} • <time class="local-time" datetime="{{ post.createdAt|date('c') }}" data-format="datetime">{{ post.createdAt|date('d.m.Y H:i') }}</time></div>
                 </div>
             </a>
@@ -21,7 +21,7 @@
             <div class="flex items-center mb-4">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
-                    <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase">Автор невідомий</div>
+                    <div class="font-bold text-lg text-primary mb-0.5 font-unbounded tracking-tight uppercase">Автор невідомий</div>
                     <div class="text-sm text-muted font-semibold uppercase">{{ post.type }} • <time class="local-time" datetime="{{ post.createdAt|date('c') }}" data-format="datetime">{{ post.createdAt|date('d.m.Y H:i') }}</time></div>
                 </div>
             </div>
@@ -41,14 +41,14 @@
                     <img src="{{ path('app_media', {fileId: post.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" class="w-12 h-12 stroke-1-5"></i>
+                <i data-lucide="image" class="w-12 h-12 stroke-1.5"></i>
             {% endif %}
         </div>
         
         <div class="post-actions flex items-center gap-3 mt-4 pt-4 border-t-2 border-border" data-post-id="{{ post.id }}">
-            <div class="inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-like" onclick="interact('like', this)"><i data-lucide="heart" class="w-5 h-5 stroke-2-5"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
-            <div class="inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-dislike" onclick="interact('dislike', this)"><i data-lucide="thumbs-down" class="w-5 h-5 stroke-2-5"></i></div>
-            <div class="inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto"><i data-lucide="eye" class="w-5 h-5 stroke-2-5"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
+            <div class="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-like" onclick="interact('like', this)"><i data-lucide="heart" class="w-5 h-5 stroke-2.5"></i> <span id="likes-count">{{ post.likesCount }}</span></div>
+            <div class="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 select-none transition-all active:translate-brutal-sm active:shadow-xs cursor-pointer btn-dislike" onclick="interact('dislike', this)"><i data-lucide="thumbs-down" class="w-5 h-5 stroke-2.5"></i></div>
+            <div class="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto"><i data-lucide="eye" class="w-5 h-5 stroke-2.5"></i> <span id="views-count">{{ post.viewsCount }}</span></div>
         </div>
     </div>
 
@@ -101,7 +101,7 @@
     <div id="comments-list">
         {% if commentsCount == 0 %}
             <div class="text-center py-16 px-4 text-primary border-2 border-dashed border-border rounded my-8 bg-black-2 empty-state">
-                <i data-lucide="message-square" class="w-12 h-12 stroke-1-5 opacity-80 mb-4 mx-auto block"></i>
+                <i data-lucide="message-square" class="w-12 h-12 stroke-1.5 opacity-80 mb-4 mx-auto block"></i>
                 <div class="font-unbounded font-bold tracking-tight uppercase">Немає коментарів</div>
             </div>
         {% else %}
@@ -112,16 +112,16 @@
                             {% set profileLink = path('app_user', {id: item.entity.user.id}) %}
                             <a href="{{ profileLink }}" data-skeleton="profile" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="{{ path('app_avatar', {userId: item.entity.user.id}) }}" alt="" loading="lazy" class="w-full h-full object-cover block" /></a>
                             <div>
-                                <a href="{{ profileLink }}" data-skeleton="profile" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.displayName }}</a>
+                                <a href="{{ profileLink }}" data-skeleton="profile" class="font-bold text-base text-primary mb-0.5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">{{ item.entity.displayName }}</a>
                                 <div class="text-xs text-muted font-bold uppercase"><time class="local-time" datetime="{{ item.entity.createdAt|date('c') }}" data-format="datetime">{{ item.entity.createdAt|date('d.m.Y H:i') }}</time></div>
                             </div>
                         </div>
                         <div class="text-base text-primary leading-relaxed font-semibold break-words" id="comment-text-{{ item.entity.id }}">{{ item.entity.text }}</div>
                         <div class="flex gap-4 mt-3 items-center flex-wrap">
-                            <button class="bg-transparent border-none p-0 text-sm font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.displayName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                            <button class="bg-transparent border-none p-0 text-sm font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply({{ item.entity.id }}, '{{ item.entity.displayName|escape('js') }}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2.5"></i> Відповісти</button>
                             <div class="owner-actions hidden gap-4 flex-wrap" data-owner-id="{{ item.entity.user.id }}" data-cid="{{ item.entity.id }}">
-                                <button class="bg-transparent border-none p-0 text-sm font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
-                                <button class="bg-transparent border-none p-0 text-sm font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
+                                <button class="bg-transparent border-none p-0 text-sm font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment({{ item.entity.id }})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2.5"></i></button>
+                                <button class="bg-transparent border-none p-0 text-sm font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment({{ item.entity.id }})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2.5"></i></button>
                             </div>
                         </div>
                         
@@ -142,7 +142,7 @@
 <div class="fixed bottom-0 left-0 right-0 bg-surface border-t-2 border-border p-3 z-90 pb-[max(12px,env(safe-area-inset-bottom))]">
     <form id="comment-form" onsubmit="submitComment(event)" class="flex items-center gap-3 w-full max-w-600 mx-auto">
         <input id="comment-input" type="text" placeholder="Написати коментар..." class="flex-1 py-3 px-4 bg-surface border-2 border-border rounded font-bold text-primary text-base outline-none shadow-brutal-sm transition-all focus:border-primary placeholder:text-muted placeholder:font-semibold" required />
-        <button type="submit" class="w-12 h-12 bg-border text-surface border-2 border-border rounded flex items-center justify-center cursor-pointer shadow-brutal-sm transition-all active:translate-brutal-sm active:shadow-xs"><i data-lucide="send" class="w-5 h-5 stroke-2-5 relative -ml-1"></i></button>
+        <button type="submit" class="w-12 h-12 bg-border text-surface border-2 border-border rounded flex items-center justify-center cursor-pointer shadow-brutal-sm transition-all active:translate-brutal-sm active:shadow-xs"><i data-lucide="send" class="w-5 h-5 stroke-2.5 relative -ml-1"></i></button>
     </form>
 </div>
 
@@ -307,16 +307,16 @@
                 <div class="flex items-center mb-3">
                     <a href="${profileLink}" class="w-10 h-10 rounded bg-surface border-2 border-border shadow-brutal-sm overflow-hidden flex items-center justify-center mr-3 shrink-0 no-underline cursor-pointer active:translate-brutal-sm active:shadow-xs transition-all"><img src="/avatar/${c.user_id}" loading="lazy" class="w-full h-full object-cover block" /></a>
                     <div>
-                        <a href="${profileLink}" class="font-bold text-base text-primary mb-0-5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
+                        <a href="${profileLink}" class="font-bold text-base text-primary mb-0.5 font-unbounded tracking-tight uppercase no-underline block cursor-pointer active:opacity-80 transition-opacity">${c.author_name}</a>
                         <div class="text-xs text-muted font-bold uppercase">Зараз</div>
                     </div>
                 </div>
                 <div class="text-base text-primary leading-relaxed font-semibold break-words" id="comment-text-${c.id}">${c.text}</div>
                 <div class="flex gap-4 mt-3 items-center flex-wrap">
-                    <button class="bg-transparent border-none p-0 text-sm font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2-5"></i> Відповісти</button>
+                    <button class="bg-transparent border-none p-0 text-sm font-bold text-muted cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase" onclick="setReply(${c.id}, '${c.author_name.replace(/'/g, "\\'")}')"><i data-lucide="corner-down-right" class="w-4 h-4 stroke-2.5"></i> Відповісти</button>
                     <div class="owner-actions flex gap-4 flex-wrap" data-owner-id="${c.user_id}" data-cid="${c.id}">
-                        <button class="bg-transparent border-none p-0 text-sm font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment(${c.id})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2-5"></i></button>
-                        <button class="bg-transparent border-none p-0 text-sm font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2-5"></i></button>
+                        <button class="bg-transparent border-none p-0 text-sm font-bold text-primary cursor-pointer flex items-center gap-1 hover:text-primary active:text-primary transition-all font-unbounded uppercase edit-btn" onclick="startEditComment(${c.id})"><i data-lucide="edit-2" class="w-4 h-4 stroke-2.5"></i></button>
+                        <button class="bg-transparent border-none p-0 text-sm font-bold text-danger cursor-pointer flex items-center gap-1 hover:text-danger active:text-danger transition-all font-unbounded uppercase delete-btn" onclick="deleteComment(${c.id})"><i data-lucide="trash-2" class="w-4 h-4 stroke-2.5"></i></button>
                     </div>
                 </div>
                 <div class="comment-reply-wrapper hidden ml-5 border-l-2 border-border pl-4 mt-4" id="replies-${c.id}"></div>

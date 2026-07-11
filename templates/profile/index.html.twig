@@ -4,7 +4,7 @@
 <div class="w-full max-w-600 mx-auto p-4">
     {% if app.request.query.get('back') %}
     <div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90 hide-on-tma mb-4 -mx-4 -mt-4">
-        <a href="#" onclick="window.history.back(); return false;" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</a>
+        <a href="#" onclick="window.history.back(); return false;" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2.5"></i> Назад</a>
     </div>
     {% endif %}
     
@@ -20,7 +20,7 @@
         <h2 id="profile-name" class="text-[26px] font-bold mb-2 m-0 font-unbounded tracking-tight uppercase">{{ name }}</h2>
         <div id="profile-username" class="text-base text-primary mb-6 leading-relaxed font-semibold">@user{{ userData.id }}</div>
         
-        <span class="bg-border text-surface py-0-5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
+        <span class="bg-border text-surface py-0.5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
             {% if is_granted('ROLE_ADMIN') %}
                 Адміністратор
             {% elseif is_granted('ROLE_MODERATOR') %}

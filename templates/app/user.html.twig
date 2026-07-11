@@ -16,7 +16,7 @@
         <h2 class="text-2xl font-bold mb-3 m-0 font-unbounded tracking-tight uppercase">{{ name }}</h2>
         <div class="text-base text-primary mb-6 leading-relaxed font-semibold">@user{{ targetUser.id }}</div>
         
-        <span class="bg-border text-surface py-0-5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
+        <span class="bg-border text-surface py-0.5 px-2 rounded text-xs font-bold uppercase font-unbounded inline-block">
             {% if 'ROLE_ADMIN' in targetUser.roles %}
                 Адміністратор
             {% elseif 'ROLE_MODERATOR' in targetUser.roles %}

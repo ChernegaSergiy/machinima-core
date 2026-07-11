@@ -4,7 +4,7 @@
 
 {% block body %}
 <div class="sticky top-0 left-0 right-0 bg-surface border-b-2 border-border flex items-center p-4 z-90 hide-on-tma">
-    <a href="{{ path('app_categories') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2-5"></i> Назад</a>
+    <a href="{{ path('app_categories') }}" class="font-bold flex items-center uppercase font-unbounded tracking-tight no-underline text-inherit cursor-pointer active:opacity-80"><i data-lucide="arrow-left" class="mr-2 w-6 h-6 stroke-2.5"></i> Назад</a>
 </div>
 
 <div class="w-full max-w-600 mx-auto p-4">
@@ -18,7 +18,7 @@
             <a href="{{ path('app_author', {id: project.staff|first.author.id}) }}" data-skeleton="author" class="flex items-center mb-4 no-underline text-inherit group transition-all">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0 group-active:translate-brutal-sm group-active:shadow-xs transition-all"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
-                    <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ project.staff|first.author.name }}</div>
+                    <div class="font-bold text-lg text-primary mb-0.5 font-unbounded tracking-tight uppercase group-active:text-accent transition-colors">{{ project.staff|first.author.name }}</div>
                     <div class="text-sm text-muted font-semibold uppercase">{{ project.type }} • <time class="local-time" datetime="{{ project.createdAt|date('c') }}" data-format="date">{{ project.createdAt|date('d.m.Y') }}</time></div>
                 </div>
             </a>
@@ -26,7 +26,7 @@
             <div class="flex items-center mb-4">
                 <div class="w-11 h-11 rounded bg-surface border-2 border-border shadow-brutal-sm flex items-center justify-center mr-3 text-primary shrink-0"><i data-lucide="user" class="w-6 h-6 stroke-2"></i></div>
                 <div>
-                    <div class="font-bold text-lg text-primary mb-0-5 font-unbounded tracking-tight uppercase">Автор невідомий</div>
+                    <div class="font-bold text-lg text-primary mb-0.5 font-unbounded tracking-tight uppercase">Автор невідомий</div>
                     <div class="text-sm text-muted font-semibold uppercase">{{ project.type }} • <time class="local-time" datetime="{{ project.createdAt|date('c') }}" data-format="date">{{ project.createdAt|date('d.m.Y') }}</time></div>
                 </div>
             </div>
@@ -46,19 +46,19 @@
                     <img src="{{ path('app_media', {fileId: project.coverFileId}) }}" alt="Cover" class="w-full h-full object-cover block" loading="lazy" />
                 {% endif %}
             {% else %}
-                <i data-lucide="image" class="w-8 h-8 stroke-1-5"></i>
+                <i data-lucide="image" class="w-8 h-8 stroke-1.5"></i>
             {% endif %}
         </a>
         
         <div class="post-actions flex items-center gap-3 mt-4 pt-4 border-t-2 border-border" data-post-id="{{ project.id }}">
-            <div class="btn-like inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'like', this)"><i data-lucide="heart" class="w-5 h-5 stroke-2-5"></i> <span class="likes-count">{{ project.likesCount }}</span></div>
-            <div class="btn-dislike inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary cursor-pointer transition-all py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'dislike', this)"><i data-lucide="thumbs-down" class="w-5 h-5 stroke-2-5"></i></div>
-            <div class="inline-flex items-center justify-center gap-1-5 text-sm font-bold text-primary py-1-5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto pointer-events-none"><i data-lucide="eye" class="w-5 h-5 stroke-2-5"></i> {{ project.viewsCount }}</div>
+            <div class="btn-like inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary cursor-pointer transition-all py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'like', this)"><i data-lucide="heart" class="w-5 h-5 stroke-2.5"></i> <span class="likes-count">{{ project.likesCount }}</span></div>
+            <div class="btn-dislike inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary cursor-pointer transition-all py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 active:translate-brutal-sm active:shadow-xs" onclick="interactFeed({{ project.id }}, 'dislike', this)"><i data-lucide="thumbs-down" class="w-5 h-5 stroke-2.5"></i></div>
+            <div class="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-primary py-1.5 px-3 bg-surface border-2 border-border rounded shadow-brutal-sm h-10 ml-auto pointer-events-none"><i data-lucide="eye" class="w-5 h-5 stroke-2.5"></i> {{ project.viewsCount }}</div>
         </div>
     </div>
     {% else %}
     <div class="text-center py-16 px-4 text-primary border-2 border-dashed border-border rounded my-8 bg-black-2">
-        <i data-lucide="inbox" class="w-12 h-12 stroke-1-5 opacity-80 mb-4 mx-auto block"></i>
+        <i data-lucide="inbox" class="w-12 h-12 stroke-1.5 opacity-80 mb-4 mx-auto block"></i>
         <div class="font-unbounded font-bold tracking-tight uppercase">В цій категорії немає проєктів</div>
     </div>
     {% endfor %}
