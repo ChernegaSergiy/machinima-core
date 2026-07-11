@@ -12,7 +12,7 @@
 
 </div>
 
-Core of the Machinima platform — a Symfony application that works as a regular website and, at the same time, as a Telegram Mini App, without hard-coding Telegram anywhere in the core.
+This Symfony application functions seamlessly as both a regular website and an interactive Telegram Mini App. Its unique architecture ensures that the core system remains completely independent and entirely free of any hardcoded Telegram dependencies.
 
 ## Architecture
 
