@@ -34,10 +34,15 @@
             {% include splash.templatePath ignore missing %}
         </template>
         {% if splash.displayCondition %}
-            <script>
-                if ({{ splash.displayCondition|raw }}) {
-                    var t = document.getElementById('splash-template-{{ splash.platformName }}');
-                    if (t) document.write(t.innerHTML);
+            <script data-turbo-eval="false">
+                if (!window.__splashShown_{{ splash.platformName }}) {
+                    window.__splashShown_{{ splash.platformName }} = true;
+                    if ({{ splash.displayCondition|raw }}) {
+                        var t = document.getElementById('splash-template-{{ splash.platformName }}');
+                        if (t) {
+                            document.currentScript.parentNode.insertBefore(t.content.cloneNode(true), document.currentScript);
+                        }
+                    }
                 }
             </script>
         {% endif %}
