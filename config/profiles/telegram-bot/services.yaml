@@ -1,5 +1,0 @@
-services:
-    App\Service\Notification\NotificationGateway:
-        arguments:
-            $channel: '@App\Service\Notification\TelegramNotificationService'
-            $logger: '@logger'
