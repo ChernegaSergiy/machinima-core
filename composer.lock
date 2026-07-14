@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c111c6fadc93e449d278cddbdc3562ae",
+    "content-hash": "2210e6d720223164c40654c0350d2573",
     "packages": [
         {
             "name": "dicebear/core",
@@ -1363,10 +1363,16 @@
         {
             "name": "morfeditorial/machinima-telegram-adapter",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ChernegaSergiy/machinima-telegram-adapter.git",
+                "reference": "6b857eb89f68db2c867c00740e91470a6e5e3415"
+            },
             "dist": {
-                "type": "path",
-                "url": "../machinima-telegram-adapter",
-                "reference": "9f6d72b5b6ff44e8c4ed9f8ea3c8ba0b15423c0b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/ChernegaSergiy/machinima-telegram-adapter/zipball/6b857eb89f68db2c867c00740e91470a6e5e3415",
+                "reference": "6b857eb89f68db2c867c00740e91470a6e5e3415",
+                "shasum": ""
             },
             "require": {
                 "lcobucci/jwt": "^4.0",
@@ -1378,12 +1384,14 @@
                 "symfony/notifier": "8.1.*",
                 "symfony/telegram-notifier": "8.1.*"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
                     "Morfeditorial\\MachinimaTelegramAdapter\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LicenseRef-CSSM-Unlimited-2.0"
             ],
@@ -1394,9 +1402,11 @@
                 }
             ],
             "description": "Telegram platform adapter for the Machinima core app.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/ChernegaSergiy/machinima-telegram-adapter/issues",
+                "source": "https://github.com/ChernegaSergiy/machinima-telegram-adapter/tree/main"
+            },
+            "time": "2026-07-14T14:33:08+00:00"
         },
         {
             "name": "morfeditorial/telegram-bot-bundle",
