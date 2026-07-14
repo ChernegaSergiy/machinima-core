@@ -9,7 +9,7 @@ use App\Contract\PlatformUiContextProvider;
 use App\Service\PlatformAdapterRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class PlatformUiContextRuntime implements RuntimeExtensionInterface
@@ -22,8 +22,8 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
         private PlatformAdapterRegistry $registry,
         private Security $security,
         private RequestStack $requestStack,
-        #[TaggedIterator('app.splash_screen')]
-        iterable $splashScreens = [],
+        #[AutowireIterator('app.splash_screen')]
+        iterable $splashScreens,
     ) {
         $this->splashScreens = $splashScreens;
     }
