@@ -10,12 +10,12 @@ class ContentStaff
 {
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Content::class, inversedBy: 'staff')]
-    #[ORM\JoinColumn(name: 'content_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'content_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Content $content = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Author::class)]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Author $author = null;
 
     #[ORM\Id]
