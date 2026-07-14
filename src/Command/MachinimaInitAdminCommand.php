@@ -13,10 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'app:init:admin',
-    description: 'Initializes the basic role hierarchy and assigns the initial admin.',
+    name: 'machinima:init-admin',
+    description: 'Initializes the application with an admin user',
 )]
-class AppInitAdminCommand extends Command
+class MachinimaInitAdminCommand extends Command
 {
     private EntityManagerInterface $em;
 
