@@ -29,6 +29,12 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body data-route="{{ app.request.attributes.get('_route') }}">
+    {% for splash in ui_splash_screens() %}
+        <template id="splash-template-{{ splash.platformName }}">
+            {% include splash.templatePath ignore missing %}
+        </template>
+    {% endfor %}
+
     <div id="not-supported" style="display:none">
         <div class="w-full max-w-600 mx-auto p-4 pb-0 min-h-screen flex items-center justify-center">
             <div class="text-center py-8 px-4 mb-8 bg-surface rounded border-2 border-border shadow-brutal w-full">
