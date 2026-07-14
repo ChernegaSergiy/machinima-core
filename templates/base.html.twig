@@ -33,6 +33,14 @@
         <template id="splash-template-{{ splash.platformName }}">
             {% include splash.templatePath ignore missing %}
         </template>
+        {% if splash.displayCondition %}
+            <script>
+                if ({{ splash.displayCondition|raw }}) {
+                    var t = document.getElementById('splash-template-{{ splash.platformName }}');
+                    if (t) document.write(t.innerHTML);
+                }
+            </script>
+        {% endif %}
     {% endfor %}
 
     <div id="not-supported" style="display:none">
