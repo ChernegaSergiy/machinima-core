@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Contract;
 
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+
 /**
  * Marker interface for platform-specific splash screens.
  * 
@@ -12,6 +14,7 @@ namespace App\Contract;
  * them as hidden <template> tags in the initial HTML payload, ensuring zero 
  * Flash of Unstyled Content (FOUC) when the client JS reveals them.
  */
+#[AutoconfigureTag('app.splash_screen')]
 interface SplashScreenInterface
 {
     /**
