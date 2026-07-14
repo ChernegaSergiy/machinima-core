@@ -25,7 +25,7 @@
     {% if platform_ui_hints_module_path() %}
         <meta name="platform-ui-hints-module-path" content="{{ platform_ui_hints_module_path() }}">
     {% endif %}
-    <link rel="stylesheet" href="/css/index.css?v={{ random() }}">
+    <link rel="stylesheet" href="{{ asset('bundles/machinimacore/css/machinima_core.css') }}?v={{ random() }}">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body data-route="{{ app.request.attributes.get('_route') }}">
@@ -136,7 +136,7 @@
             observer.observe(document.documentElement, { childList: true, subtree: true });
         }
     </script>
-    <script src="/js/app.js?v={{ random() }}"></script>
+    <script src="{{ asset('bundles/machinimacore/js/machinima_core.js') }}?v={{ random() }}"></script>
     {% include '@MachinimaCore/components/skeletons.html.twig' %}
     {% block javascripts %}{% endblock %}
 </body>
