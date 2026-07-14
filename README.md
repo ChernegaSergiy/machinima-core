@@ -2,105 +2,73 @@
 
 <img src="assets/images/morf-logo.svg" alt="MORF" width="320" />
 
-# machinima-app
+# machinima-core
 
-*Core of the Machinima platform.*
+*Core CMS Bundle of the Machinima platform.*
 
-[Architecture](#architecture) · [Run profiles](#run-profiles) · [Tech stack](#tech-stack) · [Installation](#installation) · [Contributing](#contributing)
+[Architecture](#architecture) · [Tech stack](#tech-stack) · [Installation](#installation) · [Contributing](#contributing)
 
 ---
 
 </div>
 
-This Symfony application functions seamlessly as both a regular website and an interactive Telegram Mini App. Its unique architecture ensures that the core system remains completely independent and entirely free of any hardcoded Telegram dependencies.
+This Symfony Bundle provides the core business logic, entities, services, and base UI templates for the Machinima platform. Its unique architecture ensures that the core system remains completely independent and entirely free of any hardcoded platform (like Telegram) dependencies.
 
 ## Architecture
 
 The core knows nothing about specific login platforms. Everything platform-specific (Telegram, or any other) lives in separate adapters, plugged in through contracts:
 
-- **`App\Contract\PlatformAdapterInterface`** — a platform adapter: declares its own name (`getPlatformName()`), an optional JS module for zero-click bootstrap (`getBootstrapModulePath()`), an optional JS module for presentational UI hints (theme, back button — `getUiHintsModulePath()`), and the session's UI context (`getUiContext()`).
-- **`App\Contract\IdentityProviderPort`** — an identity provider: validates an assertion (an OIDC id_token, a signed initData string, etc.) and returns an `IdentityAssertion`.
-- **`App\Contract\BootstrapOnlyIdentityProvider`** — a marker for providers that are only ever used via zero-click bootstrap and must never appear as a button on `/login`.
+- **`Morfeditorial\MachinimaCoreBundle\Contract\PlatformAdapterInterface`** — a platform adapter: declares its own name (`getPlatformName()`), an optional JS module for zero-click bootstrap (`getBootstrapModulePath()`), an optional JS module for presentational UI hints (theme, back button — `getUiHintsModulePath()`), and the session's UI context (`getUiContext()`).
+- **`Morfeditorial\MachinimaCoreBundle\Contract\IdentityProviderPort`** — an identity provider: validates an assertion (an OIDC id_token, a signed initData string, etc.) and returns an `IdentityAssertion`.
+- **`Morfeditorial\MachinimaCoreBundle\Contract\BootstrapOnlyIdentityProvider`** — a marker for providers that are only ever used via zero-click bootstrap and must never appear as a button on `/login`.
 
 Zero-click login (e.g. from a Telegram Mini App) goes through a single, generic `POST /api/auth/bootstrap` endpoint: the platform's bootstrap module detects its runtime in the browser on its own, builds an opaque `assertion`, and sends `{provider, assertion}` — with no custom HTTP headers or other platform-specific workarounds involved.
 
-Currently the only real adapter is [`machinima-telegram-adapter`](https://github.com/ChernegaSergiy/machinima-telegram-adapter), pulled in as a separate composer package.
-
-## Run profiles
-
-The application supports several profiles (`config/profiles/`) that enable a different set of bundles and configuration via `APP_PROFILE`:
-
-- **`core-only`** — core only, no platform adapter.
-- **`telegram-webapp`** — core + Telegram Mini App adapter (zero-click login, UI hints).
-- **`telegram-bot`** — core + Telegram bot (notifications, commands).
+Currently the only real adapter is [`machinima-telegram-adapter`](https://github.com/ChernegaSergiy/machinima-telegram-adapter), pulled in as a separate composer package in the host application.
 
 ## Tech stack
 
 - PHP 8.4+, Symfony 8.1
 - Doctrine ORM + PostgreSQL
-- Mercure (real-time notifications)
-- Symfony Messenger
 - Twig + Turbo (Hotwire) on the frontend
 
 ## Installation
 
+To install this bundle in your Symfony host application:
+
 ```bash
-composer install
+composer require morfeditorial/machinima-core
 ```
 
-Copy `.env.example` to `.env.local` and fill in the values:
+Ensure the bundle is registered in your `config/bundles.php`:
 
-```bash
-cp .env.example .env.local
-```
-
-Main environment variables:
-
-| Variable | Purpose |
-|---|---|
-| `APP_PROFILE` | `core-only` / `telegram-webapp` / `telegram-bot` |
-| `DATABASE_URL` | PostgreSQL connection string |
-| `TELEGRAM_BOT_TOKEN` | bot token (needed by the Telegram adapter and for verifying Mini App `initData`) |
-| `TELEGRAM_DSN` | DSN for Symfony Notifier (Telegram notifications) |
-| `MERCURE_URL` / `MERCURE_PUBLIC_URL` / `MERCURE_JWT_SECRET` | Mercure hub for real-time updates |
-| `MESSENGER_TRANSPORT_DSN` | transport for asynchronous messages |
-
-Bring up infrastructure (PostgreSQL, Mercure) via Docker Compose:
-
-```bash
-docker compose up -d
-```
-
-Database migrations:
-
-```bash
-php bin/console doctrine:migrations:migrate
-```
-
-Local run via Symfony CLI:
-
-```bash
-symfony server:start -d
+```php
+return [
+    // ...
+    Morfeditorial\MachinimaCoreBundle\MachinimaCoreBundle::class => ['all' => true],
+];
 ```
 
 ## Project structure
 
 ```text
-machinima-app/
-+-- config/
-|   \-- profiles/       # configuration per run profile
-+-- migrations/         # Doctrine migrations
+machinima-core/
++-- config/             # Bundle configuration (services, routes)
 +-- src/
+|   +-- Command/        # CLI commands
 |   +-- Contract/       # platform-agnostic contracts (adapters, identity providers, UI context)
 |   +-- Controller/     # web + API controllers
+|   +-- DependencyInjection/ # Bundle extension
 |   +-- Entity/         # Doctrine entities
 |   +-- Event/          # domain events (e.g. UserAuthenticatedEvent)
 |   +-- EventListener/  # event subscribers
 |   +-- Security/       # authentication/authorization
 |   +-- Service/        # adapter/provider registries and other business logic
 |   +-- Twig/           # Twig extensions/runtime
-|   \-- Kernel.php
-\-- templates/          # Twig templates
+|   \-- MachinimaCoreBundle.php
++-- templates/          # Twig templates
+\-- Resources/
+    \-- public/         # Public CSS/JS assets
 ```
 
 ## Contributing
