@@ -28,4 +28,11 @@ interface SplashScreenInterface
      * e.g., '@MorfBranding/splash.html.twig'
      */
     public function getTemplatePath(): string;
+
+    /**
+     * Optional JavaScript condition evaluated synchronously during DOM parsing
+     * to immediately inject the splash screen and prevent a FOUC of the main UI.
+     * e.g., "window.location.hash.includes('tgWebAppData=')"
+     */
+    public function getDisplayCondition(): ?string;
 }
