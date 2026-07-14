@@ -1,7 +1,7 @@
 {
-    "name": "morfeditorial/machinima-app",
-    "description": "The official Telegram Mini App for the Machinima platform.",
-    "type": "project",
+    "name": "morfeditorial/machinima-core",
+    "description": "The Core CMS bundle for the Machinima platform.",
+    "type": "symfony-bundle",
     "license": "LicenseRef-CSSM-Unlimited-2.0",
     "authors": [
         {
@@ -18,23 +18,17 @@
         "doctrine/doctrine-bundle": "^3.2",
         "doctrine/doctrine-migrations-bundle": "^4.0",
         "doctrine/orm": "^3.6",
-        "morfeditorial/machinima-telegram-adapter": "dev-main",
-        "morfeditorial/telegram-bot-bundle": "dev-main",
         "phpdocumentor/reflection-docblock": "^6.0",
         "phpstan/phpdoc-parser": "^2.3",
         "symfony/console": "8.1.*",
-        "symfony/dotenv": "8.1.*",
-        "symfony/flex": "^2",
         "symfony/framework-bundle": "8.1.*",
         "symfony/mercure-bundle": "*",
         "symfony/messenger": "8.1.*",
         "symfony/notifier": "8.1.*",
         "symfony/property-access": "8.1.*",
         "symfony/property-info": "8.1.*",
-        "symfony/runtime": "8.1.*",
         "symfony/security-bundle": "8.1.*",
         "symfony/serializer": "8.1.*",
-        "symfony/telegram-notifier": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/workflow": "8.1.*",
         "symfony/yaml": "8.1.*",
@@ -42,22 +36,18 @@
     },
     "config": {
         "allow-plugins": {
-            "php-http/discovery": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
+            "php-http/discovery": true
         },
-        "bump-after-update": true,
         "sort-packages": true
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
-
+            "Morfeditorial\\MachinimaCoreBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Morfeditorial\\MachinimaCoreBundle\\Tests\\": "tests/"
         }
     },
     "replace": {
@@ -71,18 +61,6 @@
         "symfony/polyfill-php82": "*",
         "symfony/polyfill-php83": "*",
         "symfony/polyfill-php84": "*"
-    },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
-        "post-install-cmd": [
-            "@auto-scripts"
-        ],
-        "post-update-cmd": [
-            "@auto-scripts"
-        ]
     },
     "conflict": {
         "symfony/symfony": "*"
