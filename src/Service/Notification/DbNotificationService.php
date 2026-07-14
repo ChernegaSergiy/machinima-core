@@ -17,7 +17,7 @@ class DbNotificationService
 
     public function markAllAsRead(User $user): void
     {
-        $this->em->createQuery('UPDATE App\Entity\Notification n SET n.isRead = true WHERE n.user = :user AND n.isRead = false')
+        $this->em->createQuery('UPDATE Morfeditorial\MachinimaCoreBundle\Entity\Notification n SET n.isRead = true WHERE n.user = :user AND n.isRead = false')
            ->setParameter('user', $user)
            ->execute();
     }
@@ -58,7 +58,7 @@ class DbNotificationService
 
     private function getCommentRedirect(int $commentId): array
     {
-        $comment = $this->em->getRepository(\App\Entity\Comment::class)->find($commentId);
+        $comment = $this->em->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\Comment::class)->find($commentId);
         if ($comment && $comment->getContent()) {
             return [
                 'route' => 'app_post',

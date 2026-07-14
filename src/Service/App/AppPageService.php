@@ -172,7 +172,7 @@ class AppPageService
         }
 
         $followingCount = $this->em->getRepository(Follower::class)->count(['user' => $targetUser]);
-        $likesCount = $this->em->getRepository(\App\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
+        $likesCount = $this->em->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction::class)->count(['user' => $targetUser, 'interactionType' => 'like']);
 
         $name = $targetUser->getDisplayName() ?? 'Користувач #'.$targetUser->getId();
 

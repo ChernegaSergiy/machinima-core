@@ -21,7 +21,7 @@ class TelegramNotificationAddressResolver implements UserNotificationAddressReso
             return null;
         }
 
-        $identity = $this->em->getRepository(\App\Entity\UserIdentity::class)->findOneBy([
+        $identity = $this->em->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity::class)->findOneBy([
             'user' => $user,
             'providerName' => 'telegram',
         ]);

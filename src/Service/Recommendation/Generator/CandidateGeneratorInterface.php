@@ -12,7 +12,7 @@ interface CandidateGeneratorInterface
      * @param User|null $user  The current user (null if guest)
      * @param int       $limit Maximum number of posts to fetch
      *
-     * @return array<int, \App\Entity\Content>
+     * @return array<int, \Morfeditorial\MachinimaCoreBundle\Entity\Content>
      */
     public function generate(?User $user, int $limit = 50): array;
 }

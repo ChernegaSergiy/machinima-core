@@ -141,7 +141,7 @@ class CommentService
             return;
         }
 
-        $notification = new \App\Entity\Notification();
+        $notification = new \Morfeditorial\MachinimaCoreBundle\Entity\Notification();
         $notification->setUser($parentUser);
         $notification->setType('comment_reply');
         $notification->setTargetId($comment->getId());
@@ -165,7 +165,7 @@ class CommentService
             return;
         }
 
-        $notification = new \App\Entity\Notification();
+        $notification = new \Morfeditorial\MachinimaCoreBundle\Entity\Notification();
         $notification->setUser($projectAuthor);
         $notification->setType('new_comment');
         $notification->setTargetId($comment->getId());

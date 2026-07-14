@@ -15,7 +15,7 @@ class UserService
 
     public function getRoles(int $userId): ?array
     {
-        $user = $this->em->getRepository(\App\Entity\User::class)->find($userId);
+        $user = $this->em->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\User::class)->find($userId);
         if (!$user) {
             return null;
         }

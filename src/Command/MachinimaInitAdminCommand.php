@@ -94,7 +94,7 @@ class MachinimaInitAdminCommand extends Command
         $this->em->flush();
 
         // 3. Setup Initial Admin User (via Identity)
-        $identityRepo = $this->em->getRepository(\App\Entity\UserIdentity::class);
+        $identityRepo = $this->em->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity::class);
         $identity = $identityRepo->findOneBy(['providerName' => $provider, 'providerId' => (string) $subjectId]);
 
         if ($identity) {
@@ -103,7 +103,7 @@ class MachinimaInitAdminCommand extends Command
             $user = new User();
             $this->em->persist($user);
 
-            $identity = new \App\Entity\UserIdentity();
+            $identity = new \Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity();
             $identity->setUser($user);
             $identity->setProviderName($provider);
             $identity->setProviderId((string) $subjectId);

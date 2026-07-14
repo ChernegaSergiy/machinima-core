@@ -9,7 +9,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class UserAuthenticatedEvent extends Event
 {
-    private ?\App\Entity\User $user = null;
+    private ?\Morfeditorial\MachinimaCoreBundle\Entity\User $user = null;
 
     public function __construct(
         private readonly IdentityAssertion $assertion,
@@ -21,12 +21,12 @@ class UserAuthenticatedEvent extends Event
         return $this->assertion;
     }
 
-    public function getUser(): ?\App\Entity\User
+    public function getUser(): ?\Morfeditorial\MachinimaCoreBundle\Entity\User
     {
         return $this->user;
     }
 
-    public function setUser(\App\Entity\User $user): void
+    public function setUser(\Morfeditorial\MachinimaCoreBundle\Entity\User $user): void
     {
         $this->user = $user;
     }

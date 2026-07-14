@@ -23,7 +23,7 @@ class AuthSubscriber
         $assertion = $event->getAssertion();
         $needsFlush = false;
 
-        $identityRepo = $this->entityManager->getRepository(\App\Entity\UserIdentity::class);
+        $identityRepo = $this->entityManager->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity::class);
         $identity = $identityRepo->findOneBy([
             'providerName' => $assertion->getProviderName(),
             'providerId' => $assertion->getProviderSubjectId(),
@@ -36,7 +36,7 @@ class AuthSubscriber
             $user->setUserState('active');
             $this->entityManager->persist($user);
 
-            $identity = new \App\Entity\UserIdentity();
+            $identity = new \Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity();
             $identity->setUser($user);
             $identity->setProviderName($assertion->getProviderName());
             $identity->setProviderId($assertion->getProviderSubjectId());
