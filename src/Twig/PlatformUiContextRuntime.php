@@ -9,16 +9,23 @@ use App\Contract\PlatformUiContextProvider;
 use App\Service\PlatformAdapterRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class PlatformUiContextRuntime implements RuntimeExtensionInterface
 {
+    /** @var iterable<\App\Contract\SplashScreenInterface> */
+    private iterable $splashScreens;
+
     public function __construct(
         private PlatformUiContextProvider $provider,
         private PlatformAdapterRegistry $registry,
         private Security $security,
         private RequestStack $requestStack,
+        #[TaggedIterator('app.splash_screen')]
+        iterable $splashScreens = [],
     ) {
+        $this->splashScreens = $splashScreens;
     }
 
     public function getContext(): PlatformUiContext
@@ -83,5 +90,21 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
     private function toPublicUrl(string $path): string
     {
         return '/' . ltrim($path, '/') . '?v=' . time();
+    }
+
+    /**
+     * @return list<array{platformName: string, templatePath: string}>
+     */
+    public function getSplashScreens(): array
+    {
+        $screens = [];
+        foreach ($this->splashScreens as $splash) {
+            $screens[] = [
+                'platformName' => $splash->getPlatformName(),
+                'templatePath' => $splash->getTemplatePath(),
+            ];
+        }
+
+        return $screens;
     }
 }
