@@ -102,6 +102,7 @@ class PlatformUiContextRuntime implements RuntimeExtensionInterface
             $screens[] = [
                 'platformName' => $splash->getPlatformName(),
                 'templatePath' => $splash->getTemplatePath(),
+                'displayCondition' => $splash->getDisplayCondition(),
             ];
         }
 
