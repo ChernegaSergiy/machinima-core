@@ -43,7 +43,7 @@ final class LinkedAccountsController extends AbstractController
 
         $linkRouteExists = null !== $this->router->getRouteCollection()->get('popular_oidcs_link');
 
-        return $this->render('profile/linked_accounts.html.twig', [
+        return $this->render('@MachinimaCore/profile/linked_accounts.html.twig', [
             'identities' => $identities,
             'available_providers' => array_values($availableProviders),
             'link_route_exists' => $linkRouteExists,

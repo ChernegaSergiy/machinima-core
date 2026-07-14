@@ -39,7 +39,7 @@ final class LoginController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('login.html.twig', [
+        return $this->render('@MachinimaCore/login.html.twig', [
             'providers' => $providers,
         ]);
     }

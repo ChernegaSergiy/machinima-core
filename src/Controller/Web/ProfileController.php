@@ -19,7 +19,7 @@ class ProfileController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(): Response
     {
-        return $this->render('profile/index.html.twig',
+        return $this->render('@MachinimaCore/profile/index.html.twig',
             $this->profileService->getProfileData($this->getUser()),
         );
     }
@@ -28,7 +28,7 @@ class ProfileController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function following(): Response
     {
-        return $this->render('app/user_following.html.twig', [
+        return $this->render('@MachinimaCore/app/user_following.html.twig', [
             'authors' => $this->profileService->getFollowing($this->getUser()),
         ]);
     }
@@ -37,7 +37,7 @@ class ProfileController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function likes(): Response
     {
-        return $this->render('app/user_likes.html.twig', [
+        return $this->render('@MachinimaCore/app/user_likes.html.twig', [
             'feed' => $this->profileService->getLikes($this->getUser()),
         ]);
     }

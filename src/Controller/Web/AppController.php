@@ -25,7 +25,7 @@ class AppController extends AbstractController
     {
         $feed = $recommendationPipeline->getRecommendations($this->getUser(), 20);
 
-        return $this->render('app/index.html.twig', [
+        return $this->render('@MachinimaCore/app/index.html.twig', [
             'feed' => $feed,
         ]);
     }
@@ -33,7 +33,7 @@ class AppController extends AbstractController
     #[Route('/categories', name: 'app_categories')]
     public function categories(): Response
     {
-        return $this->render('app/categories.html.twig', [
+        return $this->render('@MachinimaCore/app/categories.html.twig', [
             'categories' => $this->appPageService->getCategories(),
         ]);
     }
@@ -46,13 +46,13 @@ class AppController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('app/category.html.twig', $data);
+        return $this->render('@MachinimaCore/app/category.html.twig', $data);
     }
 
     #[Route('/authors', name: 'app_authors')]
     public function authors(): Response
     {
-        return $this->render('app/authors.html.twig', [
+        return $this->render('@MachinimaCore/app/authors.html.twig', [
             'authors' => $this->appPageService->getAuthors($this->getUser()),
         ]);
     }
@@ -65,7 +65,7 @@ class AppController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        return $this->render('app/author.html.twig', $data);
+        return $this->render('@MachinimaCore/app/author.html.twig', $data);
     }
 
     #[Route('/author/{id}/follow', name: 'app_author_follow', requirements: ['id' => '\d+'], methods: ['POST'])]
@@ -102,14 +102,14 @@ class AppController extends AbstractController
 
         $this->contentViewService->trackView($this->getUser(), $data['post']);
 
-        return $this->render('app/post.html.twig', $data);
+        return $this->render('@MachinimaCore/app/post.html.twig', $data);
     }
 
     #[Route('/notifications', name: 'app_notifications')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function notifications(): Response
     {
-        return $this->render('app/notifications.html.twig', [
+        return $this->render('@MachinimaCore/app/notifications.html.twig', [
             'notifications' => $this->appPageService->getNotifications($this->getUser()),
         ]);
     }
@@ -126,6 +126,6 @@ class AppController extends AbstractController
             return $this->forward('App\Controller\Web\ProfileController::index');
         }
 
-        return $this->render('app/user.html.twig', $data);
+        return $this->render('@MachinimaCore/app/user.html.twig', $data);
     }
 }
