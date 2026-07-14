@@ -14,7 +14,7 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 class PlatformUiContextRuntime implements RuntimeExtensionInterface
 {
-    /** @var iterable<\App\Contract\SplashScreenInterface> */
+    /** @var iterable<\Morfeditorial\MachinimaCoreBundle\Contract\SplashScreenInterface> */
     private iterable $splashScreens;
 
     public function __construct(

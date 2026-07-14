@@ -123,7 +123,7 @@ class AppController extends AbstractController
         }
 
         if (isset($data['self'])) {
-            return $this->forward('App\Controller\Web\ProfileController::index');
+            return $this->forward('Morfeditorial\MachinimaCoreBundle\Controller\Web\ProfileController::index');
         }
 
         return $this->render('@MachinimaCore/app/user.html.twig', $data);
