@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace Morfeditorial\MachinimaCoreBundle\Repository;
 
-use App\Entity\Follower;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

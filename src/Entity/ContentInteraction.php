@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace Morfeditorial\MachinimaCoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

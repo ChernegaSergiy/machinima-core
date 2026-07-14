@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Profile;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Profile;
 
-use App\Entity\Author;
-use App\Entity\ContentInteraction;
-use App\Entity\Follower;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
+use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Api;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Api;
 
-use App\Service\Author\AuthorService;
+use Morfeditorial\MachinimaCoreBundle\Service\Author\AuthorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

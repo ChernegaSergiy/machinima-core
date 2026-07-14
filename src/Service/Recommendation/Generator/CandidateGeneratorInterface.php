@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service\Recommendation\Generator;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Generator;
 
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.candidate_generator')]

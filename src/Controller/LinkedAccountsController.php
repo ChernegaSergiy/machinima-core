@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Morfeditorial\MachinimaCoreBundle\Controller;
 
-use App\Entity\UserIdentity;
-use App\Service\IdentityProviderRegistry;
+use Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity;
+use Morfeditorial\MachinimaCoreBundle\Service\IdentityProviderRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

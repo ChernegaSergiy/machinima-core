@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Twig;
+namespace Morfeditorial\MachinimaCoreBundle\Twig;
 
-use App\Contract\PlatformUiContext;
-use App\Contract\PlatformUiContextProvider;
-use App\Service\PlatformAdapterRegistry;
+use Morfeditorial\MachinimaCoreBundle\Contract\PlatformUiContext;
+use Morfeditorial\MachinimaCoreBundle\Contract\PlatformUiContextProvider;
+use Morfeditorial\MachinimaCoreBundle\Service\PlatformAdapterRegistry;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Recommendation\Generator;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Generator;
 
-use App\Entity\Content;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TrendingPostsGenerator implements CandidateGeneratorInterface

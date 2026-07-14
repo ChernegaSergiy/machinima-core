@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Api;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

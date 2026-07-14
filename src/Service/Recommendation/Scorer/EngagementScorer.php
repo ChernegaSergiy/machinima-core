@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Recommendation\Scorer;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Scorer;
 
-use App\Entity\User;
-use App\Service\Recommendation\DTO\CandidatePost;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\DTO\CandidatePost;
 
 class EngagementScorer implements PostScorerInterface
 {

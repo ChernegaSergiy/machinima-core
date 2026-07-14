@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Interaction;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Interaction;
 
-use App\Entity\Content;
-use App\Entity\ContentInteraction;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ContentViewService

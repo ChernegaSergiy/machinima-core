@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Security\Voter;
+namespace Morfeditorial\MachinimaCoreBundle\Security\Voter;
 
-use App\Entity\Content;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;

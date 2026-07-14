@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace Morfeditorial\MachinimaCoreBundle\Controller;
 
-use App\Service\IdentityProviderRegistry;
+use Morfeditorial\MachinimaCoreBundle\Service\IdentityProviderRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

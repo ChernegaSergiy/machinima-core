@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Contract;
+namespace Morfeditorial\MachinimaCoreBundle\Contract;
 
 class NullIdentityProvider implements IdentityProviderPort
 {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Author;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Author;
 
-use App\Entity\Author;
-use App\Entity\ContentStaff;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AuthorService

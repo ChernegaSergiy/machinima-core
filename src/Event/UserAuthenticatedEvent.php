@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Event;
+namespace Morfeditorial\MachinimaCoreBundle\Event;
 
-use App\Contract\IdentityAssertion;
+use Morfeditorial\MachinimaCoreBundle\Contract\IdentityAssertion;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class UserAuthenticatedEvent extends Event

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\EventListener;
+namespace Morfeditorial\MachinimaCoreBundle\EventListener;
 
-use App\Entity\Role;
-use App\Entity\User;
-use App\Event\UserAuthenticatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Entity\Role;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\UserAuthenticatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Command;
+namespace Morfeditorial\MachinimaCoreBundle\Command;
 
-use App\Entity\Role;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Role;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

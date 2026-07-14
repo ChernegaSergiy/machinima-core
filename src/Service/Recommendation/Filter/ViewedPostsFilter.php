@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Recommendation\Filter;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Filter;
 
-use App\Entity\ContentInteraction;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ViewedPostsFilter implements PostFilterInterface

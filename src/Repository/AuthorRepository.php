@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Morfeditorial\MachinimaCoreBundle\Repository;
 
-use App\Entity\Author;
-use App\Entity\Content;
-use App\Entity\ContentStaff;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

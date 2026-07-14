@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Project;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Project;
 
-use App\Entity\Category;
-use App\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\Category;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProjectService

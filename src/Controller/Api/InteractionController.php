@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Api;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Api;
 
-use App\Service\Interaction\InteractionService;
+use Morfeditorial\MachinimaCoreBundle\Service\Interaction\InteractionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

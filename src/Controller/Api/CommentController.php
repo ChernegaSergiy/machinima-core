@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Api;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Api;
 
-use App\Service\Comment\CommentService;
+use Morfeditorial\MachinimaCoreBundle\Service\Comment\CommentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

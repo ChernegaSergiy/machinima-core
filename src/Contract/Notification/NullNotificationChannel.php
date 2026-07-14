@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Contract\Notification;
+namespace Morfeditorial\MachinimaCoreBundle\Contract\Notification;
 
-use App\Contract\NotificationChannelPort;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 
 class NullNotificationChannel implements NotificationChannelPort
 {

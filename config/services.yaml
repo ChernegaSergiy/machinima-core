@@ -16,39 +16,39 @@ services:
             $workflow: '@state_machine.content_publishing'
             $projectDir: '%kernel.project_dir%'
 
-    App\Contract\NotificationChannelPort:
-        alias: App\Contract\Notification\NullNotificationChannel
+    Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort:
+        alias: Morfeditorial\MachinimaCoreBundle\Contract\Notification\NullNotificationChannel
         public: true
 
-    App\Service\Notification\NotificationGateway:
+    Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway:
         arguments:
-            $channel: '@App\Contract\NotificationChannelPort'
+            $channel: '@Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort'
 
-    App\Service\IdentityProviderRegistry:
+    Morfeditorial\MachinimaCoreBundle\Service\IdentityProviderRegistry:
         arguments:
             $providers: !tagged_iterator app.identity_provider
 
-    App\Service\PlatformAdapterRegistry:
+    Morfeditorial\MachinimaCoreBundle\Service\PlatformAdapterRegistry:
         arguments:
             $adapters: !tagged_iterator app.platform_adapter
 
-    App\Service\Avatar\AvatarProviderInterface:
-        alias: App\Service\Avatar\ThumbsAvatarProvider
+    Morfeditorial\MachinimaCoreBundle\Service\Avatar\AvatarProviderInterface:
+        alias: Morfeditorial\MachinimaCoreBundle\Service\Avatar\ThumbsAvatarProvider
 
-    App\Service\Avatar\ThumbsAvatarProvider:
+    Morfeditorial\MachinimaCoreBundle\Service\Avatar\ThumbsAvatarProvider:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
-    App\Service\Avatar\InitialsAvatarProvider:
+    Morfeditorial\MachinimaCoreBundle\Service\Avatar\InitialsAvatarProvider:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
-    App\Service\Media\MediaProviderInterface:
-        alias: App\Service\Media\DefaultMediaProvider
+    Morfeditorial\MachinimaCoreBundle\Service\Media\MediaProviderInterface:
+        alias: Morfeditorial\MachinimaCoreBundle\Service\Media\DefaultMediaProvider
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    Morfeditorial\MachinimaCoreBundle\:
         resource: '../src/'
         exclude:
             - '../src/Entity/'
@@ -58,11 +58,11 @@ services:
     Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
 
     role_service:
-        alias: App\Service\RoleService
+        alias: Morfeditorial\MachinimaCoreBundle\Service\RoleService
         public: true
 
     content_service:
-        alias: App\Service\ContentService
+        alias: Morfeditorial\MachinimaCoreBundle\Service\ContentService
         public: true
 
     visuals_links:

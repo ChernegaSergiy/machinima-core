@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Contract;
+namespace Morfeditorial\MachinimaCoreBundle\Contract;
 
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 
 interface NotificationChannelPort
 {

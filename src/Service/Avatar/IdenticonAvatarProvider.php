@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Avatar;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Avatar;
 
 class IdenticonAvatarProvider implements AvatarProviderInterface
 {

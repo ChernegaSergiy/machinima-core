@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Api;
 
-use App\Event\UserAuthenticatedEvent;
-use App\Service\IdentityProviderRegistry;
+use Morfeditorial\MachinimaCoreBundle\Event\UserAuthenticatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Service\IdentityProviderRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;

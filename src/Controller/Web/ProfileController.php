@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Web;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Web;
 
-use App\Service\Profile\ProfileService;
+use Morfeditorial\MachinimaCoreBundle\Service\Profile\ProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

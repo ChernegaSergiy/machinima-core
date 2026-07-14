@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service\Recommendation\Scorer;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Scorer;
 
-use App\Entity\User;
-use App\Repository\ContentInteractionRepository;
-use App\Service\Recommendation\DTO\CandidatePost;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Repository\ContentInteractionRepository;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\DTO\CandidatePost;
 
 class AuthorAffinityScorer implements PostScorerInterface
 {

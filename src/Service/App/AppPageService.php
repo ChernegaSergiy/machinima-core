@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Service\App;
+namespace Morfeditorial\MachinimaCoreBundle\Service\App;
 
-use App\Entity\Author;
-use App\Entity\Category;
-use App\Entity\Comment;
-use App\Entity\Content;
-use App\Entity\Follower;
-use App\Entity\Notification;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\Category;
+use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
+use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 

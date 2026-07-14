@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Entity\Content;
-use App\Entity\ContentInteraction;
-use App\Entity\ContentView;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentView;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 

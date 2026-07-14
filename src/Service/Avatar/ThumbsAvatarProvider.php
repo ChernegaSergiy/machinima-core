@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Avatar;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Avatar;
 
 use Composer\InstalledVersions;
 use DiceBear\Avatar;

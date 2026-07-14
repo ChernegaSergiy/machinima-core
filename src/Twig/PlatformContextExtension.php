@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Twig;
+namespace Morfeditorial\MachinimaCoreBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

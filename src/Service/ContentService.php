@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Entity\Author;
-use App\Entity\Category;
-use App\Entity\Comment;
-use App\Entity\Content;
-use App\Entity\ContentStaff;
-use App\Entity\User;
-use App\Model\ContentItem;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\Category;
+use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;

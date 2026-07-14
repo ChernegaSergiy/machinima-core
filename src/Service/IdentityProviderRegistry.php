@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Contract\BootstrapOnlyIdentityProvider;
-use App\Contract\IdentityProviderMetadataProvider;
-use App\Contract\IdentityProviderPort;
+use Morfeditorial\MachinimaCoreBundle\Contract\BootstrapOnlyIdentityProvider;
+use Morfeditorial\MachinimaCoreBundle\Contract\IdentityProviderMetadataProvider;
+use Morfeditorial\MachinimaCoreBundle\Contract\IdentityProviderPort;
 
 final class IdentityProviderRegistry
 {

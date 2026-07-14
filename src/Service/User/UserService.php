@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\User;
+namespace Morfeditorial\MachinimaCoreBundle\Service\User;
 
 use Doctrine\ORM\EntityManagerInterface;
 

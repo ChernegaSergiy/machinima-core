@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Follow;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Follow;
 
-use App\Entity\Author;
-use App\Entity\Follower;
-use App\Entity\Notification;
-use App\Entity\User;
-use App\Service\Notification\NotificationGateway;
+use Morfeditorial\MachinimaCoreBundle\Entity\Author;
+use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
+use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
 
 class FollowService

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Comment;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Comment;
 
-use App\Entity\Comment;
-use App\Entity\Content;
-use App\Entity\User;
-use App\Service\Notification\NotificationGateway;
+use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;

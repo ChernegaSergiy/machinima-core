@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Entity\Role;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\Role;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RoleService

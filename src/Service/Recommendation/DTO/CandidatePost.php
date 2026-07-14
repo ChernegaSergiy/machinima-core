@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service\Recommendation\DTO;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\DTO;
 
-use App\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 
 class CandidatePost
 {

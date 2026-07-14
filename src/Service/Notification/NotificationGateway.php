@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Notification;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Notification;
 
-use App\Contract\NotificationChannelPort;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Psr\Log\LoggerInterface;
 
 class NotificationGateway implements NotificationChannelPort

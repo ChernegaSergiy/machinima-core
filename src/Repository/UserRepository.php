@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Repository;
+namespace Morfeditorial\MachinimaCoreBundle\Repository;
 
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Service\Recommendation;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation;
 
-use App\Entity\Content;
-use App\Entity\User;
-use App\Service\Recommendation\DTO\CandidatePost;
-use App\Service\Recommendation\Filter\PostFilterInterface;
-use App\Service\Recommendation\Generator\CandidateGeneratorInterface;
-use App\Service\Recommendation\Scorer\PostScorerInterface;
+use Morfeditorial\MachinimaCoreBundle\Entity\Content;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\DTO\CandidatePost;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Filter\PostFilterInterface;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Generator\CandidateGeneratorInterface;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Scorer\PostScorerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 class RecommendationPipeline

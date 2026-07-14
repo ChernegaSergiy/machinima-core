@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Notification;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Notification;
 
-use App\Contract\UserNotificationAddressResolver;
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Contract\UserNotificationAddressResolver;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 class TelegramNotificationAddressResolver implements UserNotificationAddressResolver

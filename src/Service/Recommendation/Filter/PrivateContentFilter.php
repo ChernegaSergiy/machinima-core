@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Service\Recommendation\Filter;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Filter;
 
-use App\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class PrivateContentFilter implements PostFilterInterface

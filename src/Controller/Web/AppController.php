@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Controller\Web;
+namespace Morfeditorial\MachinimaCoreBundle\Controller\Web;
 
-use App\Service\App\AppPageService;
-use App\Service\Follow\FollowService;
-use App\Service\Interaction\ContentViewService;
-use App\Service\Recommendation\RecommendationPipeline;
+use Morfeditorial\MachinimaCoreBundle\Service\App\AppPageService;
+use Morfeditorial\MachinimaCoreBundle\Service\Follow\FollowService;
+use Morfeditorial\MachinimaCoreBundle\Service\Interaction\ContentViewService;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\RecommendationPipeline;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

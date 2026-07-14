@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service\Recommendation\Filter;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Recommendation\Filter;
 
-use App\Entity\User;
-use App\Service\Recommendation\DTO\CandidatePost;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Service\Recommendation\DTO\CandidatePost;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.post_filter')]

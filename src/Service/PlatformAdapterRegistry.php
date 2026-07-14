@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Contract\PlatformAdapterInterface;
+use Morfeditorial\MachinimaCoreBundle\Contract\PlatformAdapterInterface;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpFoundation\Request;
 

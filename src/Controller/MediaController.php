@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace Morfeditorial\MachinimaCoreBundle\Controller;
 
-use App\Service\Media\MediaProviderInterface;
+use Morfeditorial\MachinimaCoreBundle\Service\Media\MediaProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

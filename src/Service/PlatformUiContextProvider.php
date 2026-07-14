@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service;
+namespace Morfeditorial\MachinimaCoreBundle\Service;
 
-use App\Contract\NullPlatformUiContext;
-use App\Contract\PlatformUiContext;
-use App\Contract\PlatformUiContextProvider as PlatformUiContextProviderInterface;
+use Morfeditorial\MachinimaCoreBundle\Contract\NullPlatformUiContext;
+use Morfeditorial\MachinimaCoreBundle\Contract\PlatformUiContext;
+use Morfeditorial\MachinimaCoreBundle\Contract\PlatformUiContextProvider as PlatformUiContextProviderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 

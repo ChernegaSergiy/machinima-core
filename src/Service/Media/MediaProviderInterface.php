@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Media;
+namespace Morfeditorial\MachinimaCoreBundle\Service\Media;
 
 interface MediaProviderInterface
 {
