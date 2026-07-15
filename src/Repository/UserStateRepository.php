@@ -8,11 +8,14 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Entity\UserState;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UserStateRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private EventDispatcherInterface $dispatcher,
+    ) {
         parent::__construct($registry, UserState::class);
     }
 
