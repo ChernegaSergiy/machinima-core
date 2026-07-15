@@ -7,11 +7,14 @@ namespace Morfeditorial\MachinimaCoreBundle\Service;
 use Morfeditorial\MachinimaCoreBundle\Entity\Role;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RoleService
 {
-    public function __construct(private EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $em,
+        private EventDispatcherInterface $dispatcher,
+    ) {
     }
 
     public function createRole(string $role_name): bool
