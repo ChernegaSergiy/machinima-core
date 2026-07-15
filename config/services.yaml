@@ -16,14 +16,6 @@ services:
             $workflow: '@state_machine.content_publishing'
             $projectDir: '%kernel.project_dir%'
 
-    Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort:
-        alias: Morfeditorial\MachinimaCoreBundle\Contract\Notification\NullNotificationChannel
-        public: true
-
-    Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway:
-        arguments:
-            $channel: '@Morfeditorial\MachinimaCoreBundle\Contract\NotificationChannelPort'
-
     Morfeditorial\MachinimaCoreBundle\Service\IdentityProviderRegistry:
         arguments:
             $providers: !tagged_iterator app.identity_provider
