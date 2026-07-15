@@ -9,12 +9,14 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\UserAuthenticatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsEventListener(event: UserAuthenticatedEvent::class)]
 class AuthSubscriber
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
