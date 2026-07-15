@@ -11,6 +11,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCreatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentUpdatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -82,30 +83,40 @@ class ContentService
             return false;
         }
 
+        $changedFields = [];
         if (array_key_exists('title', $data)) {
+            $changedFields[] = 'title';
             $content->setTitle($data['title']);
         }
         if (array_key_exists('type', $data)) {
+            $changedFields[] = 'type';
             $content->setType($data['type']);
         }
         if (array_key_exists('description', $data)) {
+            $changedFields[] = 'description';
             $content->setDescription($data['description']);
         }
         if (array_key_exists('url', $data)) {
+            $changedFields[] = 'url';
             $content->setUrl($data['url']);
         }
         if (array_key_exists('release_date', $data)) {
+            $changedFields[] = 'release_date';
             $content->setReleaseDate($data['release_date']);
         }
         if (array_key_exists('status', $data)) {
+            $changedFields[] = 'status';
             $content->setStatus($data['status']);
         }
         if (array_key_exists('cover_file_id', $data)) {
+            $changedFields[] = 'cover_file_id';
             $content->setCoverFileId($data['cover_file_id']);
         }
 
         $content->setUpdatedAt(date('Y-m-d H:i:s'));
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new ContentUpdatedEvent($content, $changedFields));
 
         return true;
     }
