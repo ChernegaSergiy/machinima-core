@@ -65,7 +65,7 @@ machinima-core/
 |   +-- Security/       # authentication/authorization
 |   +-- Service/        # adapter/provider registries and other business logic
 |   +-- Twig/           # Twig extensions/runtime
-|   \-- MachinimaCoreBundle.php
+|   \-- MachinimaCoreBundle.php # Main bundle class
 +-- templates/          # Twig templates
 \-- Resources/
     \-- public/         # Public CSS/JS assets
