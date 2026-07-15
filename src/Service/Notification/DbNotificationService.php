@@ -7,11 +7,13 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DbNotificationService
 {
     public function __construct(
         private EntityManagerInterface $em,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
