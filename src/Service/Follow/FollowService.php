@@ -8,7 +8,6 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
-use Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -16,7 +15,6 @@ class FollowService
 {
     public function __construct(
         private EntityManagerInterface $em,
-        private NotificationGateway $notifier,
         private EventDispatcherInterface $dispatcher,
     ) {
     }
@@ -44,8 +42,6 @@ class FollowService
                 $notification->setTargetType('user');
                 $notification->setMessage('На вас підписався новий користувач.');
                 $this->em->persist($notification);
-
-                $this->notifier->send($authorUser, 'На вас підписався новий користувач у Machinima');
             }
 
             $this->em->flush();
