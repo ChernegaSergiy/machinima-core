@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CommentService
 {
@@ -20,6 +21,7 @@ class CommentService
         private HubInterface $hub,
         private NotificationGateway $notifier,
         private LoggerInterface $logger,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
