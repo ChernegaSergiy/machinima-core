@@ -1,15 +1,24 @@
-###> symfony/framework-bundle ###
-/.env
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
+# Composer
 /vendor/
-###< symfony/framework-bundle ###
+/composer.lock
 
-###> friendsofphp/php-cs-fixer ###
-/.php-cs-fixer.php
-/.php-cs-fixer.cache
-###< friendsofphp/php-cs-fixer ###
+# Caches and logs
+/var/
+/logs/
+
+# Environment variables
+.env
+.env.*
+
+# IDEs
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Testing and Code Quality
+.phpunit.result.cache
+.php-cs-fixer.cache
+.php-cs-fixer.php
