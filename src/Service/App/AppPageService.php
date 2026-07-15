@@ -74,7 +74,7 @@ class AppPageService
             return null;
         }
 
-        if (!$this->authChecker->isGranted(\App\Security\Voter\AuthorVoter::VIEW, $author)) {
+        if (!$this->authChecker->isGranted(\Morfeditorial\MachinimaCoreBundle\Security\Voter\AuthorVoter::VIEW, $author)) {
             return null;
         }
 
@@ -111,7 +111,7 @@ class AppPageService
             return null;
         }
 
-        if (!$this->authChecker->isGranted(\App\Security\Voter\PostVoter::VIEW, $post)) {
+        if (!$this->authChecker->isGranted(\Morfeditorial\MachinimaCoreBundle\Security\Voter\PostVoter::VIEW, $post)) {
             return null;
         }
 
