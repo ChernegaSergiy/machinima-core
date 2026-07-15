@@ -64,7 +64,6 @@ machinima-core/
 |   +-- Command/                 # CLI commands
 |   +-- Contract/                # platform-agnostic contracts (adapters, identity providers, UI context)
 |   +-- Controller/              # web + API controllers
-|   +-- DependencyInjection/     # Bundle extension
 |   +-- Entity/                  # Doctrine entities
 |   +-- Event/                   # domain events (e.g. UserAuthenticatedEvent)
 |   +-- EventListener/           # event subscribers
