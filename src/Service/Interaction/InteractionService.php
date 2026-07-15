@@ -10,12 +10,14 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class InteractionService
 {
     public function __construct(
         private EntityManagerInterface $em,
         private HubInterface $hub,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
