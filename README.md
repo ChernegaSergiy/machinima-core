@@ -6,6 +6,10 @@
 
 *Core CMS Bundle of the Machinima platform.*
 
+[![Latest Stable Version](https://img.shields.io/packagist/v/morfeditorial/machinima-core.svg?label=Packagist&logo=packagist)](https://packagist.org/packages/morfeditorial/machinima-core)
+[![Total Downloads](https://img.shields.io/packagist/dt/morfeditorial/machinima-core.svg?label=Downloads&logo=packagist)](https://packagist.org/packages/morfeditorial/machinima-core)
+[![License](https://img.shields.io/packagist/l/morfeditorial/machinima-core.svg?label=Licence&logo=open-source-initiative)](https://packagist.org/packages/morfeditorial/machinima-core)
+
 [Architecture](#architecture) · [Tech stack](#tech-stack) · [Installation](#installation) · [Contributing](#contributing)
 
 ---
