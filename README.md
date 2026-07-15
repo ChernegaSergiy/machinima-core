@@ -53,22 +53,22 @@ return [
 
 ```text
 machinima-core/
-+-- config/             # Bundle configuration (services, routes)
++-- config/                      # Bundle configuration (services, routes)
 +-- src/
-|   +-- Command/        # CLI commands
-|   +-- Contract/       # platform-agnostic contracts (adapters, identity providers, UI context)
-|   +-- Controller/     # web + API controllers
-|   +-- DependencyInjection/ # Bundle extension
-|   +-- Entity/         # Doctrine entities
-|   +-- Event/          # domain events (e.g. UserAuthenticatedEvent)
-|   +-- EventListener/  # event subscribers
-|   +-- Security/       # authentication/authorization
-|   +-- Service/        # adapter/provider registries and other business logic
-|   +-- Twig/           # Twig extensions/runtime
-|   \-- MachinimaCoreBundle.php # Main bundle class
-+-- templates/          # Twig templates
+|   +-- Command/                 # CLI commands
+|   +-- Contract/                # platform-agnostic contracts (adapters, identity providers, UI context)
+|   +-- Controller/              # web + API controllers
+|   +-- DependencyInjection/     # Bundle extension
+|   +-- Entity/                  # Doctrine entities
+|   +-- Event/                   # domain events (e.g. UserAuthenticatedEvent)
+|   +-- EventListener/           # event subscribers
+|   +-- Security/                # authentication/authorization
+|   +-- Service/                 # adapter/provider registries and other business logic
+|   +-- Twig/                    # Twig extensions/runtime
+|   \-- MachinimaCoreBundle.php  # Main bundle class
++-- templates/                   # Twig templates
 \-- Resources/
-    \-- public/         # Public CSS/JS assets
+    \-- public/                  # Public CSS/JS assets
 ```
 
 ## Contributing
