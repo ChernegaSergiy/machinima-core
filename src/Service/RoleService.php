@@ -10,6 +10,7 @@ use Morfeditorial\MachinimaCoreBundle\Event\RoleCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleAssignedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleRemovedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleDeletedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\RoleHierarchyChangedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -50,6 +51,8 @@ class RoleService
         $parent->addChild($child);
         $this->em->flush();
 
+        $this->dispatcher->dispatch(new RoleHierarchyChangedEvent($parent, $child, RoleHierarchyChangedEvent::ACTION_ADDED));
+
         return true;
     }
 
@@ -64,6 +67,8 @@ class RoleService
 
         $parent->removeChild($child);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new RoleHierarchyChangedEvent($parent, $child, RoleHierarchyChangedEvent::ACTION_REMOVED));
 
         return true;
     }
