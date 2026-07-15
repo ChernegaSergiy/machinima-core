@@ -28,9 +28,11 @@ Currently the only real adapter is [`machinima-telegram-adapter`](https://github
 
 ## Tech stack
 
-- PHP 8.4+, Symfony 8.1
-- Doctrine ORM + PostgreSQL
-- Twig + Turbo (Hotwire) on the frontend
+This bundle relies on the following core technologies to provide its features:
+
+- **Backend**: PHP 8.4+, Symfony Components (Security, EventDispatcher, Twig)
+- **Data Access**: Doctrine ORM
+- **Frontend Base**: Twig, Turbo (Hotwire), Vanilla CSS (Utility-First), and Lucide Icons
 
 ## Installation
 
