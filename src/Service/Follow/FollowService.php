@@ -10,12 +10,14 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FollowService
 {
     public function __construct(
         private EntityManagerInterface $em,
         private NotificationGateway $notifier,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
