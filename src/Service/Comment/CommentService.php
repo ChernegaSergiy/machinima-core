@@ -7,7 +7,6 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
-use Morfeditorial\MachinimaCoreBundle\Service\Notification\NotificationGateway;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
@@ -19,7 +18,6 @@ class CommentService
     public function __construct(
         private EntityManagerInterface $em,
         private HubInterface $hub,
-        private NotificationGateway $notifier,
         private LoggerInterface $logger,
         private EventDispatcherInterface $dispatcher,
     ) {
@@ -151,8 +149,6 @@ class CommentService
         $notification->setMessage($comment->getDisplayName().' відповів(ла) на ваш коментар.');
         $this->em->persist($notification);
         $this->em->flush();
-
-        $this->notifier->send($parentUser, 'Вам відповіли на коментар у Machinima: '.$comment->getDisplayName());
     }
 
     private function notifyProjectAuthor(Comment $comment, User $user, Content $project): void
@@ -175,8 +171,6 @@ class CommentService
         $notification->setMessage('Новий коментар до вашого проєкту від '.$comment->getDisplayName().'.');
         $this->em->persist($notification);
         $this->em->flush();
-
-        $this->notifier->send($projectAuthor, 'Новий коментар до вашого проєкту в Machinima від '.$comment->getDisplayName());
     }
 
     private function broadcastCommentEvent(string $type, int $contentId, array $data): void
