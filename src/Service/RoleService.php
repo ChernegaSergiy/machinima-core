@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service;
 use Morfeditorial\MachinimaCoreBundle\Entity\Role;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleCreatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\RoleAssignedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -127,6 +128,8 @@ class RoleService
         $user->addRole($role);
 
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new RoleAssignedEvent($user, $role));
 
         return 'success';
     }
