@@ -14,6 +14,7 @@ use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ContentService
 {
@@ -22,6 +23,7 @@ class ContentService
     public function __construct(
         private EntityManagerInterface $em,
         private WorkflowInterface $workflow,
+        private EventDispatcherInterface $dispatcher,
     ) {
         $this->db = $em->getConnection();
     }
