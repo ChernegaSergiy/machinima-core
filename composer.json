@@ -25,7 +25,6 @@
         "symfony/framework-bundle": "8.1.*",
         "symfony/mercure-bundle": "*",
         "symfony/messenger": "8.1.*",
-        "symfony/notifier": "8.1.*",
         "symfony/property-access": "8.1.*",
         "symfony/property-info": "8.1.*",
         "symfony/security-bundle": "8.1.*",
@@ -65,9 +64,6 @@
         "symfony/symfony": "*"
     },
     "config": {
-        "allow-plugins": {
-            "php-http/discovery": true
-        },
         "sort-packages": true
     },
     "extra": {
