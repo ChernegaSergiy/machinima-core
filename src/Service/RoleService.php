@@ -9,6 +9,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleAssignedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\RoleRemovedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\RoleDeletedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -104,6 +105,8 @@ class RoleService
 
         $this->em->remove($role);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new RoleDeletedEvent($role));
 
         return true;
     }
