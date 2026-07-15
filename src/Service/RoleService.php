@@ -6,6 +6,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service;
 
 use Morfeditorial\MachinimaCoreBundle\Entity\Role;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\RoleCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -28,6 +29,8 @@ class RoleService
         $role->setRoleName($role_name);
         $this->em->persist($role);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new RoleCreatedEvent($role));
 
         return true;
     }
