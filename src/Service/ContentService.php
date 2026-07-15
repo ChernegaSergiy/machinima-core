@@ -10,6 +10,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -68,6 +69,8 @@ class ContentService
 
         $this->em->persist($content);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new ContentCreatedEvent($content));
 
         return $content->getId();
     }
