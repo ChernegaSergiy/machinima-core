@@ -7,11 +7,13 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class AuthorService
 {
     public function __construct(
         private EntityManagerInterface $em,
+        private EventDispatcherInterface $dispatcher,
     ) {
     }
 
