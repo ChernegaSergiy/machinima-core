@@ -28,7 +28,7 @@ The core knows nothing about specific login platforms. Everything platform-speci
 
 Zero-click login (e.g. from a Telegram Mini App) goes through a single, generic `POST /api/auth/bootstrap` endpoint: the platform's bootstrap module detects its runtime in the browser on its own, builds an opaque `assertion`, and sends `{provider, assertion}` — with no custom HTTP headers or other platform-specific workarounds involved.
 
-Currently the only real adapter is [`machinima-telegram-adapter`](https://github.com/ChernegaSergiy/machinima-telegram-adapter), pulled in as a separate composer package in the host application.
+Currently the only real adapter is [`machinima-telegram-adapter`](https://github.com/morfeditorial/machinima-telegram-adapter), pulled in as a separate composer package in the host application.
 
 ## Tech stack
 
