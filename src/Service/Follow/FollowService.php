@@ -8,6 +8,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorFollowedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -45,6 +46,8 @@ class FollowService
             }
 
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new AuthorFollowedEvent($user, $author));
         }
 
         return $author;
