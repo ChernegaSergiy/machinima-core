@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -86,6 +87,8 @@ class AuthorService
         $author->setUser($user);
         $this->em->persist($author);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new AuthorCreatedEvent($author));
 
         return $author;
     }
