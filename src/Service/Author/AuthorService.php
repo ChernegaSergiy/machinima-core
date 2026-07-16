@@ -6,6 +6,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Author;
 
 use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
+use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -76,5 +77,70 @@ class AuthorService
             'state' => $author->getState(),
             'user_id' => $author->getUser()?->getId(),
         ];
+    }
+
+    public function createAuthor(string $name, ?User $user = null): Author
+    {
+        $author = new Author();
+        $author->setName($name);
+        $author->setUser($user);
+        $this->em->persist($author);
+        $this->em->flush();
+
+        return $author;
+    }
+
+    public function updateAuthor(int $id, array $data): bool
+    {
+        $author = $this->em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            return false;
+        }
+
+        if (array_key_exists('name', $data)) {
+            $author->setName($data['name']);
+        }
+        if (array_key_exists('biography', $data)) {
+            $author->setBiography($data['biography']);
+        }
+        if (array_key_exists('channel_link', $data)) {
+            $author->setChannelLink($data['channel_link']);
+        }
+        if (array_key_exists('state', $data)) {
+            $author->setState($data['state']);
+        }
+        if (array_key_exists('user', $data)) {
+            $author->setUser($data['user']);
+        }
+
+        $this->em->flush();
+
+        return true;
+    }
+
+    public function deleteAuthor(int $id): bool
+    {
+        $author = $this->em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            return false;
+        }
+
+        $this->em->remove($author);
+        $this->em->flush();
+
+        return true;
+    }
+
+    public function changeVisibility(int $id): bool
+    {
+        $author = $this->em->getRepository(Author::class)->find($id);
+        if (!$author) {
+            return false;
+        }
+
+        $author->setState('private' === $author->getState() ? 'public' : 'private');
+        $this->em->flush();
+
+        return true;
     }
 }
