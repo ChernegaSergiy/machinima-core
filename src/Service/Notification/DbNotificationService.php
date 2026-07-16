@@ -8,7 +8,9 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\NotificationReadEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\NotificationsMarkedAsReadEvent;
+use Morfeditorial\MachinimaCoreBundle\Security\Voter\NotificationVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DbNotificationService
@@ -16,6 +18,7 @@ class DbNotificationService
     public function __construct(
         private EntityManagerInterface $em,
         private EventDispatcherInterface $dispatcher,
+        private Security $security,
     ) {
     }
 
@@ -37,10 +40,14 @@ class DbNotificationService
         return $this->em->getRepository(Notification::class)->count(['user' => $user, 'isRead' => false]);
     }
 
-    public function markAsReadAndGetRedirect(int $id, User $user): ?array
+    public function markAsReadAndGetRedirect(int $id): ?array
     {
         $notification = $this->em->getRepository(Notification::class)->find($id);
-        if (!$notification || $notification->getUser() !== $user) {
+        if (!$notification) {
+            return null;
+        }
+
+        if (!$this->security->isGranted(NotificationVoter::EDIT, $notification)) {
             return null;
         }
 
@@ -136,6 +143,10 @@ class DbNotificationService
     {
         $notif = $this->em->getRepository(Notification::class)->find($id);
         if (!$notif) {
+            return false;
+        }
+
+        if (!$this->security->isGranted(NotificationVoter::EDIT, $notif)) {
             return false;
         }
 
