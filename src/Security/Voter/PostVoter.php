@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class PostVoter extends Voter
 {
     public const VIEW = 'POST_VIEW';
+    public const EDIT = 'POST_EDIT';
+    public const DELETE = 'POST_DELETE';
 
     public function __construct(
         private Security $security,
@@ -22,16 +24,13 @@ class PostVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute && $subject instanceof Content;
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)
+            && $subject instanceof Content;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var Content $subject */
-        if ('published' === $subject->getStatus()) {
-            return true;
-        }
-
         if ($this->security->isGranted('ROLE_MODERATOR')) {
             return true;
         }
@@ -41,7 +40,19 @@ class PostVoter extends Voter
             return false;
         }
 
-        foreach ($subject->getStaff() as $staffItem) {
+        $isStaff = $this->isStaffMember($subject, $user);
+        $isOwner = $subject->getCreatedBy() && (int) $subject->getCreatedBy()->getId() === (int) $user->getId();
+
+        return match ($attribute) {
+            self::VIEW => 'published' === $subject->getStatus() || $isStaff,
+            self::EDIT, self::DELETE => $isStaff || $isOwner,
+            default => false,
+        };
+    }
+
+    private function isStaffMember(Content $content, User $user): bool
+    {
+        foreach ($content->getStaff() as $staffItem) {
             $author = $staffItem->getAuthor();
             if ($author && $author->getUser() && (int) $author->getUser()->getId() === (int) $user->getId()) {
                 return true;
