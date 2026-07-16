@@ -10,8 +10,10 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentUpdatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentDeletedEvent;
+use Morfeditorial\MachinimaCoreBundle\Security\Voter\CommentVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -23,6 +25,7 @@ class CommentService
         private HubInterface $hub,
         private LoggerInterface $logger,
         private EventDispatcherInterface $dispatcher,
+        private Security $security,
     ) {
     }
 
@@ -94,14 +97,14 @@ class CommentService
         return $responseData;
     }
 
-    public function editComment(int $commentId, int $userId, string $text): bool
+    public function editComment(int $commentId, string $text): bool
     {
         $comment = $this->em->getRepository(Comment::class)->find($commentId);
         if (!$comment) {
             return false;
         }
 
-        if ($comment->getUser()->getId() !== $userId) {
+        if (!$this->security->isGranted(CommentVoter::EDIT, $comment)) {
             return false;
         }
 
@@ -121,14 +124,14 @@ class CommentService
         return true;
     }
 
-    public function deleteComment(int $commentId, int $userId, bool $isModerator): bool
+    public function deleteComment(int $commentId): bool
     {
         $comment = $this->em->getRepository(Comment::class)->find($commentId);
         if (!$comment) {
             return false;
         }
 
-        if ($comment->getUser()->getId() !== $userId && !$isModerator) {
+        if (!$this->security->isGranted(CommentVoter::DELETE, $comment)) {
             return false;
         }
 
