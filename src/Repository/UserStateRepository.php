@@ -6,6 +6,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Repository;
 
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Entity\UserState;
+use Morfeditorial\MachinimaCoreBundle\Event\UserStateChangedEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -50,6 +51,8 @@ class UserStateRepository extends ServiceEntityRepository
         }
         $state->setStateValue(json_encode($value));
         $em->flush();
+
+        $this->dispatcher->dispatch(new UserStateChangedEvent($user, $key, $value));
     }
 
     public function clear(int $userId, ?string $key = null): void
