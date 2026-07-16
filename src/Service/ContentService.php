@@ -19,6 +19,7 @@ use Morfeditorial\MachinimaCoreBundle\Event\CategoryDeletedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryAssignedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryRemovedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentStaffAssignedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentStaffRemovedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -383,6 +384,8 @@ class ContentService
         if ($staff) {
             $this->em->remove($staff);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new ContentStaffRemovedEvent($content, $author, $role));
         }
 
         return true;
