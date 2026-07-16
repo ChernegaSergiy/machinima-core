@@ -9,6 +9,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentUpdatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\CommentDeletedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
@@ -133,6 +134,8 @@ class CommentService
 
         $this->em->remove($comment);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new CommentDeletedEvent($comment, $comment->getContent(), $comment->getUser()));
 
         $this->broadcastCommentEvent('DELETE_COMMENT', $commentId, [
             'comment_id' => $commentId,
