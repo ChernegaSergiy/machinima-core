@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\NotificationReadEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\NotificationsMarkedAsReadEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -23,6 +24,8 @@ class DbNotificationService
         $this->em->createQuery('UPDATE Morfeditorial\MachinimaCoreBundle\Entity\Notification n SET n.isRead = true WHERE n.user = :user AND n.isRead = false')
            ->setParameter('user', $user)
            ->execute();
+
+        $this->dispatcher->dispatch(new NotificationsMarkedAsReadEvent($user));
     }
 
     public function getUnreadCount(?User $user): int
@@ -123,6 +126,8 @@ class DbNotificationService
            ->setParameter('user', $user)
            ->getQuery()
            ->execute();
+
+        $this->dispatcher->dispatch(new NotificationsMarkedAsReadEvent($user));
 
         return true;
     }
