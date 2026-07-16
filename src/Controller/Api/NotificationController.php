@@ -37,7 +37,7 @@ class NotificationController extends AbstractController
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function readAndRedirect(int $id): Response
     {
-        $redirect = $this->dbNotificationService->markAsReadAndGetRedirect($id, $this->getUser());
+        $redirect = $this->dbNotificationService->markAsReadAndGetRedirect($id);
 
         if (!$redirect) {
             return $this->redirectToRoute('app_notifications');
