@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\EventListener;
 use Morfeditorial\MachinimaCoreBundle\Entity\Role;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\UserAuthenticatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\UserRegisteredEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -24,6 +25,7 @@ class AuthSubscriber
     {
         $assertion = $event->getAssertion();
         $needsFlush = false;
+        $isNewUser = false;
 
         $identityRepo = $this->entityManager->getRepository(\Morfeditorial\MachinimaCoreBundle\Entity\UserIdentity::class);
         $identity = $identityRepo->findOneBy([
@@ -57,6 +59,7 @@ class AuthSubscriber
             $user->addRole($role);
 
             $needsFlush = true;
+            $isNewUser = true;
         }
 
         $displayName = $assertion->getDisplayName();
@@ -68,6 +71,10 @@ class AuthSubscriber
 
         if ($needsFlush) {
             $this->entityManager->flush();
+        }
+
+        if ($isNewUser) {
+            $this->dispatcher->dispatch(new UserRegisteredEvent($user));
         }
 
         $event->setUser($user);
