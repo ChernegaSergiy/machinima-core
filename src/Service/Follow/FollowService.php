@@ -9,6 +9,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Follower;
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorFollowedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorUnfollowedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -64,6 +65,8 @@ class FollowService
         if ($existing) {
             $this->em->remove($existing);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new AuthorUnfollowedEvent($user, $author));
         }
 
         return $author;
