@@ -18,6 +18,7 @@ use Morfeditorial\MachinimaCoreBundle\Event\CategoryCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CategoryDeletedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryAssignedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryRemovedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentStaffAssignedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -364,6 +365,8 @@ class ContentService
             $staff->setRole($role);
             $this->em->persist($staff);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new ContentStaffAssignedEvent($content, $author, $role));
         }
 
         return true;
