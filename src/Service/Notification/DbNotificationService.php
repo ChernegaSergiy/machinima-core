@@ -6,6 +6,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Notification;
 
 use Morfeditorial\MachinimaCoreBundle\Entity\Notification;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\NotificationReadEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -43,6 +44,8 @@ class DbNotificationService
         if (!$notification->isRead()) {
             $notification->setIsRead(true);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new NotificationReadEvent($notification));
         }
 
         if (!$notification->getTargetId() || !$notification->getTargetType()) {
@@ -133,6 +136,8 @@ class DbNotificationService
 
         $notif->setIsRead(true);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new NotificationReadEvent($notif));
 
         return true;
     }
