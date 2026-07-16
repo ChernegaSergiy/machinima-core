@@ -12,6 +12,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentUpdatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentStatusChangedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,10 +39,14 @@ class ContentService
         }
 
         $contentItem = new ContentItem($content_id, $content['status']);
+        $oldStatus = $content['status'];
 
         if ($this->workflow->can($contentItem, $transition)) {
             $this->workflow->apply($contentItem, $transition);
             $this->updateContent($content_id, ['status' => $contentItem->getStatus()]);
+
+            $contentEntity = $this->em->getRepository(Content::class)->find($content_id);
+            $this->dispatcher->dispatch(new ContentStatusChangedEvent($contentEntity, $oldStatus, $contentItem->getStatus()));
 
             return true;
         }
