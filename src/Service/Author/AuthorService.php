@@ -10,6 +10,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorUpdatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorDeletedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorVisibilityChangedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -153,8 +154,12 @@ class AuthorService
             return false;
         }
 
-        $author->setState('private' === $author->getState() ? 'public' : 'private');
+        $oldState = $author->getState();
+        $newState = 'private' === $oldState ? 'public' : 'private';
+        $author->setState($newState);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new AuthorVisibilityChangedEvent($author, $oldState, $newState));
 
         return true;
     }
