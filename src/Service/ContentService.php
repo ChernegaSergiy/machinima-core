@@ -14,6 +14,7 @@ use Morfeditorial\MachinimaCoreBundle\Event\ContentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentUpdatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentStatusChangedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentDeletedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\CategoryCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -298,6 +299,8 @@ class ContentService
 
         $this->em->persist($category);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new CategoryCreatedEvent($category));
 
         return $category->getId();
     }
