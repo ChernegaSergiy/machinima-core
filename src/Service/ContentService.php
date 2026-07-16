@@ -13,6 +13,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentUpdatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentStatusChangedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentDeletedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -246,6 +247,8 @@ class ContentService
 
         $this->em->remove($content);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new ContentDeletedEvent($content));
 
         return true;
     }
