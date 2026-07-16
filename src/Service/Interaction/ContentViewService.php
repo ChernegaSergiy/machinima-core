@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Interaction;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentViewedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -48,6 +49,8 @@ class ContentViewService
             }
 
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new ContentViewedEvent($post, $user));
         }
     }
 }
