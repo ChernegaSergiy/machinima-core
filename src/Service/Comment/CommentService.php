@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\CommentCreatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
@@ -71,6 +72,8 @@ class CommentService
 
         $this->em->persist($comment);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new CommentCreatedEvent($comment, $project, $user));
 
         $responseData = [
             'id' => $comment->getId(),
