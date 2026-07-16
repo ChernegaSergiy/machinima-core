@@ -8,6 +8,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Comment;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\CommentCreatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\CommentUpdatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\HubInterface;
@@ -103,9 +104,12 @@ class CommentService
             return false;
         }
 
+        $oldText = $comment->getText();
         $comment->setText($text);
         $comment->setUpdatedAt(date('Y-m-d H:i:s'));
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new CommentUpdatedEvent($comment, $oldText, $text));
 
         $this->broadcastCommentEvent('EDIT_COMMENT', $commentId, [
             'comment_id' => $commentId,
