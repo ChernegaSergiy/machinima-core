@@ -49,11 +49,11 @@ class CommentController extends AbstractController
     public function editComment(int $id, Request $request): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
-        if (!$body || !isset($body['text'], $body['user_id'])) {
+        if (!$body || !isset($body['text'])) {
             return $this->json(['success' => false, 'error' => 'Missing data'], 400);
         }
 
-        $success = $this->commentService->editComment($id, (int) $body['user_id'], $body['text']);
+        $success = $this->commentService->editComment($id, $body['text']);
 
         if (!$success) {
             return $this->json(['success' => false, 'error' => 'Comment not found or unauthorized'], 404);
@@ -63,13 +63,9 @@ class CommentController extends AbstractController
     }
 
     #[Route('/comments/{id}', name: 'api_delete_comment', requirements: ['id' => '\d+'], methods: ['DELETE'])]
-    public function deleteComment(int $id, Request $request): JsonResponse
+    public function deleteComment(int $id): JsonResponse
     {
-        $body = json_decode($request->getContent(), true);
-        $userId = (int) ($body['user_id'] ?? 0);
-        $isModerator = $this->getUser() && $this->isGranted('ROLE_MODERATOR');
-
-        $success = $this->commentService->deleteComment($id, $userId, $isModerator);
+        $success = $this->commentService->deleteComment($id);
 
         if (!$success) {
             return $this->json(['success' => false, 'error' => 'Comment not found or unauthorized'], 404);
