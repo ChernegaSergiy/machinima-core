@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Repository;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Entity\UserState;
 use Morfeditorial\MachinimaCoreBundle\Event\UserStateChangedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\UserStateClearedEvent;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -74,5 +75,7 @@ class UserStateRepository extends ServiceEntityRepository
             }
         }
         $em->flush();
+
+        $this->dispatcher->dispatch(new UserStateClearedEvent($user, $key));
     }
 }
