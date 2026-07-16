@@ -7,6 +7,7 @@ namespace Morfeditorial\MachinimaCoreBundle\Service\Interaction;
 use Morfeditorial\MachinimaCoreBundle\Entity\Content;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentInteraction;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentInteractionEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
@@ -86,6 +87,8 @@ class InteractionService
         }
 
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new ContentInteractionEvent($content, $user, $type));
 
         $this->broadcastStatsUpdate($contentId, $content->getLikesCount(), $content->getDislikesCount(), $content->getViewsCount());
 
