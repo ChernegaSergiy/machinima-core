@@ -17,6 +17,7 @@ use Morfeditorial\MachinimaCoreBundle\Event\ContentDeletedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CategoryCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\CategoryDeletedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryAssignedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\ContentCategoryRemovedEvent;
 use Morfeditorial\MachinimaCoreBundle\Model\ContentItem;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -434,6 +435,8 @@ class ContentService
         if ($content->getCategories()->contains($category)) {
             $content->removeCategory($category);
             $this->em->flush();
+
+            $this->dispatcher->dispatch(new ContentCategoryRemovedEvent($content, $category));
         }
 
         return true;
