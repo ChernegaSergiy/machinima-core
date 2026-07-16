@@ -9,6 +9,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorCreatedEvent;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorUpdatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorDeletedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -139,6 +140,8 @@ class AuthorService
 
         $this->em->remove($author);
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new AuthorDeletedEvent($author));
 
         return true;
     }
