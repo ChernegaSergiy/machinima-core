@@ -8,6 +8,7 @@ use Morfeditorial\MachinimaCoreBundle\Entity\Author;
 use Morfeditorial\MachinimaCoreBundle\Entity\ContentStaff;
 use Morfeditorial\MachinimaCoreBundle\Entity\User;
 use Morfeditorial\MachinimaCoreBundle\Event\AuthorCreatedEvent;
+use Morfeditorial\MachinimaCoreBundle\Event\AuthorUpdatedEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -100,23 +101,31 @@ class AuthorService
             return false;
         }
 
+        $changedFields = [];
         if (array_key_exists('name', $data)) {
+            $changedFields[] = 'name';
             $author->setName($data['name']);
         }
         if (array_key_exists('biography', $data)) {
+            $changedFields[] = 'biography';
             $author->setBiography($data['biography']);
         }
         if (array_key_exists('channel_link', $data)) {
+            $changedFields[] = 'channel_link';
             $author->setChannelLink($data['channel_link']);
         }
         if (array_key_exists('state', $data)) {
+            $changedFields[] = 'state';
             $author->setState($data['state']);
         }
         if (array_key_exists('user', $data)) {
+            $changedFields[] = 'user';
             $author->setUser($data['user']);
         }
 
         $this->em->flush();
+
+        $this->dispatcher->dispatch(new AuthorUpdatedEvent($author, $changedFields));
 
         return true;
     }
