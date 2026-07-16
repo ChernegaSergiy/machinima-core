@@ -14,6 +14,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class AuthorVoter extends Voter
 {
     public const VIEW = 'AUTHOR_VIEW';
+    public const EDIT = 'AUTHOR_EDIT';
+    public const DELETE = 'AUTHOR_DELETE';
 
     public function __construct(
         private Security $security,
@@ -22,16 +24,13 @@ class AuthorVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute && $subject instanceof Author;
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)
+            && $subject instanceof Author;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         /** @var Author $subject */
-        if ('private' !== $subject->getState()) {
-            return true;
-        }
-
         if ($this->security->isGranted('ROLE_MODERATOR')) {
             return true;
         }
@@ -41,10 +40,12 @@ class AuthorVoter extends Voter
             return false;
         }
 
-        if ($subject->getUser() && (int) $user->getId() === (int) $subject->getUser()->getId()) {
-            return true;
-        }
+        $isOwner = $subject->getUser() && (int) $user->getId() === (int) $subject->getUser()->getId();
 
-        return false;
+        return match ($attribute) {
+            self::VIEW => 'private' !== $subject->getState() || $isOwner,
+            self::EDIT, self::DELETE => $isOwner,
+            default => false,
+        };
     }
 }
